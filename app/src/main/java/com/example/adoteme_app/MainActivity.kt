@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.adoteme_app.home.presentation.home_screen.HomeContent
+import com.example.adoteme_app.home.presentation.home_screen.HomeViewState
 import com.example.adoteme_app.ui.theme.AdotemeappTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,15 +38,12 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         text = "Hello $name!",
         modifier = modifier
     )
-    Text(
-        text = "O Mobile"
-    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     AdotemeappTheme {
-        Greeting("Adoteme")
+        HomeContent(HomeViewState())
     }
 }
