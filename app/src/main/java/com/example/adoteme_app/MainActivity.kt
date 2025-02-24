@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.adoteme_app.home.presentation.home_screen.HomeContent
+import com.example.adoteme_app.home.presentation.home_screen.HomeScreen
 import com.example.adoteme_app.home.presentation.home_screen.HomeViewState
+import com.example.adoteme_app.navigation.presentation.navi_drawer.NaviDrawer
 import com.example.adoteme_app.ui.theme.AdotemeappTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,6 +46,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     AdotemeappTheme {
-        HomeContent(HomeViewState())
+        HomeScreen()
     }
 }
