@@ -23,29 +23,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AdotemeappTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Adoteme",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MainApp()
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     AdotemeappTheme {
-        HomeScreen()
+        MainApp()
     }
 }
