@@ -1,8 +1,8 @@
 package com.example.adoteme_app.navigation.presentation.utils
 
 sealed class InternalRoutes(val route: String) {
-    object Home: InternalRoutes("home")
-    object Pets: InternalRoutes("pets")
-    object Doacoes: InternalRoutes("doacoes")
-    object Ongs: InternalRoutes("ongs")
+    data object Home: InternalRoutes("home")
+    data object Pets: InternalRoutes("pets")
+    data object Ongs: InternalRoutes("ongs")
+    data object Favoritos: InternalRoutes("favoritos")
 }
