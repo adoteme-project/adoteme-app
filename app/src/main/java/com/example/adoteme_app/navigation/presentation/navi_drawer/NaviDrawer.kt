@@ -73,7 +73,7 @@ fun NaviDrawerLayout (
             modifier = Modifier
                 .fillMaxWidth()
                 .size(175.dp)
-                .background(color = mainColor),
+                .background(color = mainColor, shape = RoundedCornerShape(bottomEnd = 45.dp)),
             contentAlignment = Alignment.Center
         ) {
             Row(

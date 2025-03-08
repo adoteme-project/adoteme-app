@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,10 +32,11 @@ fun AdotemeBottomAppBar() {
         blue = 94
     )
 
+    // A cor do fima da muito claro
     val secondaryColor = Color(
-        red = 253,
-        green = 246,
-        blue = 240
+        red = 255,
+        green = 223,
+        blue = 196
     )
 
     BottomAppBar(
