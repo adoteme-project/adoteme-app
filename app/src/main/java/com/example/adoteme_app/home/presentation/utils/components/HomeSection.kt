@@ -32,7 +32,8 @@ fun HomeSection() {
         }
     ) {
         Scaffold (
-            topBar = { AdotemeTopAppBar(drawerState = drawerState, scope = scope) }
+            topBar = { AdotemeTopAppBar(drawerState = drawerState, scope = scope) },
+            bottomBar = { AdotemeBottomAppBar() }
         ) { innerPadding ->
             AppHomeNavigation(
                 navController = navController,

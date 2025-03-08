@@ -25,7 +25,7 @@ fun DrawerItem(item: NavDrawerItem, onItemClick: (NavDrawerItem) -> Unit) {
                 onClick = { onItemClick(item) }
             )
             .height(45.dp)
-            .padding(start = 10.dp)
+            .padding(start = 12.dp)
     ) {
         Spacer(modifier = Modifier.width(7.dp))
         Text(

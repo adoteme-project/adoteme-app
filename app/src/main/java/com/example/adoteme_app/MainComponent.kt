@@ -33,7 +33,7 @@ fun MainApp() {
 
     NavHost(
         navController = navController,
-        startDestination = RootRoutes.Login.route
+        startDestination = RootRoutes.HomeSection.route
     ) {
         composable(RootRoutes.Login.route) {
             LoginScreen(

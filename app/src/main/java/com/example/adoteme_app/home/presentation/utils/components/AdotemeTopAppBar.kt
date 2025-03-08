@@ -43,9 +43,8 @@ fun AdotemeTopAppBar(drawerState: DrawerState, scope: CoroutineScope) {
             Image(
                 painter = painterResource(id = R.drawable.logo_adotme_nobg),
                 contentDescription = "Logo",
-                modifier = Modifier.size(42.dp)
+                modifier = Modifier.size(124.dp)
             )
-            Text(text = "adoteme", modifier = Modifier.padding(start =  8.dp))
         },
         title = { Text(text = "") }
     )

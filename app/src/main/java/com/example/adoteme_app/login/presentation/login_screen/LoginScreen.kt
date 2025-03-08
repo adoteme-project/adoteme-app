@@ -13,9 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
-import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 
 @Composable
 fun LoginScreen(
