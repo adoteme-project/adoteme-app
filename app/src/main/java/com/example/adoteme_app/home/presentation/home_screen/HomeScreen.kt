@@ -9,8 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomeScreen(
-) {
+fun HomeScreen() {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

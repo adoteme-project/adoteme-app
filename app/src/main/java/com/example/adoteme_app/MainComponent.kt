@@ -20,35 +20,35 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.adoteme_app.home.presentation.home_screen.HomeScreen
 import com.example.adoteme_app.home.presentation.utils.components.AdotemeTopAppBar
+import com.example.adoteme_app.home.presentation.utils.components.HomeSection
+import com.example.adoteme_app.login.presentation.login_screen.LoginScreen
 import com.example.adoteme_app.navigation.presentation.navi_drawer.NaviDrawerLayout
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
+import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.pets.presentation.pets_screen.PetsScreen
 
 @Composable
 fun MainApp() {
-    val drawerState = rememberDrawerState(DrawerValue.Closed);
-    val scope = rememberCoroutineScope()
     val navController = rememberNavController()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                NaviDrawerLayout(
-                    drawerState = drawerState,
-                    scope = scope,
-                    navController = navController
-                )
-            }
-        }
+    NavHost(
+        navController = navController,
+        startDestination = RootRoutes.Login.route
     ) {
-        Scaffold(
-            topBar = { AdotemeTopAppBar(drawerState = drawerState, scope = scope) }
-        ) { innerPadding ->
-            AppHomeNavigation(
-                navController = navController,
-                modifier = Modifier.padding(innerPadding)
+        composable(RootRoutes.Login.route) {
+            LoginScreen(
+                onNavigate = {
+                    navController.navigate(RootRoutes.HomeSection.route) {
+                        popUpTo(RootRoutes.Login.route) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
+        }
+
+        composable(RootRoutes.HomeSection.route) {
+            HomeSection()
         }
     }
 }
