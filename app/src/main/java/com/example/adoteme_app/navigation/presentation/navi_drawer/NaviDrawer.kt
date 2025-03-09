@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.NavDrawerItem
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import kotlinx.coroutines.CoroutineScope
@@ -115,7 +116,9 @@ fun NaviDrawerLayout (
                 }
             })
         }
+
         Spacer(modifier = Modifier.weight(1f))
+
         Row(
             modifier = Modifier.padding(start = 12.dp, bottom = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
@@ -128,7 +131,14 @@ fun NaviDrawerLayout (
                     disabledContainerColor = Color.LightGray
                 ),
                 onClick = {
-                    navController.navigate(RootRoutes.Login.route)
+                    navController.navigate(InternalRoutes.PetsInfo.route) {
+                        popUpTo(InternalRoutes.Home.route) {
+                            inclusive = true
+                        }
+                    }
+                    scope.launch {
+                        drawerState.close()
+                    }
                 }
             ) {
                 Text(

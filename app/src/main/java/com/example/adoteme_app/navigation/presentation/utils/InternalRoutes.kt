@@ -5,4 +5,5 @@ sealed class InternalRoutes(val route: String) {
     data object Pets: InternalRoutes("pets")
     data object Ongs: InternalRoutes("ongs")
     data object Favoritos: InternalRoutes("favoritos")
+    data object PetsInfo: InternalRoutes("petInfo")
 }

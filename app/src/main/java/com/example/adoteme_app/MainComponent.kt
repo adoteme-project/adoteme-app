@@ -2,6 +2,7 @@ package com.example.adoteme_app
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -25,6 +26,7 @@ import com.example.adoteme_app.login.presentation.login_screen.LoginScreen
 import com.example.adoteme_app.navigation.presentation.navi_drawer.NaviDrawerLayout
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
+import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
 import com.example.adoteme_app.pets.presentation.pets_screen.PetsScreen
 
 @Composable
@@ -53,6 +55,7 @@ fun MainApp() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AppHomeNavigation(
     navController: NavHostController,
@@ -68,6 +71,9 @@ fun AppHomeNavigation(
         }
         composable(InternalRoutes.Pets.route) {
             PetsScreen()
+        }
+        composable(InternalRoutes.PetsInfo.route) {
+            PetInfoScreen()
         }
     }
 }
