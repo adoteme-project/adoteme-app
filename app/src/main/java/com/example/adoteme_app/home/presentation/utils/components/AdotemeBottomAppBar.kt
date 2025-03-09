@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,12 +30,17 @@ fun AdotemeBottomAppBar() {
         green = 197,
         blue = 94
     )
-
-    // A cor do fima da muito claro
+    // A cor do figma da muito claro
     val secondaryColor = Color(
-        red = 255,
-        green = 223,
-        blue = 196
+        red = 253,
+        green = 246,
+        blue = 240
+    )
+
+    val greenColor = Color(
+        red = 198,
+        green = 214,
+        blue = 104
     )
 
     BottomAppBar(
@@ -80,7 +84,7 @@ fun AdotemeBottomAppBar() {
                     Icon(
                         Icons.Outlined.Person,
                         contentDescription = "Usuário",
-                        tint = Color.Green
+                        tint = greenColor
                     )
                 }
             }

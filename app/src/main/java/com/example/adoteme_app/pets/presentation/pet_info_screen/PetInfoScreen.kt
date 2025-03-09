@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.adoteme_app.R
+import com.example.adoteme_app.pets.utils.components.AccordionPersonality
+import com.example.adoteme_app.pets.utils.components.AccordionSection
 
 @Composable
 @ExperimentalLayoutApi
@@ -79,5 +81,15 @@ fun PetInfoScreen() {
             Text(text = "Tamanho: $petTamanho")
             Text(text = "Taxa de adoção: $petTaxa")
         }
+        AccordionPersonality(
+            sections = listOf(
+                AccordionSection(
+                    title = "Personalidades",
+                    rows = listOf("Brincalhão", "Calmo", "Territorial")
+                )
+            )
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = "Sugestão", fontSize = 28.sp, fontWeight = FontWeight.Bold)
     }
 }
