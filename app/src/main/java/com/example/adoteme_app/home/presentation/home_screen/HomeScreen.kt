@@ -15,6 +15,8 @@ import com.example.adoteme_app.R
 import com.example.adoteme_app.model.Categoria
 import com.example.adoteme_app.ui.components.BannerCarrossel
 import com.example.adoteme_app.ui.components.CategoriaCarrossel
+import com.example.adoteme_app.ui.components.GridLayout.Animal
+import com.example.adoteme_app.ui.components.GridLayout.GridLayout
 
 @Composable
 fun HomeScreen() {
@@ -39,5 +41,4 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = "Próximos a você", fontSize = 28.sp, fontWeight = FontWeight.Bold)
     }
-
 }
