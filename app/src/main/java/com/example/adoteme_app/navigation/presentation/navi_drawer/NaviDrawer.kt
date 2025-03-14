@@ -68,7 +68,6 @@ fun NaviDrawerLayout (
 
     Column(
         modifier = Modifier.fillMaxSize()
-            .verticalScroll(rememberScrollState())
     ) {
         Box(
             modifier = Modifier

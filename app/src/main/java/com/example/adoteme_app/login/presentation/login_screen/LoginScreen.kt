@@ -3,6 +3,7 @@ package com.example.adoteme_app.login.presentation.login_screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -20,7 +21,7 @@ fun LoginScreen(
 ) {
     Scaffold { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding)
+            modifier = Modifier.fillMaxWidth().padding(innerPadding)
         ) {
             Text(
                 text = "Login",

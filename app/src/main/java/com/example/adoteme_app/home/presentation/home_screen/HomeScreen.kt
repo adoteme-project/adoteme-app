@@ -3,6 +3,7 @@ package com.example.adoteme_app.home.presentation.home_screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -15,8 +16,6 @@ import com.example.adoteme_app.R
 import com.example.adoteme_app.model.Categoria
 import com.example.adoteme_app.ui.components.BannerCarrossel
 import com.example.adoteme_app.ui.components.CategoriaCarrossel
-import com.example.adoteme_app.ui.components.GridLayout.Animal
-import com.example.adoteme_app.ui.components.GridLayout.GridLayout
 
 @Composable
 fun HomeScreen() {
@@ -32,7 +31,7 @@ fun HomeScreen() {
     )
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
     ) {
         BannerCarrossel(banners)
         Spacer(modifier = Modifier.height(12.dp))
