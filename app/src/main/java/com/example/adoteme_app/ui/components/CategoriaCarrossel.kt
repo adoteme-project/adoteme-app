@@ -58,24 +58,5 @@ fun CategoriaCarrossel(categorias: List<Categoria>) {
                 }
             }
         }
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-
-            repeat(categorias.size) { index ->
-                val color = if (index == currentPage) Color(0xFFFFA000) else Color.LightGray
-                Box(
-                    modifier = Modifier
-                        .size(12.dp)
-                        .padding(4.dp)
-                        .background(color, shape = CircleShape)
-                )
-            }
-        }
     }
 }
