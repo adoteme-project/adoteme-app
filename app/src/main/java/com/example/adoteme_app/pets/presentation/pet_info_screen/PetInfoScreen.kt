@@ -9,13 +9,18 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -28,10 +33,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.example.adoteme_app.R
 import com.example.adoteme_app.pets.utils.components.AccordionPersonality
 import com.example.adoteme_app.pets.utils.components.AccordionSection
@@ -49,25 +57,17 @@ fun PetInfoScreen() {
     var showBottomSheet by remember { mutableStateOf(false) }
 
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false
+        skipPartiallyExpanded = false,
     )
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val minHeight = screenHeight * 0.45f
 
-    val actionColor = Color(
-        red = 255,
-        green = 166,
-        blue = 7
-    )
+    val showModal = remember { mutableStateOf(false) }
 
-    val rejectColor = Color(
-        red = 236,
-        green = 90,
-        blue = 73
-    )
-    val approvalColor = Color(
-        red = 169,
-        green = 185,
-        blue = 73
-    )
+
+    val actionColor = Color(red = 255, green = 166, blue = 7)
+    val rejectColor = Color(red = 236, green = 90, blue = 73)
+    val approvalColor = Color(red = 169, green = 185, blue = 73)
 
 
     LazyColumn(
@@ -86,7 +86,7 @@ fun PetInfoScreen() {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Cidade - Estado",
+                    text = "Guarulhos - São Paulo",
                     fontSize = 12.sp,
                 )
             }
@@ -106,7 +106,8 @@ fun PetInfoScreen() {
             Text(
                 text = "Noha",
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                lineHeight = 32.sp
             )
         }
 
@@ -127,11 +128,11 @@ fun PetInfoScreen() {
                 modifier = Modifier.padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = "Espécie: $petEspecie")
-                Text(text = "Sexo: $petSexo")
-                Text(text = "Idade: $petIdade")
-                Text(text = "Tamanho: $petTamanho")
-                Text(text = "Taxa de adoção: $petTaxa")
+                Text(text = "Espécie: $petEspecie", lineHeight = 32.sp)
+                Text(text = "Sexo: $petSexo", lineHeight = 32.sp)
+                Text(text = "Idade: $petIdade", lineHeight = 32.sp)
+                Text(text = "Tamanho: $petTamanho", lineHeight = 32.sp)
+                Text(text = "Taxa de adoção: $petTaxa", lineHeight = 32.sp)
             }
         }
 
@@ -178,9 +179,9 @@ fun PetInfoScreen() {
         item {
             if(showBottomSheet) {
                 ModalBottomSheet(
-                    modifier = Modifier.fillMaxHeight(),
+                    modifier = Modifier.heightIn(min = minHeight),
                     sheetState = sheetState,
-                    onDismissRequest = { showBottomSheet = false}
+                    onDismissRequest = { showBottomSheet = false},
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(21.dp),
@@ -197,7 +198,7 @@ fun PetInfoScreen() {
                                     "Por favor, confirme que você tem certeza e está preparado" +
                                     "para fornecer um lar permanente."
                         )
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(21.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center,
@@ -209,7 +210,7 @@ fun PetInfoScreen() {
                                     disabledContentColor = Color.Transparent,
                                     disabledContainerColor = Color.LightGray
                                 ),
-                                onClick = {}
+                                onClick = { showBottomSheet = false}
                             ) {
                                 Text(
                                     "Cancelar",
@@ -226,7 +227,7 @@ fun PetInfoScreen() {
                                     disabledContentColor = Color.Transparent,
                                     disabledContainerColor = Color.LightGray
                                 ),
-                                onClick = {}
+                                onClick = { showModal.value = true}
                             ) {
                                 Text(
                                     "Aceitar",
@@ -239,6 +240,37 @@ fun PetInfoScreen() {
                     }
                 }
             }
+        }
+
+        item {
+            if (showModal.value) {
+                ModalAdocao(setShowModal = {showModal.value = it})
+            }
+        }
+    }
+}
+
+@Composable
+fun ModalAdocao(
+    onDismissRequest: () -> Unit = {},
+    setShowModal: (Boolean) -> Unit = {}
+) {
+    Dialog(onDismissRequest = { setShowModal(false) }) {
+        Card (
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Text(
+                text = "Seu interesse em adotar foi registrado! Verifique " +
+                        "a aba “Meus Pets” , na sessão do seu perfil, para atualizações.",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.Center),
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }
