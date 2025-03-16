@@ -22,7 +22,7 @@ fun OngsScreen() {
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         item { SearchBar() }
         items(ongs) { ong ->
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             OngCard(
                 nome = ong.nome,
                 endereco = ong.endereco,
