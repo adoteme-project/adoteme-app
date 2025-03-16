@@ -2,6 +2,7 @@ package com.example.adoteme_app.navigation.presentation.navi_drawer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,10 +43,11 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun NaviDrawerLayout (
+fun NaviDrawerLayout(
     drawerState: DrawerState,
     scope: CoroutineScope,
-    navController: NavController
+    mainNavController: NavController,  // Rotas externas
+    nestedNavController: NavController  // Rotas internas
 ) {
     val items = listOf(
         NavDrawerItem.Home,
@@ -54,17 +56,8 @@ fun NaviDrawerLayout (
         NavDrawerItem.Favoritos,
     )
 
-    val mainColor = Color(
-        red = 255,
-        green = 197,
-        blue = 94
-    )
-
-    val blueColor = Color(
-        red = 76,
-        green = 142,
-        blue = 181
-    )
+    val mainColor = Color(red = 255, green = 197, blue = 94)
+    val blueColor = Color(red = 76, green = 142, blue = 181)
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -82,10 +75,20 @@ fun NaviDrawerLayout (
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    modifier = Modifier.size(100.dp),
+                    modifier = Modifier.size(100.dp)
+                        .clickable {
+                            nestedNavController.navigate(InternalRoutes.Profile.route) {
+                                popUpTo(InternalRoutes.Home.route) {
+                                    saveState = true
+                                }
+                            }
+                            scope.launch {
+                                drawerState.close()
+                            }
+                        },
                     imageVector = Icons.Filled.AccountCircle,
                     contentScale = ContentScale.Crop,
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Text(
                     "Olá, usuário!",
@@ -94,22 +97,30 @@ fun NaviDrawerLayout (
                     fontWeight = FontWeight.Bold
                 )
             }
-
         }
 
         Spacer(Modifier.height(32.dp))
 
         items.forEach { item ->
             DrawerItem(item = item, onItemClick = {
-                navController.navigate(item.route) {
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
+                when (item.route) {
+                    InternalRoutes.Home.route,
+                    InternalRoutes.Pets.route,
+                    InternalRoutes.Ongs.route,
+                    InternalRoutes.Favoritos.route -> {
+                        nestedNavController.navigate(item.route) {
+                            popUpTo(nestedNavController.graph.startDestinationId!!)
+                            launchSingleTop = true
                         }
                     }
-                    launchSingleTop = true
-                    restoreState = true
+                    else -> {
+                        mainNavController.navigate(item.route) {
+                            popUpTo(RootRoutes.HomeSection.route)
+                            launchSingleTop = true
+                        }
+                    }
                 }
+
                 scope.launch {
                     drawerState.close()
                 }
@@ -130,9 +141,9 @@ fun NaviDrawerLayout (
                     disabledContainerColor = Color.LightGray
                 ),
                 onClick = {
-                    navController.navigate(InternalRoutes.PetsInfo.route) {
+                    mainNavController.navigate(RootRoutes.Login.route) {
                         popUpTo(InternalRoutes.Home.route) {
-                            inclusive = true
+                            saveState = true
                         }
                     }
                     scope.launch {
@@ -160,6 +171,5 @@ fun NaviDrawerLayout (
                 )
             }
         }
-
     }
 }
