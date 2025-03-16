@@ -18,15 +18,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 
 @Composable
-fun ListItemOption(text: String ) {
-    // onNavigate: () -> Unit
+fun ListItemOption(text: String, navController: NavHostController, route: String) {
     Box(
         modifier = Modifier.padding(8.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().clickable { },
+            modifier = Modifier.fillMaxWidth().clickable {
+                navController.navigate(route) {
+                    popUpTo(InternalRoutes.Profile.route) {
+                        saveState = true
+                    }
+                } },
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = text, fontSize = 16.sp)

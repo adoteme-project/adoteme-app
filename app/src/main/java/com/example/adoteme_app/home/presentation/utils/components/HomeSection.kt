@@ -54,7 +54,7 @@ fun HomeSectionWrapper(
                 ) {
                     composable(InternalRoutes.Home.route) { HomeScreen() }
                     composable(InternalRoutes.Pets.route) { PetsScreen() }
-                    composable(InternalRoutes.Profile.route) { ProfileScreen() }
+                    composable(InternalRoutes.Profile.route) { ProfileScreen(mainNavController) }
                 }
             }
         }

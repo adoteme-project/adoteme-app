@@ -12,11 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.perfil.presentation.utils.components.ListItemOption
 import com.example.adoteme_app.perfil.presentation.utils.components.ProfilePhotoPicker
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier.padding(horizontal = 12.dp)
     ) {
@@ -28,8 +30,20 @@ fun ProfileScreen() {
             ProfilePhotoPicker()
             Text(text = "Adotante", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         }
-        ListItemOption(text = "Meus Dados")
-        ListItemOption(text = "Meus Formulário")
-        ListItemOption(text = "Minhas Aplicações")
+        ListItemOption(
+            text = "Meus Dados",
+            navController =  navHostController,
+            InternalRoutes.ProfileData.route
+        )
+        ListItemOption(
+            text = "Meus Formulário",
+            navController = navHostController,
+            InternalRoutes.ProfileForm.route
+        )
+        ListItemOption(
+            text = "Minhas Aplicações",
+            navController = navHostController,
+            InternalRoutes.ProfileAplicacoes.route
+        )
     }
 }
