@@ -26,6 +26,7 @@ import com.example.adoteme_app.login.presentation.login_screen.LoginScreen
 import com.example.adoteme_app.navigation.presentation.navi_drawer.NaviDrawerLayout
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
+import com.example.adoteme_app.pets.presentation.ongs_screen.OngsScreen
 import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
 import com.example.adoteme_app.pets.presentation.pets_screen.PetsScreen
 
@@ -74,6 +75,12 @@ fun AppHomeNavigation(
         }
         composable(InternalRoutes.PetsInfo.route) {
             PetInfoScreen()
+        }
+        composable(InternalRoutes.Ongs.route) {
+            OngsScreen()
+        }
+        composable(InternalRoutes.Favoritos.route) {
+            //FavoritosScreen()
         }
     }
 }

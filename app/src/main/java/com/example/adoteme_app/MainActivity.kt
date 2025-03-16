@@ -3,7 +3,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.adoteme_app.MainApp
+import com.example.adoteme_app.pets.presentation.ongs_screen.OngsScreen
 import com.example.adoteme_app.ui.theme.AdotemeappTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AdotemeappTheme {
-                MainApp()
+                OngsScreen()
             }
         }
     }
@@ -21,6 +21,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     AdotemeappTheme {
-        MainApp()
+        OngsScreen()
     }
 }
