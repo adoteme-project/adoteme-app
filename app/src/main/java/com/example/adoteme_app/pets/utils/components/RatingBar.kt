@@ -15,12 +15,14 @@ fun RatingBarPersonality(
     currentRating:Int,
     // onRatingSelected: (Int) -> Unit
 ) {
+    val mainColor = Color(red = 255, green = 197, blue = 94)
+
     Row {
         for (i in 1..maxRating) {
             Icon(
                 imageVector = Icons.Default.Pets,
                 contentDescription = "Contador de Personalidade",
-                tint = if (i <= currentRating) Color.Yellow else Color.Gray,
+                tint = if (i <= currentRating) mainColor else Color.Gray,
                 // modifier = Modifier.clickable { onRatingSelected(i) }
             )
         }

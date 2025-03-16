@@ -35,7 +35,7 @@ fun PetsScreen() {
     )
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
     ) {
         Image(
             painter = painterResource(R.drawable.animais),

@@ -21,27 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 
 @Composable
-fun AdotemeBottomAppBar() {
+fun AdotemeBottomAppBar(
+    mainNavController: NavController,  // Rotas externas
+    nestedNavController: NavController  // Rotas internas
+) {
 
-    val mainColor = Color(
-        red = 255,
-        green = 197,
-        blue = 94
-    )
-    // A cor do figma da muito claro
-    val secondaryColor = Color(
-        red = 253,
-        green = 246,
-        blue = 240
-    )
-
-    val greenColor = Color(
-        red = 198,
-        green = 214,
-        blue = 104
-    )
+    val mainColor = Color(red = 255, green = 197, blue = 94)
+    val secondaryColor = Color(red = 253, green = 246, blue = 240)
+    val greenColor = Color(red = 198, green = 214, blue = 104)
 
     BottomAppBar(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
@@ -79,7 +70,13 @@ fun AdotemeBottomAppBar() {
                     )
                 }
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        nestedNavController.navigate(InternalRoutes.Profile.route) {
+                            popUpTo(InternalRoutes.Home.route) {
+                                saveState = true
+                            }
+                        }
+                    }
                 ) {
                     Icon(
                         Icons.Outlined.Person,

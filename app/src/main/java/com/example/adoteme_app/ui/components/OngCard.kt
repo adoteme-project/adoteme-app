@@ -3,11 +3,13 @@ package com.example.adoteme_app.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -26,38 +28,46 @@ fun OngCard(
     categoriaColor: Color
 ) {
     Card(
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFDF6F0))
     ) {
-        Column(
-            modifier = Modifier
-                .background(Color(0xFFFDF6F0))
-                .padding(16.dp)
-        ) {
+        Column {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
-                contentAlignment = Alignment.CenterEnd
+                    .align(Alignment.End)
+                    .background(categoriaColor, shape = RoundedCornerShape(bottomStart = 12.dp))
+                    .padding(horizontal = 16.dp, vertical = 6.dp)
+                    .fillMaxWidth(0.5f)
             ) {
-                Box(
-                    modifier = Modifier
-                        .background(categoriaColor, RoundedCornerShape(4.dp))
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    Text(text = "ONG", color = Color.White, fontSize = 12.sp)
-                }
+                Text(
+                    text = "ONG",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Image(
                     painter = painterResource(id = logo),
                     contentDescription = "Logo da ONG",
-                    modifier = Modifier.size(150.dp),
-                    contentScale = ContentScale.Fit
+                    modifier = Modifier
+                        .size(90.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+
+                Spacer(modifier = Modifier.width(12.dp))
+
                 Column {
                     Text(
                         text = "Endereço: $endereco",
@@ -70,25 +80,46 @@ fun OngCard(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = distancia, fontSize = 12.sp, color = Color.Black)
-            Spacer(modifier = Modifier.height(8.dp))
+
+
+            Text(
+                text = distancia,
+                fontSize = 12.sp,
+                color = Color.Black,
+                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+            )
+
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.End
             ) {
                 Button(
                     onClick = { /* TODO */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC55E))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC55E)),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(50))
+                        .width(60.dp)
+                        .height(30.dp),
+                    contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text(text = "Ver mais")
+                    Text(text = "Ver", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
+
                 Spacer(modifier = Modifier.width(8.dp))
+
                 Button(
                     onClick = { /* TODO */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFA9B949))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFA9B949)),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(50))
+                        .width(80.dp)
+                        .height(30.dp),
+                    contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text(text = "Doar")
+                    Text(text = "Doar", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
             }
         }

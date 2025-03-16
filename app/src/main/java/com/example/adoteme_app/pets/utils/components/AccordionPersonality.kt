@@ -3,6 +3,7 @@ package com.example.adoteme_app.pets.utils.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,41 +33,38 @@ fun AccordionPersonality(
     sections: List<AccordionSection>,
     modifier: Modifier = Modifier
 ) {
-
     val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
-    LazyColumn (modifier) {
+    Column (modifier) {
         sections.forEachIndexed { i, dataItem ->
             val collapsed = collapsedState[i]
-            item(key = "header_$i") {
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clickable {
+                        collapsedState[i] = !collapsed
+                    }
+            ) {
+                Icon(
+                    Icons.Default.run {
+                        if (collapsed)
+                            KeyboardArrowDown
+                        else
+                            KeyboardArrowUp
+                    },
+                    contentDescription = "",
+                    tint = Color.LightGray,
+                )
+                Text(
+                    dataItem.title,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .clickable {
-                            collapsedState[i] = !collapsed
-                        }
-                ) {
-                    Icon(
-                        Icons.Default.run {
-                            if (collapsed)
-                                KeyboardArrowDown
-                            else
-                                KeyboardArrowUp
-                        },
-                        contentDescription = "",
-                        tint = Color.LightGray,
-                    )
-                    Text(
-                        dataItem.title,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(vertical = 10.dp)
-                            .weight(1f)
-                    )
-                }
-                HorizontalDivider()
+                        .padding(vertical = 10.dp)
+                        .weight(1f)
+                )
             }
+            HorizontalDivider()
             if (!collapsed) {
-                items(dataItem.rows) { row ->
+                dataItem.rows.forEach { row ->
                     Row(
                         Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
