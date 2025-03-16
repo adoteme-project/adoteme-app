@@ -23,8 +23,7 @@ import com.example.adoteme_app.pets.presentation.pets_screen.PetsScreen
 
 @Composable
 fun HomeSectionWrapper(
-    mainNavController: NavHostController,
-    onInternalNavigate: (String) -> Unit
+    mainNavController: NavHostController
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -45,7 +44,10 @@ fun HomeSectionWrapper(
     ) {
         Scaffold(
             topBar = { AdotemeTopAppBar(drawerState, scope) },
-            bottomBar = { AdotemeBottomAppBar() }
+            bottomBar = { AdotemeBottomAppBar(
+                mainNavController = mainNavController,
+                nestedNavController = nestedNavController
+            ) }
         ) { innerPadding ->
             Box(Modifier.padding(innerPadding)) {
                 NavHost(

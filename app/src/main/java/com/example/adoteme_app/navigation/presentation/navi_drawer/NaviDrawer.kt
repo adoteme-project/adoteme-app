@@ -56,17 +56,8 @@ fun NaviDrawerLayout(
         NavDrawerItem.Favoritos,
     )
 
-    val mainColor = Color(
-        red = 255,
-        green = 197,
-        blue = 94
-    )
-
-    val blueColor = Color(
-        red = 76,
-        green = 142,
-        blue = 181
-    )
+    val mainColor = Color(red = 255, green = 197, blue = 94)
+    val blueColor = Color(red = 76, green = 142, blue = 181)
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -150,7 +141,7 @@ fun NaviDrawerLayout(
                     disabledContainerColor = Color.LightGray
                 ),
                 onClick = {
-                    mainNavController.navigate(InternalRoutes.PetsInfo.route) {
+                    mainNavController.navigate(RootRoutes.Login.route) {
                         popUpTo(InternalRoutes.Home.route) {
                             saveState = true
                         }

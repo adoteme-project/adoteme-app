@@ -12,7 +12,6 @@ import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.perfil.presentation.perfilDados_screen.PerfilDadosScreen
 import com.example.adoteme_app.perfil.presentation.perfilForm_screen.PerfilFormScreen
-import com.example.adoteme_app.perfil.presentation.perfil_screen.ProfileScreen
 import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -37,9 +36,6 @@ fun MainApp() {
             composable(InternalRoutes.Home.route) {
                 HomeSectionWrapper(
                     mainNavController = navController,
-                    onInternalNavigate = { route ->
-                        navController.navigate(route)  // Handle external navigation
-                    }
                 )
             }
         }
