@@ -1,5 +1,7 @@
 package com.example.adoteme_app
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -50,8 +52,11 @@ fun MainApp() {
             }
         }
 
-        composable(InternalRoutes.PetsInfo.route) { PetInfoScreen(onBack = {navController.popBackStack()})  }
+        composable(InternalRoutes.PetsInfo.route) { PetInfoScreen(onBack = {navController.popBackStack()}, navController)  }
         composable(InternalRoutes.ProfileData.route) { PerfilDadosScreen(onBack = {navController.popBackStack()}) }
         composable(InternalRoutes.ProfileForm.route) { PerfilFormScreen(onBack = {navController.popBackStack()}) }
     }
 }
+
+
+

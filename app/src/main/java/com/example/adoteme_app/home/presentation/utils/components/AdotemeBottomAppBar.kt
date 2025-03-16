@@ -53,7 +53,13 @@ fun AdotemeBottomAppBar(
                         disabledContainerColor = Color.LightGray
                     ),
                     modifier = Modifier.weight(1f),
-                    onClick = {}
+                    onClick = {
+                        nestedNavController.navigate(InternalRoutes.Ongs.route) {
+                            popUpTo(InternalRoutes.Home.route) {
+                                saveState = true
+                            }
+                        }
+                    }
                 ) {
                     Text(
                         text = "Doação",
@@ -61,7 +67,13 @@ fun AdotemeBottomAppBar(
                     )
                 }
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        nestedNavController.navigate(InternalRoutes.Favoritos.route) {
+                            popUpTo(InternalRoutes.Home.route) {
+                                saveState = true
+                            }
+                        }
+                    }
                 ) {
                     Icon(
                         Icons.Outlined.FavoriteBorder,
