@@ -43,20 +43,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
 import com.example.adoteme_app.R
+import com.example.adoteme_app.model.AnimalFavorito
 import com.example.adoteme_app.pets.utils.components.AccordionPersonality
 import com.example.adoteme_app.pets.utils.components.AccordionSection
+import com.example.adoteme_app.ui.components.AnimalFavoritoCard
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalLayoutApi
-fun PetInfoScreen(onBack: () -> Unit) {
+fun PetInfoScreen(onBack: () -> Unit, navController: NavController) {
     val petEspecie: String = "Cachorro"
     val petSexo: String = "Macho"
     val petIdade: String = "2 anos"
@@ -77,6 +83,11 @@ fun PetInfoScreen(onBack: () -> Unit) {
     val actionColor = Color(red = 255, green = 166, blue = 7)
     val rejectColor = Color(red = 236, green = 90, blue = 73)
     val approvalColor = Color(red = 169, green = 185, blue = 73)
+    val animals = listOf(
+        AnimalFavorito("NOAH", "2 anos", "Macho", R.drawable.animal),
+        AnimalFavorito("NOAH", "2 anos", "Macho", R.drawable.animal),
+    )
+
 
     Scaffold(
         topBar = {
@@ -89,11 +100,6 @@ fun PetInfoScreen(onBack: () -> Unit) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBackIosNew,
                             contentDescription = "Voltar",
-                            tint = Color(
-                                red = 198,
-                                green = 214,
-                                blue = 104
-                            )
                         )
                     }
                 },
@@ -144,8 +150,9 @@ fun PetInfoScreen(onBack: () -> Unit) {
 
                 item {
                     Text(
-                        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
-                                "Proin nec mi eget ligula dignissim aliquam vitae a tellus.",
+                        text = "Nhoa é um pet carismático e cheio de energia! " +
+                                "Com um olhar expressivo e uma personalidade cativante, ele " +
+                                "adora brincar, correr e explorar novos ambientes.",
                         fontSize = 14.sp
                     )
                 }
@@ -159,11 +166,51 @@ fun PetInfoScreen(onBack: () -> Unit) {
                         modifier = Modifier.padding(vertical = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(text = "Espécie: $petEspecie", lineHeight = 32.sp)
-                        Text(text = "Sexo: $petSexo", lineHeight = 32.sp)
-                        Text(text = "Idade: $petIdade", lineHeight = 32.sp)
-                        Text(text = "Tamanho: $petTamanho", lineHeight = 32.sp)
-                        Text(text = "Taxa de adoção: $petTaxa", lineHeight = 32.sp)
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("Espécie: ")
+                                }
+                                append(petEspecie)
+                            },
+                            lineHeight = 32.sp
+                        )
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("Sexo: ")
+                                }
+                                append(petSexo)
+                            },
+                            lineHeight = 32.sp
+                        )
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("Idade: ")
+                                }
+                                append(petIdade)
+                            },
+                            lineHeight = 32.sp
+                        )
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("Tamanho: ")
+                                }
+                                append(petTamanho)
+                            },
+                            lineHeight = 32.sp
+                        )
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("Taxa de adoção: ")
+                                }
+                                append(petTaxa)
+                            },
+                            lineHeight = 32.sp
+                        )
                     }
                 }
 
@@ -172,7 +219,8 @@ fun PetInfoScreen(onBack: () -> Unit) {
                         sections = listOf(
                             AccordionSection(
                                 title = "Personalidades",
-                                rows = listOf("Brincalhão", "Calmo", "Territorial")
+                                rows = listOf("Curiosos", "Amigáveis", "Tolerante",
+                                    "Obediente", "Territorialista", "Inteligente")
                             )
                         )
                     )
@@ -184,6 +232,27 @@ fun PetInfoScreen(onBack: () -> Unit) {
 
                 item {
                     Text(text = "Sugestão", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    val rows = animals.chunked(2)
+                    rows.forEach { rowItems ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(21.dp)
+                        ) {
+                            rowItems.forEach { animal ->
+                                Box(modifier = Modifier.weight(1f)) {
+                                    AnimalFavoritoCard(animal, navController)
+                                }
+                            }
+                            if (rowItems.size < 2) {
+                                Box(modifier = Modifier.weight(1f))
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(32.dp))
+                    }
                 }
 
                 item {
@@ -275,7 +344,7 @@ fun PetInfoScreen(onBack: () -> Unit) {
 
                 item {
                     if (showModal.value) {
-                        ModalAdocao(setShowModal = {showModal.value = it})
+                        ModalAdocao(onBack, setShowModal = {showModal.value = it})
                     }
                 }
             }
@@ -285,10 +354,13 @@ fun PetInfoScreen(onBack: () -> Unit) {
 
 @Composable
 fun ModalAdocao(
-    onDismissRequest: () -> Unit = {},
+    onBack: () -> Unit,
     setShowModal: (Boolean) -> Unit = {}
 ) {
-    Dialog(onDismissRequest = { setShowModal(false) }) {
+    Dialog(onDismissRequest = {
+        onBack()
+        setShowModal(false)
+    }) {
         Card (
             modifier = Modifier
                 .fillMaxWidth()

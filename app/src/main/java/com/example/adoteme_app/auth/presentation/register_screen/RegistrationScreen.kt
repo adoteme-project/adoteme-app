@@ -1,4 +1,4 @@
-package com.example.adoteme_app.perfil.presentation.perfilDados_screen
+package com.example.adoteme_app.auth.presentation.register_screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Button
@@ -26,16 +27,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.perfil.presentation.utils.components.DatePickerFieldToModal
 import com.example.adoteme_app.perfil.presentation.utils.components.InputForm
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilDadosScreen(onBack: () -> Unit) {
+fun RegistrationScreen(navController: NavController) {
     var fieldNome by remember { mutableStateOf("") }
     var fieldEmail by remember { mutableStateOf("") }
     var fieldCelular by remember { mutableStateOf("") }
@@ -47,22 +54,17 @@ fun PerfilDadosScreen(onBack: () -> Unit) {
 
     val actionColor = Color(red = 255, green = 166, blue = 7)
 
-    Scaffold(
+    Scaffold (
         topBar = {
             TopAppBar (
-                title = { Text("MEUS DADOS", fontWeight = FontWeight.Bold) },
+                title = { Text("CRIAR CONTA", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(
-                        onClick = onBack
+                        onClick = {navController.popBackStack()}
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBackIosNew,
-                            contentDescription = "Voltar",
-                            tint = Color(
-                                red = 198,
-                                green = 214,
-                                blue = 104
-                            )
+                            contentDescription = "Voltar"
                         )
                     }
                 },
@@ -87,6 +89,8 @@ fun PerfilDadosScreen(onBack: () -> Unit) {
                 item {InputForm(fieldEstado, "Estado", KeyboardType.Text)}
                 item {InputForm(fieldCidade, "Cidade", KeyboardType.Text)}
                 item {InputForm(fieldSenha, "Senha", KeyboardType.Password)}
+                item {BulletList()}
+                item {InputForm(fieldSenha, "Confirmar senha", KeyboardType.Password)}
                 item {
                     Button(
                         colors = ButtonColors(
@@ -95,11 +99,15 @@ fun PerfilDadosScreen(onBack: () -> Unit) {
                             disabledContentColor = Color.Transparent,
                             disabledContainerColor = Color.LightGray
                         ),
-                        modifier = Modifier.fillMaxWidth( ),
-                        onClick = { }
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            navController.navigate(RootRoutes.UserFormRegistration.route) {
+                                popUpTo(RootRoutes.UserRegistration.route) { saveState = true }
+                            }
+                        }
                     ) {
                         Text(
-                            text = "Alterar Dados",
+                            text = "Continuar",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.White
@@ -109,4 +117,27 @@ fun PerfilDadosScreen(onBack: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+fun BulletList() {
+    val bullet = "\u2022"
+    val messages = listOf(
+        "Mínimo de 8 caracteres",
+        "Pelo menos uma letra maiúscula",
+        "Pelo menos um número",
+        "Pelo menos um símbolo especial (!@#\$%^&*)"
+    )
+    val paragraphStyle = ParagraphStyle(textIndent = TextIndent(restLine = 12.sp))
+    Text(
+        buildAnnotatedString {
+            messages.forEach {
+                withStyle(style = paragraphStyle) {
+                    append(bullet)
+                    append("\t\t")
+                    append(it)
+                }
+            }
+        }
+    )
 }
