@@ -47,6 +47,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-svg:2.4.0")
+    implementation("androidx.compose.animation:animation:1.5.4")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation(libs.coil.compose)
@@ -62,7 +65,6 @@ dependencies {
     implementation("com.google.dagger:dagger:2.55")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.dagger:hilt-android:2.50")
-    implementation("io.coil-kt:coil-compose:2.3.0")
     implementation("com.google.accompanist:accompanist-permissions:0.31.1-alpha")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
 

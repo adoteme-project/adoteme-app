@@ -1,6 +1,7 @@
 package com.example.adoteme_app.perfil.presentation.perfilDados_screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -68,43 +69,45 @@ fun PerfilDadosScreen(onBack: () -> Unit) {
                 },
             )
         },
-        modifier = Modifier.padding(horizontal = 21.dp)
     ) { innerPadding ->
-        LazyColumn (
-            modifier = Modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+        Box(
+            modifier = Modifier.padding(horizontal = 21.dp)
         ) {
-            item {
-                HorizontalDivider()
-            }
-            item {InputForm(fieldNome, "Nome Completo", KeyboardType.Text)}
-            item {InputForm(fieldEmail, "E-mail", KeyboardType.Email)}
-            item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone)}
-            item {DatePickerFieldToModal(label = "Data de Nascimento")}
-            item {InputForm(fieldCep, "CEP", KeyboardType.Text)}
-            item {InputForm(fieldEstado, "Estado", KeyboardType.Text)}
-            item {InputForm(fieldCidade, "Cidade", KeyboardType.Text)}
-            item {InputForm(fieldSenha, "Senha", KeyboardType.Password)}
-            item {
-                Button(
-                    colors = ButtonColors(
-                        containerColor = actionColor,
-                        contentColor = Color.White,
-                        disabledContentColor = Color.Transparent,
-                        disabledContainerColor = Color.LightGray
-                    ),
-                    modifier = Modifier.fillMaxWidth( ),
-                    onClick = { }
-                ) {
-                    Text(
-                        text = "Alterar Dados",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
+            LazyColumn (
+                modifier = Modifier.padding(innerPadding),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                item {
+                    HorizontalDivider()
+                }
+                item {InputForm(fieldNome, "Nome Completo", KeyboardType.Text)}
+                item {InputForm(fieldEmail, "E-mail", KeyboardType.Email)}
+                item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone)}
+                item {DatePickerFieldToModal(label = "Data de Nascimento")}
+                item {InputForm(fieldCep, "CEP", KeyboardType.Text)}
+                item {InputForm(fieldEstado, "Estado", KeyboardType.Text)}
+                item {InputForm(fieldCidade, "Cidade", KeyboardType.Text)}
+                item {InputForm(fieldSenha, "Senha", KeyboardType.Password)}
+                item {
+                    Button(
+                        colors = ButtonColors(
+                            containerColor = actionColor,
+                            contentColor = Color.White,
+                            disabledContentColor = Color.Transparent,
+                            disabledContainerColor = Color.LightGray
+                        ),
+                        modifier = Modifier.fillMaxWidth( ),
+                        onClick = { }
+                    ) {
+                        Text(
+                            text = "Alterar Dados",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+                    }
                 }
             }
-
         }
     }
 }

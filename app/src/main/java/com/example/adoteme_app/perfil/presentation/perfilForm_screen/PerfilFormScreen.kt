@@ -1,6 +1,7 @@
 package com.example.adoteme_app.perfil.presentation.perfilForm_screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -49,71 +50,72 @@ fun PerfilFormScreen(onBack: () -> Unit) {
                 },
             )
         },
-        modifier = Modifier.padding(horizontal = 12.dp)
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(21.dp)
-        ) {
-            item { Text(
-                "Preencha o formulário de adoção abaixo.",
+        Box(modifier = Modifier.padding(horizontal = 21.dp)) {
+            LazyColumn(
+                modifier = Modifier.padding(innerPadding),
+                verticalArrangement = Arrangement.spacedBy(21.dp)
+            ) {
+                item { Text(
+                    "Preencha o formulário de adoção abaixo.",
                     fontSize = 18.sp,
                     modifier = Modifier.padding(top = 12.dp)
                 )
-            }
-            item {
-                RadioButtonGroup(
-                    "Moram crianças na sua casa?",
+                }
+                item {
+                    RadioButtonGroup(
+                        "Moram crianças na sua casa?",
                         radioOptions = listOf("Sim", "Não")
-                )
-            }
-            item {
-                RadioButtonGroup(
-                    "Todos que moram com você estão de acordo com a adoção?",
-                    radioOptions = listOf("Sim", "Não")
-                )
-            }
-            item {
-                RadioButtonGroup(
-                    "O responsável pelo animal será você ou outra pessoa?",
-                    radioOptions = listOf("Sim", "Não")
-                )
-            }
-            item {
-                RadioButtonGroup(
-                    "Você mora em casa ou apartamento?",
-                    radioOptions = listOf("Sim", "Não")
-                )
-            }
-            item {
-                RadioButtonGroup(
-                    "Sua residência é telada?",
-                    radioOptions = listOf("Sim", "Não")
-                )
-            }
-            item {
-                RadioButtonGroup(
-                    "Sua casa tem portão alto?",
-                    radioOptions = listOf("Sim", "Não")
-                )
-            }
-            item {
-                Button(
-                    colors = ButtonColors(
-                        containerColor = actionColor,
-                        contentColor = Color.White,
-                        disabledContentColor = Color.Transparent,
-                        disabledContainerColor = Color.LightGray
-                    ),
-                    modifier = Modifier.fillMaxWidth( ),
-                    onClick = { }
-                ) {
-                    Text(
-                        text = "Alterar Formulário",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
                     )
+                }
+                item {
+                    RadioButtonGroup(
+                        "Todos que moram com você estão de acordo com a adoção?",
+                        radioOptions = listOf("Sim", "Não")
+                    )
+                }
+                item {
+                    RadioButtonGroup(
+                        "O responsável pelo animal será você ou outra pessoa?",
+                        radioOptions = listOf("Sim", "Não")
+                    )
+                }
+                item {
+                    RadioButtonGroup(
+                        "Você mora em casa ou apartamento?",
+                        radioOptions = listOf("Sim", "Não")
+                    )
+                }
+                item {
+                    RadioButtonGroup(
+                        "Sua residência é telada?",
+                        radioOptions = listOf("Sim", "Não")
+                    )
+                }
+                item {
+                    RadioButtonGroup(
+                        "Sua casa tem portão alto?",
+                        radioOptions = listOf("Sim", "Não")
+                    )
+                }
+                item {
+                    Button(
+                        colors = ButtonColors(
+                            containerColor = actionColor,
+                            contentColor = Color.White,
+                            disabledContentColor = Color.Transparent,
+                            disabledContainerColor = Color.LightGray
+                        ),
+                        modifier = Modifier.fillMaxWidth( ),
+                        onClick = { }
+                    ) {
+                        Text(
+                            text = "Alterar Formulário",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+                    }
                 }
             }
         }

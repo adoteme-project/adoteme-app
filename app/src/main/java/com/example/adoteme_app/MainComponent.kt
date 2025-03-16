@@ -26,11 +26,7 @@ fun MainApp() {
     ) {
         composable(RootRoutes.Login.route) {
             LoginScreen(
-                onNavigate = {
-                    navController.navigate(RootRoutes.HomeSection.route) {
-                        popUpTo(RootRoutes.Login.route) { inclusive = true }
-                    }
-                }
+                navController = navController
             )
         }
 
