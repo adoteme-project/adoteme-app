@@ -1,4 +1,4 @@
-package com.example.adoteme_app.login.presentation.login_screen
+package com.example.adoteme_app.auth.presentation.login_screen
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -22,7 +22,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -204,7 +203,11 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
         Spacer(modifier = Modifier)
 
         TextButton(
-            onClick = { /* Handle create account */ }
+            onClick = {
+                navController.navigate(RootRoutes.UserRegistration.route) {
+                    popUpTo(RootRoutes.Login.route) { saveState = true }
+                }
+            }
         ) {
             Text(
                 text = "Criar conta",

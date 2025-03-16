@@ -16,6 +16,8 @@ import com.example.adoteme_app.R
 import com.example.adoteme_app.model.Categoria
 import com.example.adoteme_app.ui.components.BannerCarrossel
 import com.example.adoteme_app.ui.components.CategoriaCarrossel
+import com.example.adoteme_app.ui.components.GridLayout.Animal
+import com.example.adoteme_app.ui.components.GridLayout.GridLayout
 
 @Composable
 fun HomeScreen() {
@@ -30,6 +32,22 @@ fun HomeScreen() {
         Categoria("Amigáveis", R.drawable.dog_obd)
     )
 
+    val animals = listOf(
+        Animal(
+            id = 1,
+            name = "Rex",
+            idade = 3,
+            sexo = "Macho",
+            imageUrl =""
+        ),
+        Animal(
+            id = 2,
+            name = "Luna",
+            idade = 2,
+            sexo = "Fêmea",
+            imageUrl = "https://adimax.com.br/wp-content/uploads/2022/05/cuidados-filhote-de-cachorro.jpg")
+        ,)
+
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
     ) {
@@ -39,5 +57,6 @@ fun HomeScreen() {
         CategoriaCarrossel(listaCategiria)
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = "Próximos a você", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        GridLayout(animals = animals, columns = 2)
     }
 }
