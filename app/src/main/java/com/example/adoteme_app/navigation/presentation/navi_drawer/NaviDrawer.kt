@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -30,11 +31,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.adoteme_app.R
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.NavDrawerItem
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
@@ -70,7 +73,7 @@ fun NaviDrawerLayout(
             contentAlignment = Alignment.Center
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -85,13 +88,13 @@ fun NaviDrawerLayout(
                             scope.launch {
                                 drawerState.close()
                             }
-                        },
-                    imageVector = Icons.Filled.AccountCircle,
+                        }.clip(CircleShape),
+                    painter = painterResource(id = R.drawable.adotante_feliz),
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
                 )
                 Text(
-                    "Olá, usuário!",
+                    "Olá, Adotante!",
                     color = Color.White,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
@@ -163,7 +166,13 @@ fun NaviDrawerLayout(
                     disabledContentColor = Color.Transparent,
                     disabledContainerColor = Color.LightGray
                 ),
-                onClick = {}
+                onClick = {
+                    mainNavController.navigate(RootRoutes.UserRegistration.route) {
+                        popUpTo(InternalRoutes.Home.route) {
+                            saveState = true
+                        }
+                    }
+                }
             ) {
                 Text(
                     text = "Cadastrar",

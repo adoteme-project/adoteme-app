@@ -18,13 +18,18 @@ import androidx.navigation.NavController
 import com.example.adoteme_app.R
 import com.example.adoteme_app.model.AnimalFavorito
 import com.example.adoteme_app.model.Categoria
+import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
 import com.example.adoteme_app.ui.components.BannerCarrossel
 import com.example.adoteme_app.ui.components.CategoriaCarrossel
 
 @Composable
-fun HomeScreen(navController: NavController) {
-    val banners = listOf(R.drawable.animais, R.drawable.achados, R.drawable.ongs)
+fun HomeScreen(navController: NavController, nestedNavController: NavController) {
+    val bannerRoutes = mapOf(
+        R.drawable.animais to InternalRoutes.Pets,
+        R.drawable.doacoes to InternalRoutes.Ongs,
+        R.drawable.ongs to InternalRoutes.Ongs
+    )
 
     val listaCategoria: List<Categoria> = listOf(
         Categoria("Brincalhões", R.drawable.dog_soc),
@@ -46,7 +51,7 @@ fun HomeScreen(navController: NavController) {
         modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
     ) {
         item {
-            BannerCarrossel(banners)
+            BannerCarrossel(bannerRoutes, nestedNavController)
         }
         item {
             Spacer(modifier = Modifier.height(12.dp))

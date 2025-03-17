@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.adoteme_app.home.presentation.home_screen.HomeScreen
 import com.example.adoteme_app.navigation.presentation.navi_drawer.NaviDrawerLayout
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
+import com.example.adoteme_app.perfil.presentation.perfilAplicacao_screen.PerfilAplicacoScreen
 import com.example.adoteme_app.perfil.presentation.perfil_screen.ProfileScreen
 import com.example.adoteme_app.pets.presentation.favoritos_screen.AnimalFavoritoScreen
 import com.example.adoteme_app.pets.presentation.ongs_screen.OngsScreen
@@ -57,7 +58,7 @@ fun HomeSectionWrapper(
                     navController = nestedNavController,
                     startDestination = InternalRoutes.Home.route
                 ) {
-                    composable(InternalRoutes.Home.route) { HomeScreen(mainNavController) }
+                    composable(InternalRoutes.Home.route) { HomeScreen(mainNavController, nestedNavController) }
                     composable(InternalRoutes.Pets.route) { PetsScreen(mainNavController) }
                     composable(InternalRoutes.Profile.route) { ProfileScreen(mainNavController) }
                     composable(InternalRoutes.Favoritos.route) { AnimalFavoritoScreen(mainNavController) }

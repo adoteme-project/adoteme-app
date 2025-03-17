@@ -2,6 +2,7 @@ package com.example.adoteme_app.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -14,10 +15,17 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Surface
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.example.adoteme_app.R
+import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 
 @Composable
-fun BannerCarrossel(imagens: List<Int>) {
+fun BannerCarrossel(
+    bannerRoutes: Map<Int, InternalRoutes>, // Recebe o mapa de rotas (objetos InternalRoutes)
+    navController: NavController
+) {
+    // Extrai as imagens do mapa de rotas
+    val imagens = bannerRoutes.keys.toList()
     val pagerState = rememberPagerState { imagens.size }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -25,13 +33,24 @@ fun BannerCarrossel(imagens: List<Int>) {
             state = pagerState,
             modifier = Modifier.fillMaxWidth().height(200.dp)
         ) { page ->
+            val imageRes = imagens[page]
+            // Obtém o objeto InternalRoutes correspondente à imagem atual
+            val route = bannerRoutes[imageRes] ?: InternalRoutes.Home
+
             Surface(
                 modifier = Modifier.fillMaxSize()
             ) {
                 Image(
-                    painter = painterResource(id = imagens[page]),
+                    painter = painterResource(id = imageRes),
                     contentDescription = "Banner ${page + 1}",
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize().clickable {
+                        // Navega para a rota correspondente ao banner clicado
+                        navController.navigate(route.route) {
+                            popUpTo(InternalRoutes.Home.route) {
+                                saveState = true
+                            }
+                        }
+                    }
                 )
             }
         }
@@ -50,17 +69,4 @@ fun BannerCarrossel(imagens: List<Int>) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BannerCarrosselPreview() {
-    val banners = listOf(
-        R.drawable.achados,
-        R.drawable.ongs,
-        R.drawable.animais,
-        R.drawable.doacoes
-    )
-
-    BannerCarrossel(imagens = banners)
 }
