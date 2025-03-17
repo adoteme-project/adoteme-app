@@ -14,6 +14,7 @@ import com.example.adoteme_app.auth.presentation.register_form_screen.Registrati
 import com.example.adoteme_app.auth.presentation.register_screen.RegistrationScreen
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
+import com.example.adoteme_app.perfil.presentation.perfilAplicacao_screen.PerfilAplicacoScreen
 import com.example.adoteme_app.perfil.presentation.perfilDados_screen.PerfilDadosScreen
 import com.example.adoteme_app.perfil.presentation.perfilForm_screen.PerfilFormScreen
 import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
@@ -55,6 +56,7 @@ fun MainApp() {
         composable(InternalRoutes.PetsInfo.route) { PetInfoScreen(onBack = {navController.popBackStack()}, navController)  }
         composable(InternalRoutes.ProfileData.route) { PerfilDadosScreen(onBack = {navController.popBackStack()}) }
         composable(InternalRoutes.ProfileForm.route) { PerfilFormScreen(onBack = {navController.popBackStack()}) }
+        composable(InternalRoutes.ProfileAplicacoes.route) { PerfilAplicacoScreen(navController) }
     }
 }
 
