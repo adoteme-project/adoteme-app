@@ -42,6 +42,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     val nav_version = "2.8.8"
 
     implementation(libs.androidx.core.ktx)

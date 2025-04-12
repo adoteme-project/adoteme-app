@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
+import com.example.adoteme_app.ui.theme.GreenColor
 
 @Composable
 fun AdotemeBottomAppBar(
@@ -32,7 +33,6 @@ fun AdotemeBottomAppBar(
 
     val mainColor = Color(red = 255, green = 197, blue = 94)
     val secondaryColor = Color(red = 253, green = 246, blue = 240)
-    val greenColor = Color(red = 198, green = 214, blue = 104)
 
     BottomAppBar(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
@@ -93,7 +93,7 @@ fun AdotemeBottomAppBar(
                     Icon(
                         Icons.Outlined.Person,
                         contentDescription = "Usuário",
-                        tint = greenColor
+                        tint = GreenColor
                     )
                 }
             }
