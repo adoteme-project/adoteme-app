@@ -1,6 +1,5 @@
 package com.example.adoteme_app.navigation.presentation.navi_drawer
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,21 +31,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.adoteme_app.MainActivity
 import com.example.adoteme_app.R
-import com.example.adoteme_app.WelcomeActivity
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.NavDrawerItem
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
-import com.example.adoteme_app.ui.theme.BlueColor
-import com.example.adoteme_app.ui.theme.MainColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -65,7 +59,8 @@ fun NaviDrawerLayout(
         NavDrawerItem.Favoritos,
     )
 
-    val contexto = LocalContext.current
+    val mainColor = Color(red = 255, green = 197, blue = 94)
+    val blueColor = Color(red = 76, green = 142, blue = 181)
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -74,7 +69,7 @@ fun NaviDrawerLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .size(175.dp)
-                .background(color = MainColor, shape = RoundedCornerShape(bottomEnd = 45.dp)),
+                .background(color = mainColor, shape = RoundedCornerShape(bottomEnd = 45.dp)),
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -143,14 +138,20 @@ fun NaviDrawerLayout(
         ) {
             Button(
                 colors = ButtonColors(
-                    containerColor = BlueColor,
+                    containerColor = blueColor,
                     contentColor = Color.White,
                     disabledContentColor = Color.Transparent,
                     disabledContainerColor = Color.LightGray
                 ),
                 onClick = {
-                    val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
-                    contexto.startActivity(welcomeSection)
+                    mainNavController.navigate(RootRoutes.Login.route) {
+                        popUpTo(InternalRoutes.Home.route) {
+                            saveState = true
+                        }
+                    }
+                    scope.launch {
+                        drawerState.close()
+                    }
                 }
             ) {
                 Text(
@@ -160,14 +161,17 @@ fun NaviDrawerLayout(
             }
             Button(
                 colors = ButtonColors(
-                    containerColor = MainColor,
+                    containerColor = mainColor,
                     contentColor = Color.White,
                     disabledContentColor = Color.Transparent,
                     disabledContainerColor = Color.LightGray
                 ),
                 onClick = {
-                    val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
-                    contexto.startActivity(welcomeSection)
+                    mainNavController.navigate(RootRoutes.UserRegistration.route) {
+                        popUpTo(InternalRoutes.Home.route) {
+                            saveState = true
+                        }
+                    }
                 }
             ) {
                 Text(
