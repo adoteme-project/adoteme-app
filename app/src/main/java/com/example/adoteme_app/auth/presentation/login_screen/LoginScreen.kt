@@ -1,7 +1,5 @@
 package com.example.adoteme_app.auth.presentation.login_screen
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -35,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -45,15 +42,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.adoteme_app.MainActivity
 import com.example.adoteme_app.R
-import com.example.adoteme_app.WelcomeActivity
-import com.example.adoteme_app.auth.presentation.login_screen.ViewModel.LoginViewModel
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import kotlinx.coroutines.delay
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(
@@ -61,7 +53,6 @@ fun LoginScreen(
 ) {
     Scaffold { innerPadding ->
         var showForm by remember { mutableStateOf(false) }
-        val contexto = LocalContext.current
 
         // Delay de 2000ms para exibir o formulário
         LaunchedEffect(Unit) {
@@ -96,8 +87,7 @@ fun LoginScreen(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .offset(y = formOffSet),
-                        navController = navController,
-                        contexto = contexto
+                        navController = navController
                     )
                 }
             }
@@ -106,11 +96,10 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, contexto: Context) {
+fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val viewModel: LoginViewModel = koinViewModel()
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -179,7 +168,11 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, c
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {viewModel.login(email,password)},
+            onClick = {
+                navController.navigate(RootRoutes.HomeSection.route) {
+                    popUpTo(RootRoutes.Login.route) { inclusive = true }
+                }
+            },
             modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 32.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFFA607),
