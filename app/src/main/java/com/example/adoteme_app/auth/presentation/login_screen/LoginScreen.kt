@@ -45,12 +45,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.adoteme_app.MainActivity
 import com.example.adoteme_app.R
 import com.example.adoteme_app.WelcomeActivity
+import com.example.adoteme_app.auth.presentation.login_screen.ViewModel.LoginViewModel
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import kotlinx.coroutines.delay
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(
@@ -107,6 +110,7 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, c
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    val viewModel: LoginViewModel = koinViewModel()
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -175,10 +179,7 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, c
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                val homeSection = Intent(contexto, MainActivity::class.java)
-                contexto.startActivity(homeSection)
-            },
+            onClick = {viewModel.login(email,password)},
             modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 32.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFFA607),
