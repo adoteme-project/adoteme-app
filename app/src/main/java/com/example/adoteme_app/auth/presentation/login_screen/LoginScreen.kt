@@ -44,8 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.adoteme_app.R
+import com.example.adoteme_app.auth.presentation.login_screen.viewModel.LoginViewModel
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import kotlinx.coroutines.delay
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(
@@ -100,6 +102,7 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    val viewModel: LoginViewModel = koinViewModel()
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -168,11 +171,7 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                navController.navigate(RootRoutes.HomeSection.route) {
-                    popUpTo(RootRoutes.Login.route) { inclusive = true }
-                }
-            },
+            onClick = {viewModel.login(email,password)},
             modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 32.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFFA607),
