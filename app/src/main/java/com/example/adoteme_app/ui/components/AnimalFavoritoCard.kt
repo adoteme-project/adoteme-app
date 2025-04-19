@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.adoteme_app.model.AnimalFavorito
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 
@@ -36,9 +37,8 @@ fun AnimalFavoritoCard(animal: AnimalFavorito, navController: NavController) {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Image(
-                painter = painterResource(id = animal.imageUrl),
+            AsyncImage(
+                model = animal.imageUrl,
                 contentDescription = "Imagem de ${animal.nome}",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -47,38 +47,25 @@ fun AnimalFavoritoCard(animal: AnimalFavorito, navController: NavController) {
                     .padding(top = 12.dp, bottom = 8.dp)
             )
 
-
             Card(
                 shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF0DC)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .width(200.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = animal.nome,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = "${animal.idade}, ${animal.sexo}",
-                        fontSize = 14.sp,
-                        color = Color.Gray
-                    )
-
+                    Text(animal.nome, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text("${animal.idade}, ${animal.sexo}", fontSize = 14.sp, color = Color.Gray)
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Button(
                         onClick = {
                             navController.navigate(InternalRoutes.PetsInfo.route) {
-                                popUpTo(InternalRoutes.Home.route) {
-                                    saveState = true
-                                }
+                                popUpTo(InternalRoutes.Home.route) { saveState = true }
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA726)),
@@ -88,12 +75,7 @@ fun AnimalFavoritoCard(animal: AnimalFavorito, navController: NavController) {
                             .clip(RoundedCornerShape(50)),
                         contentPadding = PaddingValues(0.dp)
                     ) {
-                        Text(
-                            text = "Ver mais",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                            color = Color.White
-                        )
+                        Text("Ver mais", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
                     }
                 }
             }

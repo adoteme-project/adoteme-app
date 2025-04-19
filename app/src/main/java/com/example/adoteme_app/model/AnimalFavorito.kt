@@ -4,5 +4,5 @@ data class AnimalFavorito(
     val nome: String,
     val idade: String,
     val sexo: String,
-    val imageUrl: Int
+    val imageUrl: String
 )
