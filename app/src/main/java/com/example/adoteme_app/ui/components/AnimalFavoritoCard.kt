@@ -20,11 +20,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.adoteme_app.model.AnimalFavorito
+import com.example.adoteme_app.model.AnimalResponse
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 
 
 @Composable
-fun AnimalFavoritoCard(animal: AnimalFavorito, navController: NavController) {
+fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
     Card(
         shape = RoundedCornerShape(24.dp),
         modifier = Modifier
@@ -38,7 +39,7 @@ fun AnimalFavoritoCard(animal: AnimalFavorito, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
-                model = animal.imageUrl,
+                model = animal.imagem,
                 contentDescription = "Imagem de ${animal.nome}",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -64,7 +65,7 @@ fun AnimalFavoritoCard(animal: AnimalFavorito, navController: NavController) {
 
                     Button(
                         onClick = {
-                            navController.navigate(InternalRoutes.PetsInfo.route) {
+                            navController.navigate("petInfo/${animal.id}") {
                                 popUpTo(InternalRoutes.Home.route) { saveState = true }
                             }
                         },

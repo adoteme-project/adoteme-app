@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -56,9 +59,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.adoteme_app.R
+import com.example.adoteme_app.auth.presentation.login_screen.viewModel.LoginViewModel
 import com.example.adoteme_app.model.AnimalFavorito
+import com.example.adoteme_app.model.AnimalResponse
 import com.example.adoteme_app.model.RequisicaoCreateDto
+import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import com.example.adoteme_app.pets.utils.components.AccordionPersonality
 import com.example.adoteme_app.pets.utils.components.AccordionSection
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
@@ -67,16 +74,34 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalLayoutApi
-fun PetInfoScreen(onBack: () -> Unit, navController: NavController) {
+fun PetInfoScreen(onBack: () -> Unit, navController: NavController, idAnimal: Int) {
     val adocaoViewModel: RequisicaoViewModel = viewModel()
     val status by adocaoViewModel.estadoAdocao.collectAsState()
+    val animalViewModel: AnimalViewModel = viewModel()
+    val animal by animalViewModel.animal.collectAsState()
+    val animals: List<AnimalResponse> = viewModel()
 
-    val petEspecie: String = "Cachorro"
-    val petSexo: String = "Macho"
-    val petIdade: String = "2 anos"
-    val petTamanho: String = "Médio"
-    val petTaxa: String = "R$ 70"
-    val petNome: String = "Nhoa"
+    LaunchedEffect(idAnimal) {
+        animalViewModel.carregarAnimalPorId(idAnimal.toInt())
+    }
+
+    if (animal == null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    val loginViewModel: LoginViewModel = viewModel()
+    val idUsuario = loginViewModel.userId.value
+
+    val petNome = animal!!.nome
+    val petEspecie = animal!!.especie
+    val petSexo = animal!!.sexo
+    val petIdade = animal!!.idade
+    val petPorte = animal!!.porte
+    val imagemUrl = animal!!.imagem
+    val personalidades = animal!!.personalidade
 
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -91,10 +116,6 @@ fun PetInfoScreen(onBack: () -> Unit, navController: NavController) {
     val actionColor = Color(red = 255, green = 166, blue = 7)
     val rejectColor = Color(red = 236, green = 90, blue = 73)
     val approvalColor = Color(red = 169, green = 185, blue = 73)
-    val animals = listOf(
-        AnimalFavorito("NOAH", "2 anos", "Macho", R.drawable.animal),
-        AnimalFavorito("NOAH", "2 anos", "Macho", R.drawable.animal),
-    )
 
 
 Scaffold(
@@ -141,12 +162,13 @@ topBar = {
 
             item {
                 Image(
-                    painter = painterResource(id = R.drawable.pet),
-                    contentDescription = "Pet",
+                    painter = rememberAsyncImagePainter(model = imagemUrl),
+                    contentDescription = "Imagem do pet",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
-                        .padding(vertical = 12.dp)
+                        .padding(vertical = 12.dp),
+                    contentScale = ContentScale.Crop
                 )
             }
 
@@ -200,7 +222,7 @@ topBar = {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("Idade: ")
                             }
-                            append(petIdade)
+                            append(petIdade.toString())
                         },
                         lineHeight = 32.sp
                     )
@@ -209,7 +231,7 @@ topBar = {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("Tamanho: ")
                             }
-                            append(petTamanho)
+                            append(petPorte)
                         },
                         lineHeight = 32.sp
                     )
@@ -218,7 +240,7 @@ topBar = {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("Taxa de adoção: ")
                             }
-                            append(petTaxa)
+                            //append(petTaxa)
                         },
                         lineHeight = 32.sp
                     )
@@ -231,8 +253,12 @@ topBar = {
                         AccordionSection(
                             title = "Personalidades",
                             rows = listOf(
-                                "Curiosos", "Amigáveis", "Tolerante",
-                                "Obediente", "Territorialista", "Inteligente"
+                                "Energia: ${personalidades.energia}",
+                                "Sociabilidade: ${personalidades.sociabilidade}",
+                                "Tolerância: ${personalidades.tolerante}",
+                                "Obediência: ${personalidades.obediente}",
+                                "Territorialidade: ${personalidades.territorial}",
+                                "Inteligência: ${personalidades.inteligencia}"
                             )
                         )
                     )
@@ -342,7 +368,7 @@ topBar = {
                                         disabledContentColor = Color.Transparent,
                                         disabledContainerColor = Color.LightGray
                                     ),
-                                    onClick = {  adocaoViewModel.adotarAnimal(idUsuario, idAnimal),
+                                    onClick = {  adocaoViewModel.adotarAnimal(idUsuario, idAnimal)
                                         showModal.value = true }
                                 ) {
                                     Text(

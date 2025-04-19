@@ -13,7 +13,7 @@ data class AnimalResponse(
     val porte: String,
     val especie: String,
     val sexo: String,
-    val personalidade: PersonalidadeDto
+    val personalidade: PersonalidadeDto,
 )
 
 data class PersonalidadeDto(
@@ -23,5 +23,4 @@ data class PersonalidadeDto(
     val obediente: Int,
     val territorial: Int,
     val inteligencia: Int,
-
 )

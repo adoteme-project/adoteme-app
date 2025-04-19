@@ -12,7 +12,7 @@ class RequisicaoViewModel(private val repository: IRequisicaoRepository) : ViewM
     private val _estadoAdocao = MutableStateFlow<AdocaoEstado>(AdocaoEstado.Idle)
     val estadoAdocao: StateFlow<AdocaoEstado> = _estadoAdocao
 
-    fun adotarAnimal(idAdotante: Long, idAnimal: Long) {
+    fun adotarAnimal(idAdotante: Int, idAnimal: Int) {
         viewModelScope.launch {
             _estadoAdocao.value = AdocaoEstado.Carregando
             try {
