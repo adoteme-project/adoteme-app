@@ -5,7 +5,7 @@ import com.example.adoteme_app.interfaces.RequisicaoApiService
 import com.example.adoteme_app.model.RequisicaoCreateDto
 
 class RequisicaoRepository(private val api: RequisicaoApiService) : IRequisicaoRepository {
-    override suspend fun solicitarAdocao(idAdotante: Int, idAnimal: Int): Boolean {
+    override suspend fun solicitarAdocao(idAdotante: Long, idAnimal: Long): Boolean {
         val dto = RequisicaoCreateDto(idAdotante, idAnimal)
         val response = api.criarRequisicao(dto)
         return response.isSuccessful

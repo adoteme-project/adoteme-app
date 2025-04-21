@@ -13,7 +13,7 @@ class LoginViewModel(
 ) : ViewModel(){
 
     var token = mutableStateOf("");
-    var userId = mutableStateOf(0);
+    var userId = mutableStateOf(0L);
 
     fun login(email: String, password: String){
         viewModelScope.launch {

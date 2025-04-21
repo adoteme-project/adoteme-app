@@ -53,7 +53,15 @@ fun MainApp() {
             }
         }
 
-        composable(InternalRoutes.PetsInfo.route) { PetInfoScreen(onBack = {navController.popBackStack()}, navController)  }
+        composable(route = InternalRoutes.PetsInfo.route) { backStackEntry ->
+            val idAnimal = backStackEntry.arguments?.getLong("idAnimal")?.toLong() ?: 0
+
+            PetInfoScreen(
+                idAnimal = idAnimal,
+                onBack = { navController.popBackStack() },
+                navController = navController
+            )
+        }
         composable(InternalRoutes.ProfileData.route) { PerfilDadosScreen(onBack = {navController.popBackStack()}) }
         composable(InternalRoutes.ProfileForm.route) { PerfilFormScreen(onBack = {navController.popBackStack()}) }
         composable(InternalRoutes.ProfileAplicacoes.route) { PerfilAplicacoScreen(navController) }

@@ -74,7 +74,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalLayoutApi
-fun PetInfoScreen(onBack: () -> Unit, navController: NavController, idAnimal: Int) {
+fun PetInfoScreen(onBack: () -> Unit, navController: NavController, idAnimal: Long) {
     val adocaoViewModel: RequisicaoViewModel = viewModel()
     val status by adocaoViewModel.estadoAdocao.collectAsState()
     val animalViewModel: AnimalViewModel = viewModel()
@@ -82,7 +82,7 @@ fun PetInfoScreen(onBack: () -> Unit, navController: NavController, idAnimal: In
     val animals: List<AnimalResponse> = viewModel()
 
     LaunchedEffect(idAnimal) {
-        animalViewModel.carregarAnimalPorId(idAnimal.toInt())
+        animalViewModel.carregarAnimalPorId(idAnimal.toLong())
     }
 
     if (animal == null) {

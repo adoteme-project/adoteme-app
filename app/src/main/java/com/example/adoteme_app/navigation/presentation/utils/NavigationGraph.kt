@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
+import com.example.adoteme_app.pets.presentation.favoritos_screen.AnimalFavoritoScreen
 import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
 import com.example.adoteme_app.pets.presentation.pets_screen.PetsScreen
 
@@ -25,11 +26,22 @@ fun NavigationGraph(navController: NavHostController) {
             route = "petInfo/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id") ?: return@composable
+            val id = backStackEntry.arguments?.getLong("id") ?: return@composable
             PetInfoScreen(
                 idAnimal = id,
                 navController = navController,
                 onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = InternalRoutes.Favoritos.route,
+            arguments = listOf(navArgument("adotanteId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val adotanteId = backStackEntry.arguments?.getLong("adotanteId") ?: return@composable
+            AnimalFavoritoScreen(
+                navController = navController,
+                adotanteId = adotanteId
             )
         }
     }

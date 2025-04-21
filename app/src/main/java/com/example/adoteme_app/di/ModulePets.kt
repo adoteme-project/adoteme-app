@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val ModulePets = module {
 
-    single<AnimalApiService> {
+    single {
         RetrofitInstance.retrofit.create(AnimalApiService::class.java)
     }
 

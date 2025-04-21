@@ -10,21 +10,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.adoteme_app.R
 import com.example.adoteme_app.model.AnimalFavorito
 import com.example.adoteme_app.model.Categoria
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
+import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
 import com.example.adoteme_app.ui.components.BannerCarrossel
 import com.example.adoteme_app.ui.components.CategoriaCarrossel
 
 @Composable
-fun HomeScreen(navController: NavController, nestedNavController: NavController) {
+fun HomeScreen(navController: NavController, nestedNavController: NavController, viewModel: AnimalViewModel = viewModel()) {
     val bannerRoutes = mapOf(
         R.drawable.animais to InternalRoutes.Pets,
         R.drawable.doacoes to InternalRoutes.Ongs,
@@ -40,12 +44,11 @@ fun HomeScreen(navController: NavController, nestedNavController: NavController)
         Categoria("Amigáveis", R.drawable.dog_int)
     )
 
-    val animals = listOf(
-        AnimalFavorito("NOAH", "2 anos", "Macho", R.drawable.animal),
-        AnimalFavorito("NOAH", "2 anos", "Macho", R.drawable.animal),
-        AnimalFavorito("NOAH", "2 anos", "Macho", R.drawable.animal),
-        AnimalFavorito("NOAH", "2 anos", "Macho", R.drawable.animal)
-    )
+    val animais = viewModel.animais.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.carregarAnimais()
+    }
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
@@ -68,7 +71,7 @@ fun HomeScreen(navController: NavController, nestedNavController: NavController)
         }
         item {
             Spacer(modifier = Modifier.height(12.dp))
-            val rows = animals.chunked(2)
+            val rows = animais.value.chunked(2)
             rows.forEach { rowItems ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),

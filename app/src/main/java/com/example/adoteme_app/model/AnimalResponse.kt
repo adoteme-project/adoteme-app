@@ -9,7 +9,7 @@ data class AnimalResponse(
     val imagem3: String?,
     val imagem4: String?,
     val imagem5: String?,
-    val distancia: Int,
+    val distancia: Int?,
     val porte: String,
     val especie: String,
     val sexo: String,

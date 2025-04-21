@@ -20,12 +20,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.adoteme_app.model.AnimalFavorito
+import com.example.adoteme_app.model.AnimalFavoritoDto
 import com.example.adoteme_app.model.AnimalResponse
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 
 
 @Composable
-fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
+fun AnimalFavoritoDtoCard(animal: AnimalFavoritoDto, navController: NavController) {
     Card(
         shape = RoundedCornerShape(24.dp),
         modifier = Modifier
@@ -65,7 +66,7 @@ fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
 
                     Button(
                         onClick = {
-                            navController.navigate("petInfo/${animal.id}") {
+                            navController.navigate("petInfo/${animal.animalId}") {
                                 popUpTo(InternalRoutes.Home.route) { saveState = true }
                                 launchSingleTop = true
                             }
