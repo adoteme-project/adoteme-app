@@ -2,5 +2,5 @@ package com.example.adoteme_app.auth.presentation.login_screen.auth_service.Requ
 
 class LoginResponse {
     var token: String = ""
-    var idUser: Int = 0
+    var idUser: Long = 0
 }

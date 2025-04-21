@@ -1,5 +1,6 @@
 package com.example.adoteme_app.pets.presentation.pets_screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,9 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.adoteme_app.R
+import com.example.adoteme_app.api.AnimalApi
 import com.example.adoteme_app.model.AnimalResponse
 import com.example.adoteme_app.model.Categoria
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
@@ -28,9 +33,9 @@ import com.example.adoteme_app.ui.components.FilterButton
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun PetsScreen(navController: NavController) {
-    val viewModel: AnimalViewModel = koinViewModel()
-    val animais = viewModel.animais.collectAsState()
+fun PetsScreen(navController: NavController, viewModel: AnimalViewModel = koinViewModel()) {
+   val animais = viewModel.animais.collectAsState()
+
 
     val listaCategiria = listOf(
         Categoria("Brincalhões", R.drawable.dog_soc),

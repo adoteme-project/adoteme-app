@@ -1,5 +1,6 @@
 package com.example.adoteme_app.pets.presentation.pets_screen
 
+import android.net.http.HttpException
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.example.adoteme_app.model.AnimalResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class AnimalViewModel(
     private val animalApiService: AnimalApiService
@@ -20,21 +22,25 @@ class AnimalViewModel(
     val animal: StateFlow<AnimalResponse?> = _animal
 
     init {
+        Log.d("AnimalViewModel", "ViewModel criado")
         carregarAnimais()
     }
 
-    private fun carregarAnimais() {
+    fun carregarAnimais() {
+        Log.d("ViewModel", "Iniciando carregamento dos animais")
         viewModelScope.launch {
             try {
                 val resposta = animalApiService.getTodosAnimais()
+                Log.d("ViewModel", "Animais carregados: ${resposta.size}")
                 _animais.value = resposta
             } catch (e: Exception) {
-                Log.e("AnimalViewModel", "Erro ao carregar animais: ${e.message}")
+                Log.e("ViewModel", "Erro ao carregar animais", e)
             }
         }
     }
 
-    fun carregarAnimalPorId(id: Int) {
+
+    fun carregarAnimalPorId(id: Long) {
         viewModelScope.launch {
             try {
                 val response = animalApiService.getAnimalById(id)
