@@ -26,7 +26,7 @@ fun MainApp() {
 
     NavHost(
         navController = navController,
-        startDestination = RootRoutes.Login.route
+        startDestination = RootRoutes.Login.route,
     ) {
         composable(RootRoutes.Login.route) {
             LoginScreen(

@@ -67,7 +67,7 @@ fun HomeSectionWrapper(
                     composable(InternalRoutes.Pets.route) { PetsScreen(mainNavController) }
                     composable(InternalRoutes.Profile.route) { ProfileScreen(mainNavController) }
                     composable(InternalRoutes.Favoritos.route) { AnimalFavoritoScreen(mainNavController, adotanteId = adotanteId.toLong()) }
-                    composable(InternalRoutes.Ongs.route) { OngsScreen() }
+                    composable(InternalRoutes.Ongs.route) { OngsScreen(mainNavController) }
                 }
             }
         }

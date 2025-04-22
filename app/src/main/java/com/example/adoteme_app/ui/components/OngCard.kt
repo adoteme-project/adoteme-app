@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.sp
 fun OngCard(
     nome: String,
     endereco: String,
-    descricao: String,
-    distancia: String,
-    logo: Int,
+    descricao: String?,
+    distancia: String?,
+    logo: String?,
     categoriaColor: Color
 ) {
     Card(
