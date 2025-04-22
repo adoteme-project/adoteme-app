@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 
 
 @Composable
@@ -58,7 +59,7 @@ fun OngCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = logo),
+                    painter = rememberAsyncImagePainter(model = logo),
                     contentDescription = "Logo da ONG",
                     modifier = Modifier
                         .size(90.dp)
@@ -83,7 +84,7 @@ fun OngCard(
 
 
             Text(
-                text = distancia,
+                text = descricao!!,
                 fontSize = 12.sp,
                 color = Color.Black,
                 modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
