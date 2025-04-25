@@ -1,5 +1,7 @@
 package com.example.adoteme_app.auth.presentation.login_screen
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -33,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -43,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.adoteme_app.MainActivity
 import com.example.adoteme_app.R
 import com.example.adoteme_app.auth.presentation.login_screen.viewModel.LoginViewModel
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
@@ -55,6 +59,7 @@ fun LoginScreen(
 ) {
     Scaffold { innerPadding ->
         var showForm by remember { mutableStateOf(false) }
+        val contexto = LocalContext.current
 
         // Delay de 2000ms para exibir o formulário
         LaunchedEffect(Unit) {
@@ -89,7 +94,8 @@ fun LoginScreen(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .offset(y = formOffSet),
-                        navController = navController
+                        navController = navController,
+                        contexto = contexto
                     )
                 }
             }
@@ -98,7 +104,7 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
+fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, contexto: Context) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -171,7 +177,11 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {viewModel.login(email,password)},
+            onClick = {
+                // viewModel.login(email,password)
+                val homeSection = Intent(contexto, MainActivity::class.java)
+                contexto.startActivity(homeSection)
+                      },
             modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 32.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFFA607),

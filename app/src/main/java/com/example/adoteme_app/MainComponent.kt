@@ -26,21 +26,8 @@ fun MainApp() {
 
     NavHost(
         navController = navController,
-        startDestination = RootRoutes.Login.route
+        startDestination = RootRoutes.HomeSection.route
     ) {
-        composable(RootRoutes.Login.route) {
-            LoginScreen(
-                navController = navController
-            )
-        }
-
-        composable(RootRoutes.UserRegistration.route) {
-            RegistrationScreen(navController = navController)
-        }
-
-        composable(RootRoutes.UserFormRegistration.route) {
-            RegistrationFormScreen(navController = navController)
-        }
 
         navigation(
             route = RootRoutes.HomeSection.route,
