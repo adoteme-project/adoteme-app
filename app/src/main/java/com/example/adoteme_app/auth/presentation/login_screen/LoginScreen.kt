@@ -57,9 +57,25 @@ import org.koin.androidx.compose.koinViewModel
 fun LoginScreen(
     navController: NavHostController
 ) {
+    val viewModel: LoginViewModel = koinViewModel()
+    val token by viewModel.token
+
+    val context = LocalContext.current
+
+    LaunchedEffect(token) {
+        if (token.isNotBlank()) {
+            context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                .edit()
+                .putString("token", token)
+                .putLong("userId", viewModel.userId.value)
+                .apply()
+            context.startActivity(Intent(context, MainActivity::class.java))
+        }
+    }
+
     Scaffold { innerPadding ->
         var showForm by remember { mutableStateOf(false) }
-        val contexto = LocalContext.current
+
 
         // Delay de 2000ms para exibir o formulário
         LaunchedEffect(Unit) {
@@ -95,7 +111,6 @@ fun LoginScreen(
                             .align(Alignment.BottomCenter)
                             .offset(y = formOffSet),
                         navController = navController,
-                        contexto = contexto
                     )
                 }
             }
@@ -104,7 +119,7 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, contexto: Context) {
+fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -177,11 +192,7 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, c
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                // viewModel.login(email,password)
-                val homeSection = Intent(contexto, MainActivity::class.java)
-                contexto.startActivity(homeSection)
-                      },
+            onClick = { viewModel.login(email,password) },
             modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 32.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFFA607),

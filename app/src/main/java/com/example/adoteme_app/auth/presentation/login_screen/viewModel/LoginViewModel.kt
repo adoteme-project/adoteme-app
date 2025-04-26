@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.adoteme_app.auth.presentation.login_screen.auth_service.request.LoginRequest
 import com.example.adoteme_app.interfaces.AuthApiService
-import com.example.adoteme_app.auth.presentation.login_screen.auth_service.Request.LoginRequest
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -27,9 +27,5 @@ class LoginViewModel(
                 Log.e("Login", "Erro ao tentar autenticar",e)
             }
         }
-
     }
-
-
-
 }
