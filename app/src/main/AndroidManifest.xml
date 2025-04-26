@@ -22,6 +22,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Adotemeapp"
         tools:targetApi="33">
+
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_welcome"
+            android:theme="@style/Theme.Adotemeapp">
+        </activity>
+
         <activity
             android:name="MainActivity"
             android:exported="true"

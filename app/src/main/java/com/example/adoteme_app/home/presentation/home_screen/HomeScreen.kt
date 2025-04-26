@@ -26,9 +26,10 @@ import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
 import com.example.adoteme_app.ui.components.BannerCarrossel
 import com.example.adoteme_app.ui.components.CategoriaCarrossel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(navController: NavController, nestedNavController: NavController, viewModel: AnimalViewModel = viewModel()) {
+fun HomeScreen(navController: NavController, nestedNavController: NavController, viewModel: AnimalViewModel = koinViewModel()) {
     val bannerRoutes = mapOf(
         R.drawable.animais to InternalRoutes.Pets,
         R.drawable.doacoes to InternalRoutes.Ongs,
