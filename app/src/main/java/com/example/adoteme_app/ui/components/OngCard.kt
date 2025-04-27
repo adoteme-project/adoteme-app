@@ -16,17 +16,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.adoteme_app.model.OngResponseAllDto
+import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 
 
 @Composable
-fun OngCard(
-    nome: String,
-    endereco: String,
-    descricao: String,
-    distancia: String,
-    logo: Int,
-    categoriaColor: Color
-) {
+fun OngCard(ong: OngResponseAllDto, navController: NavController ) {
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -39,7 +36,7 @@ fun OngCard(
             Box(
                 modifier = Modifier
                     .align(Alignment.End)
-                    .background(categoriaColor, shape = RoundedCornerShape(bottomStart = 12.dp))
+                  //  .background(categoriaColor, shape = RoundedCornerShape(bottomStart = 12.dp))
                     .padding(horizontal = 16.dp, vertical = 6.dp)
                     .fillMaxWidth(0.5f)
             ) {
@@ -57,8 +54,8 @@ fun OngCard(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = logo),
+                AsyncImage(
+                    model = ong.imagem,
                     contentDescription = "Logo da ONG",
                     modifier = Modifier
                         .size(90.dp)
@@ -70,24 +67,24 @@ fun OngCard(
 
                 Column {
                     Text(
-                        text = "Endereço: $endereco",
+                        text = "Endereço: ${ong.endereco.rua}",
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
-                    Text(
-                        text = "Descrição: $descricao",
-                        fontSize = 12.sp
-                    )
+//                    Text(
+//                        text = "Descrição: ${ong.descricao}",
+//                        fontSize = 12.sp
+//                    )
                 }
             }
 
 
-            Text(
-                text = distancia,
-                fontSize = 12.sp,
-                color = Color.Black,
-                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
-            )
+//            Text(
+//                text = ong.distancia,
+//                fontSize = 12.sp,
+//                color = Color.Black,
+//                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+//            )
 
 
             Row(
@@ -97,7 +94,10 @@ fun OngCard(
                 horizontalArrangement = Arrangement.End
             ) {
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = {  navController.navigate("petInfo/${ong.id}") {
+                        popUpTo(InternalRoutes.Home.route) { saveState = true }
+                        launchSingleTop = true
+                    } },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC55E)),
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))

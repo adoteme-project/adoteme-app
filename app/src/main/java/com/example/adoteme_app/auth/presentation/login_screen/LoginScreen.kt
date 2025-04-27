@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.adoteme_app.MainActivity
 import com.example.adoteme_app.R
-import com.example.adoteme_app.auth.presentation.login_screen.viewModel.LoginViewModel
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -58,7 +58,8 @@ fun LoginScreen(
     navController: NavHostController
 ) {
     val viewModel: LoginViewModel = koinViewModel()
-    val token by viewModel.token
+    val token by viewModel.token.collectAsState()
+    val userId by viewModel.userId.collectAsState()
 
     val context = LocalContext.current
 
@@ -67,7 +68,7 @@ fun LoginScreen(
             context.getSharedPreferences("auth", Context.MODE_PRIVATE)
                 .edit()
                 .putString("token", token)
-                .putLong("userId", viewModel.userId.value)
+                .putLong("userId", userId)
                 .apply()
             context.startActivity(Intent(context, MainActivity::class.java))
         }

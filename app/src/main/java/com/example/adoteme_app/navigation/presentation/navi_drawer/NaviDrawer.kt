@@ -55,7 +55,7 @@ fun NaviDrawerLayout(
     drawerState: DrawerState,
     scope: CoroutineScope,
     mainNavController: NavController,  // Rotas externas
-    nestedNavController: NavController  // Rotas internas
+    nestedNavController: NavController,  // Rotas internas
 ) {
     val items = listOf(
         NavDrawerItem.Home,
@@ -114,9 +114,14 @@ fun NaviDrawerLayout(
                 when (item.route) {
                     InternalRoutes.Home.route,
                     InternalRoutes.Pets.route,
-                    InternalRoutes.Ongs.route,
-                    InternalRoutes.Favoritos.route -> {
+                    InternalRoutes.Ongs.route -> {
                         nestedNavController.navigate(item.route) {
+                            popUpTo(nestedNavController.graph.startDestinationId!!)
+                            launchSingleTop = true
+                        }
+                    }
+                    InternalRoutes.Favoritos.route -> {
+                        nestedNavController.navigate(InternalRoutes.Favoritos.route) {
                             popUpTo(nestedNavController.graph.startDestinationId!!)
                             launchSingleTop = true
                         }

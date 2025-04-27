@@ -1,5 +1,6 @@
 package com.example.adoteme_app.auth.presentation.register_screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +38,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.adoteme_app.model.AdotanteRequest
+import com.example.adoteme_app.model.AdotanteViewModel
+import com.example.adoteme_app.model.Formulario
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.perfil.presentation.utils.components.DatePickerFieldToModal
 import com.example.adoteme_app.perfil.presentation.utils.components.InputForm
+import com.example.adoteme_app.perfil.presentation.utils.components.PasswordInputForm
+import com.example.adoteme_app.ui.theme.ActionColor
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,8 +60,8 @@ fun RegistrationScreen(navController: NavController) {
     var fieldEstado by remember { mutableStateOf("") }
     var fieldCidade by remember { mutableStateOf("") }
     var fieldSenha by remember { mutableStateOf("") }
+    var fieldConfirmarSenha by remember { mutableStateOf("") }
 
-    val actionColor = Color(red = 255, green = 166, blue = 7)
 
     Scaffold (
         topBar = {
@@ -81,26 +90,52 @@ fun RegistrationScreen(navController: NavController) {
                 item {
                     HorizontalDivider()
                 }
-                item {InputForm(fieldNome, "Nome Completo", KeyboardType.Text)}
-                item {InputForm(fieldEmail, "E-mail", KeyboardType.Email)}
-                item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone)}
-                item {DatePickerFieldToModal(label = "Data de Nascimento")}
-                item {InputForm(fieldCep, "CEP", KeyboardType.Text)}
-                item {InputForm(fieldEstado, "Estado", KeyboardType.Text)}
-                item {InputForm(fieldCidade, "Cidade", KeyboardType.Text)}
-                item {InputForm(fieldSenha, "Senha", KeyboardType.Password)}
+                item { InputForm(fieldNome, "Nome Completo", KeyboardType.Text, onValueChange = { fieldNome = it }) }
+                item {InputForm(fieldEmail, "E-mail", KeyboardType.Email, onValueChange = { fieldEmail = it})}
+                item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone, onValueChange = { fieldCelular = it})}
+                item {DatePickerFieldToModal(label = "Data de Nascimento", selectedDate = fieldDataNascimento, onDateSelected = { fieldDataNascimento = it}) }
+                item {InputForm(fieldCep, "CEP", KeyboardType.Text, onValueChange = { fieldCep = it })}
+                item {InputForm(fieldEstado, "Estado", KeyboardType.Text, onValueChange = { fieldEstado = it })}
+                item {InputForm(fieldCidade, "Cidade", KeyboardType.Text, onValueChange = { fieldEstado = it })}
+                item {PasswordInputForm(fieldSenha, "Senha", onValueChange = { fieldSenha = it })}
                 item {BulletList()}
-                item {InputForm(fieldSenha, "Confirmar senha", KeyboardType.Password)}
+                item {PasswordInputForm(fieldSenha, "Confirmar senha", onValueChange = { fieldConfirmarSenha = it })}
                 item {
                     Button(
                         colors = ButtonColors(
-                            containerColor = actionColor,
+                            containerColor = ActionColor,
                             contentColor = Color.White,
                             disabledContentColor = Color.Transparent,
                             disabledContainerColor = Color.LightGray
                         ),
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
+                            val adotanteInfo = AdotanteRequest(
+                                nome = fieldNome,
+                                cep = fieldCep,
+                                email = fieldEmail,
+                                senha = fieldSenha,
+                                dtNasc = fieldDataNascimento,
+                                numero = "123",
+                                celular = fieldCelular,
+                                formulario = Formulario(
+                                    temPet = "",
+                                    casaPortaoAlto = "",
+                                    moradoresConcordam = "",
+                                    isTelado = "",
+                                    seraResponsavel = "",
+                                    moraEmCasa = "",
+                                    temCrianca = ""
+                                )
+                            )
+
+                            val gson: Gson = GsonBuilder().create()
+                            val adotanteInfoJson = gson.toJson(adotanteInfo)
+
+                            Log.i("Forms", "Adotante Info Json: $adotanteInfoJson")
+
+                            navController.currentBackStackEntry?.savedStateHandle?.set("adotanteInfo", adotanteInfoJson)
+
                             navController.navigate(RootRoutes.UserFormRegistration.route) {
                                 popUpTo(RootRoutes.UserRegistration.route) { saveState = true }
                             }

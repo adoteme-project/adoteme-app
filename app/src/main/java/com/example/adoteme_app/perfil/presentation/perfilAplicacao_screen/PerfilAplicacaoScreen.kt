@@ -55,7 +55,7 @@ fun PerfilAplicacoScreen(navController: NavController) {
                 modifier = Modifier.padding(12.dp)
             ) {
                 item {
-                    Text("Minahs aplicações", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                    Text("Minhas aplicações", fontSize = 32.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(12.dp))
                     Text("Após a aprovação da adoção, você receberá um e-mail com todas " +
                             "as informações sobre os próximos passos do processo.")

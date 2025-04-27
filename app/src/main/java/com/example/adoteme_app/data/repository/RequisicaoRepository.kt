@@ -1,5 +1,6 @@
 package com.example.adoteme_app.data.repository
 
+import androidx.compose.runtime.State
 import com.example.adoteme_app.domain.repository.IRequisicaoRepository
 import com.example.adoteme_app.interfaces.RequisicaoApiService
 import com.example.adoteme_app.model.RequisicaoCreateDto
