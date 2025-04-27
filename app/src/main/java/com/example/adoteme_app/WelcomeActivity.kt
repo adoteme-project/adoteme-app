@@ -18,6 +18,7 @@ class WelcomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             AdotemeappTheme {
                 WelcomeNavGraph()
@@ -41,7 +42,7 @@ fun WelcomeNavGraph() {
             RegistrationScreen(navController = navController)
         }
         composable(RootRoutes.UserFormRegistration.route) {
-            RegistrationFormScreen(navController = navController)
+            RegistrationFormScreen(navController)
         }
     }
 }

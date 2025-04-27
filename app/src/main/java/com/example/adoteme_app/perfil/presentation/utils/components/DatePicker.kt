@@ -35,8 +35,13 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun DatePickerFieldToModal(modifier: Modifier = Modifier, label: String) {
-    var selectedDate by remember { mutableStateOf<Long?>(null) }
+fun DatePickerFieldToModal(
+    modifier: Modifier = Modifier,
+    label: String,
+    selectedDate: String,
+    onDateSelected: (String) -> Unit
+) {
+    // var selectedDate by remember { mutableStateOf<Long?>(null) }
     var showModal by remember { mutableStateOf(false) }
 
     Column(
@@ -44,7 +49,7 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier, label: String) {
     ) {
         Text(text = label, fontSize = 18.sp )
         TextField (
-            value = selectedDate?.let { convertMillisToDate(it) } ?: "",
+            value = selectedDate,
             onValueChange = { },
             placeholder = { Text("01/01/2025") },
             trailingIcon = {
@@ -52,7 +57,7 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier, label: String) {
             },
             modifier = modifier
                 .fillMaxWidth()
-                .pointerInput(selectedDate) {
+                .pointerInput(Unit) {
                     awaitEachGesture {
                         awaitFirstDown(pass = PointerEventPass.Initial)
                         val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
@@ -71,7 +76,11 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier, label: String) {
 
     if (showModal) {
         DatePickerModal (
-            onDateSelected = { selectedDate = it },
+            onDateSelected = { millis ->
+                millis?.let {
+                    onDateSelected(convertMillisToDate(it))
+                }
+            },
             onDismiss = { showModal = false }
         )
     }
@@ -106,6 +115,6 @@ fun DatePickerModal(
 }
 
 fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return formatter.format(Date(millis))
 }

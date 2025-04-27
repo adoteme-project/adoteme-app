@@ -79,14 +79,14 @@ fun PerfilDadosScreen(onBack: () -> Unit) {
                 item {
                     HorizontalDivider()
                 }
-                item {InputForm(fieldNome, "Nome Completo", KeyboardType.Text)}
-                item {InputForm(fieldEmail, "E-mail", KeyboardType.Email)}
-                item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone)}
-                item {DatePickerFieldToModal(label = "Data de Nascimento")}
-                item {InputForm(fieldCep, "CEP", KeyboardType.Text)}
-                item {InputForm(fieldEstado, "Estado", KeyboardType.Text)}
-                item {InputForm(fieldCidade, "Cidade", KeyboardType.Text)}
-                item {InputForm(fieldSenha, "Senha", KeyboardType.Password)}
+                item { InputForm(fieldNome, "Nome Completo", KeyboardType.Text, onValueChange = { fieldNome = it }) }
+                item {InputForm(fieldEmail, "E-mail", KeyboardType.Email, onValueChange = { fieldEmail = it})}
+                item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone, onValueChange = { fieldCelular = it})}
+                item {DatePickerFieldToModal(label = "Data de Nascimento", selectedDate = fieldDataNascimento, onDateSelected = { fieldDataNascimento = it}) }
+                item {InputForm(fieldCep, "CEP", KeyboardType.Text, onValueChange = { fieldCep = it })}
+                item {InputForm(fieldEstado, "Estado", KeyboardType.Text, onValueChange = { fieldEstado = it })}
+                item {InputForm(fieldCidade, "Cidade", KeyboardType.Text, onValueChange = { fieldEstado = it })}
+                item {InputForm(fieldSenha, "Senha", KeyboardType.Password, onValueChange = { fieldSenha = it })}
                 item {
                     Button(
                         colors = ButtonColors(

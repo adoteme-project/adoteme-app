@@ -2,6 +2,8 @@ package com.example.adoteme_app.interfaces
 
 import com.example.adoteme_app.model.AdotanteRequest
 import com.example.adoteme_app.model.AdotanteResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -12,8 +14,8 @@ interface AdotanteApiService {
     @Multipart
     @POST("adotantes/cadastrar")
     suspend fun cadastrarAdotante(
-        @Part("adotante") adotante: AdotanteRequest,
-        @Part fotoPerfil: File?
+        @Part("adotante") adotante: RequestBody,
+        @Part fotoPerfil: MultipartBody.Part?
     ): AdotanteResponse
 
 }

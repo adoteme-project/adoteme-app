@@ -1,5 +1,6 @@
 package com.example.adoteme_app.di
 
+import com.example.adoteme_app.interfaces.AdotanteApiService
 import com.example.adoteme_app.interfaces.AnimalApiService
 import com.example.adoteme_app.model.AdotanteViewModel
 import com.example.adoteme_app.network.RetrofitInstance
@@ -11,11 +12,17 @@ val ModulePets = module {
 
     single {
         RetrofitInstance.retrofit.create(AnimalApiService::class.java)
-        RetrofitInstance.retrofit.create(AdotanteViewModel::class.java)
+    }
+
+    single {
+        RetrofitInstance.retrofit.create(AdotanteApiService::class.java)
     }
 
     viewModel {
         AnimalViewModel(get())
+    }
+
+    viewModel {
         AdotanteViewModel(get())
     }
 }
