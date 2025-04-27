@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.adoteme_app.MainActivity
 import com.example.adoteme_app.R
-import com.example.adoteme_app.auth.presentation.login_screen.viewModel.LoginViewModel
+import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel

@@ -1,5 +1,6 @@
 package com.example.adoteme_app.pets.presentation.pet_info_screen
 
+import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.adoteme_app.domain.repository.IRequisicaoRepository
@@ -12,7 +13,7 @@ class RequisicaoViewModel(private val repository: IRequisicaoRepository) : ViewM
     private val _estadoAdocao = MutableStateFlow<AdocaoEstado>(AdocaoEstado.Idle)
     val estadoAdocao: StateFlow<AdocaoEstado> = _estadoAdocao
 
-    fun adotarAnimal(idAdotante: Long, idAnimal: Long) {
+    fun adotarAnimal(idAdotante: State<Long>, idAnimal: Long) {
         viewModelScope.launch {
             _estadoAdocao.value = AdocaoEstado.Carregando
             try {

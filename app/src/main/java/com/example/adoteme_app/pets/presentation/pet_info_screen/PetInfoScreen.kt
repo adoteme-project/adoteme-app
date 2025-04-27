@@ -1,8 +1,6 @@
 package com.example.adoteme_app.pets.presentation.pet_info_screen
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
@@ -47,8 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -60,26 +54,23 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.adoteme_app.R
-import com.example.adoteme_app.auth.presentation.login_screen.viewModel.LoginViewModel
-import com.example.adoteme_app.model.AnimalFavorito
+import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
 import com.example.adoteme_app.model.AnimalResponse
-import com.example.adoteme_app.model.RequisicaoCreateDto
 import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import com.example.adoteme_app.pets.utils.components.AccordionPersonality
 import com.example.adoteme_app.pets.utils.components.AccordionSection
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
-import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalLayoutApi
 fun PetInfoScreen(onBack: () -> Unit, navController: NavController, idAnimal: Long) {
-    val adocaoViewModel: RequisicaoViewModel = viewModel()
+    val adocaoViewModel: RequisicaoViewModel = koinViewModel()
     val status by adocaoViewModel.estadoAdocao.collectAsState()
-    val animalViewModel: AnimalViewModel = viewModel()
+    val animalViewModel: AnimalViewModel = koinViewModel()
     val animal by animalViewModel.animal.collectAsState()
-    val animals: List<AnimalResponse> = viewModel()
+    val animals: List<AnimalResponse> = koinViewModel()
 
     LaunchedEffect(idAnimal) {
         animalViewModel.carregarAnimalPorId(idAnimal.toLong())
@@ -92,8 +83,8 @@ fun PetInfoScreen(onBack: () -> Unit, navController: NavController, idAnimal: Lo
         return
     }
 
-    val loginViewModel: LoginViewModel = viewModel()
-    val idUsuario = loginViewModel.userId.value
+    val loginViewModel: LoginViewModel = koinViewModel()
+    val idUsuario = loginViewModel.userId.collectAsState()
 
     val petNome = animal!!.nome
     val petEspecie = animal!!.especie

@@ -36,9 +36,9 @@ fun NavigationGraph(navController: NavHostController) {
 
         composable(
             route = InternalRoutes.Favoritos.route,
-            arguments = listOf(navArgument("adotanteId") { type = NavType.LongType })
+            arguments = listOf(navArgument("idUser") { type = NavType.LongType })
         ) { backStackEntry ->
-            val adotanteId = backStackEntry.arguments?.getLong("adotanteId") ?: return@composable
+            val adotanteId = backStackEntry.arguments?.getLong("idUser") ?: return@composable
             AnimalFavoritoScreen(
                 navController = navController,
                 adotanteId = adotanteId

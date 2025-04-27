@@ -11,7 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.adoteme_app.home.presentation.utils.components.HomeSectionWrapper
 import com.example.adoteme_app.auth.presentation.login_screen.LoginScreen
-import com.example.adoteme_app.auth.presentation.login_screen.viewModel.LoginViewModel
+import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
 import com.example.adoteme_app.auth.presentation.register_form_screen.RegistrationFormScreen
 import com.example.adoteme_app.auth.presentation.register_screen.RegistrationScreen
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
