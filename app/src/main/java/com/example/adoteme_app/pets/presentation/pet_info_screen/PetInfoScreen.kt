@@ -1,5 +1,6 @@
 package com.example.adoteme_app.pets.presentation.pet_info_screen
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -65,25 +67,24 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalLayoutApi
-fun PetInfoScreen(onBack: () -> Unit, navController: NavController, requisicaoViewModel: RequisicaoViewModel = koinViewModel()) {
-    val animalViewModel: AnimalViewModel = koinViewModel()
-    val animal by animalViewModel.animal.collectAsState()
-    val animals: List<AnimalResponse> = koinViewModel()
+fun PetInfoScreen(onBack: () -> Unit,
+                  animalId: Long,
+                  navController: NavController,
+                  requisicaoViewModel: RequisicaoViewModel = koinViewModel(),
+                  animalViewModel: AnimalViewModel = koinViewModel()) {
+    val context = LocalContext.current
 
-    if (animal == null) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-        return
+    LaunchedEffect(animalId) {
+        animalViewModel.carregarAnimalPorId(animalId)
     }
 
-    val petNome = animal!!.nome
-    val petEspecie = animal!!.especie
-    val petSexo = animal!!.sexo
-    val petIdade = animal!!.idade
-    val petPorte = animal!!.porte
-    val imagemUrl = animal!!.imagem
-    val personalidades = animal!!.personalidade
+    val animalState by animalViewModel.animal.collectAsState()
+    val animaisState by animalViewModel.animais.collectAsState()
+
+    val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+    val userId = sharedPreferences.getLong("userId", 0L)
+
+    val statusRequisicao by requisicaoViewModel.statusRequisicao.collectAsState()
 
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -99,11 +100,18 @@ fun PetInfoScreen(onBack: () -> Unit, navController: NavController, requisicaoVi
     val rejectColor = Color(red = 236, green = 90, blue = 73)
     val approvalColor = Color(red = 169, green = 185, blue = 73)
 
+    LaunchedEffect(statusRequisicao) {
+        if (statusRequisicao is StatusRequisicao.Sucesso) {
+            showBottomSheet = false
+            showModal.value = true
+        }
+    }
 
-Scaffold(
+
+    Scaffold(
 topBar = {
     TopAppBar(
-        title = { Text("Detalhes - $petNome") },
+        title = { Text("Detalhes - ${animalState?.nome}") },
         navigationIcon = {
             IconButton(
                 onClick = onBack
@@ -131,7 +139,7 @@ topBar = {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = petNome,
+                        text = animalState?.nome.toString(),
                         fontSize = 21.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -144,7 +152,7 @@ topBar = {
 
             item {
                 Image(
-                    painter = rememberAsyncImagePainter(model = imagemUrl),
+                    painter = rememberAsyncImagePainter(model = animalState?.imagem),
                     contentDescription = "Imagem do pet",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -156,7 +164,7 @@ topBar = {
 
             item {
                 Text(
-                    text = "Noha",
+                    text = animalState?.nome.toString(),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     lineHeight = 32.sp
@@ -186,7 +194,7 @@ topBar = {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("Espécie: ")
                             }
-                            append(petEspecie)
+                            append(animalState?.especie)
                         },
                         lineHeight = 32.sp
                     )
@@ -195,7 +203,7 @@ topBar = {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("Sexo: ")
                             }
-                            append(petSexo)
+                            append(animalState?.sexo)
                         },
                         lineHeight = 32.sp
                     )
@@ -204,7 +212,7 @@ topBar = {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("Idade: ")
                             }
-                            append(petIdade.toString())
+                            append(animalState?.idade.toString())
                         },
                         lineHeight = 32.sp
                     )
@@ -213,7 +221,7 @@ topBar = {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("Tamanho: ")
                             }
-                            append(petPorte)
+                            append(animalState?.porte)
                         },
                         lineHeight = 32.sp
                     )
@@ -235,12 +243,12 @@ topBar = {
                         AccordionSection(
                             title = "Personalidades",
                             rows = listOf(
-                                "Energia: ${personalidades.energia}",
-                                "Sociabilidade: ${personalidades.sociabilidade}",
-                                "Tolerância: ${personalidades.tolerante}",
-                                "Obediência: ${personalidades.obediente}",
-                                "Territorialidade: ${personalidades.territorial}",
-                                "Inteligência: ${personalidades.inteligencia}"
+                                "Energia: ${animalState?.personalidade?.energia}",
+                                "Sociabilidade: ${animalState?.personalidade?.sociabilidade}",
+                                "Tolerância: ${animalState?.personalidade?.tolerante}",
+                                "Obediência: ${animalState?.personalidade?.obediente}",
+                                "Territorialidade: ${animalState?.personalidade?.territorial}",
+                                "Inteligência: ${animalState?.personalidade?.inteligencia}"
                             )
                         )
                     )
@@ -257,7 +265,7 @@ topBar = {
 
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                val rows = animals.chunked(2)
+                val rows = animaisState.chunked(2)
                 rows.forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -311,7 +319,7 @@ topBar = {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Co  nfirmação de Adoção",
+                                text = "Confirmação de Adoção",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp,
                             )
@@ -350,8 +358,7 @@ topBar = {
                                         disabledContentColor = Color.Transparent,
                                         disabledContainerColor = Color.LightGray
                                     ),
-                                    onClick = {  requisicaoViewModel.adotarAnimal()
-                                        showModal.value = true }
+                                    onClick = { requisicaoViewModel.criarRequisicao(userId, animalId) }
                                 ) {
                                     Text(
                                         "Aceitar",

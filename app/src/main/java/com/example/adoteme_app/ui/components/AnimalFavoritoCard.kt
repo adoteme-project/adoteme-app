@@ -65,10 +65,7 @@ fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
 
                     Button(
                         onClick = {
-                            navController.navigate("petInfo/${animal.id}") {
-                                popUpTo(InternalRoutes.Home.route) { saveState = true }
-                                launchSingleTop = true
-                            }
+                            navController.navigate("petInfo/${animal.id}")
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA726)),
                         modifier = Modifier

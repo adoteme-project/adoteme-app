@@ -1,50 +1,38 @@
 package com.example.adoteme_app.pets.presentation.pet_info_screen
 
-import androidx.compose.runtime.State
-import androidx.lifecycle.SavedStateHandle
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
-import com.example.adoteme_app.domain.repository.IRequisicaoRepository
+import com.example.adoteme_app.interfaces.RequisicaoApiService
+import com.example.adoteme_app.model.RequisicaoCreateDto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RequisicaoViewModel(
-    private val repository: IRequisicaoRepository,
-    private val savedStateHandle: SavedStateHandle,
-    private val loginViewModel: LoginViewModel
+    private val requisicaoApiService: RequisicaoApiService
 ) : ViewModel() {
 
-    private val _estadoAdocao = MutableStateFlow<AdocaoEstado>(AdocaoEstado.Idle)
-    val estadoAdocao: StateFlow<AdocaoEstado> = _estadoAdocao
+    private val _statusRequisicao = MutableStateFlow<StatusRequisicao>(StatusRequisicao.Nada)
+    val statusRequisicao: StateFlow<StatusRequisicao> = _statusRequisicao
 
-    companion object {
-        private const val ID_ANIMAL_KEY = "id_animal"
-    }
-
-    val idAnimal: StateFlow<Long> = savedStateHandle.getStateFlow(ID_ANIMAL_KEY, 0L)
-
-    fun adotarAnimal() {
-
-        val idAdotante = loginViewModel.userId.value
-
+    fun criarRequisicao(userId: Long, animalId: Long) {
         viewModelScope.launch {
-            _estadoAdocao.value = AdocaoEstado.Carregando
             try {
-                val idAnimalValue = idAnimal.value
-                val sucesso = repository.solicitarAdocao(idAdotante, idAnimalValue)
-                _estadoAdocao.value = if (sucesso) AdocaoEstado.Sucesso else AdocaoEstado.Erro("Erro ao adotar")
+                _statusRequisicao.value = StatusRequisicao.Carregando
+
+                val requisicaoDto = RequisicaoCreateDto(
+                    idAdotante = userId,
+                    idAnimal = animalId
+                )
+
+                requisicaoApiService.criarRequisicao(requisicaoDto)
+
+                _statusRequisicao.value = StatusRequisicao.Sucesso
             } catch (e: Exception) {
-                _estadoAdocao.value = AdocaoEstado.Erro(e.message ?: "Erro desconhecido")
+                _statusRequisicao.value = StatusRequisicao.Erro(e.message ?: "Erro desconhecido")
             }
         }
     }
-}
-
-sealed class AdocaoEstado {
-    object Idle : AdocaoEstado()
-    object Carregando : AdocaoEstado()
-    object Sucesso : AdocaoEstado()
-    data class Erro(val mensagem: String) : AdocaoEstado()
 }

@@ -46,9 +46,12 @@ fun MainApp() {
             }
         }
 
-        composable(route = InternalRoutes.PetsInfo.route) { backStackEntry ->
+        composable(route = InternalRoutes.PetsInfo.route + "/{animalId}") { backStackEntry ->
+            val animalId = backStackEntry.arguments?.getString("animalId")?.toLongOrNull() ?: 0L
+
             PetInfoScreen(
                 onBack = { navController.popBackStack() },
+                animalId = animalId,
                 navController = navController
             )
         }
