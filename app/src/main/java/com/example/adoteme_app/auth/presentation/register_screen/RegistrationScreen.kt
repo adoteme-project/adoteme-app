@@ -36,9 +36,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.adoteme_app.model.AdotanteViewModel
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.perfil.presentation.utils.components.DatePickerFieldToModal
 import com.example.adoteme_app.perfil.presentation.utils.components.InputForm
+import com.example.adoteme_app.ui.theme.ActionColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +54,6 @@ fun RegistrationScreen(navController: NavController) {
     var fieldCidade by remember { mutableStateOf("") }
     var fieldSenha by remember { mutableStateOf("") }
 
-    val actionColor = Color(red = 255, green = 166, blue = 7)
 
     Scaffold (
         topBar = {
@@ -94,7 +95,7 @@ fun RegistrationScreen(navController: NavController) {
                 item {
                     Button(
                         colors = ButtonColors(
-                            containerColor = actionColor,
+                            containerColor = ActionColor,
                             contentColor = Color.White,
                             disabledContentColor = Color.Transparent,
                             disabledContainerColor = Color.LightGray
