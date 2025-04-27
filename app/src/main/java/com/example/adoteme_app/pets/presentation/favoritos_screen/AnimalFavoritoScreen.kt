@@ -2,7 +2,6 @@ package com.example.adoteme_app.pets.presentation.favoritos_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -22,12 +21,8 @@ import androidx.compose.runtime.getValue
 
 
 @Composable
-fun AnimalFavoritoScreen(navController: NavController, adotanteId: Long, viewModel: AnimalFavoritoViewModel = koinViewModel()) {
+fun AnimalFavoritoScreen(navController: NavController, viewModel: AnimalFavoritoViewModel = koinViewModel()) {
    val favoritos by viewModel.favoritos.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.carregarFavoritos(adotanteId)
-    }
 
     Column(
         modifier = Modifier
