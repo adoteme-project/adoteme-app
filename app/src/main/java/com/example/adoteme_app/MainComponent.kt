@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +21,9 @@ import com.example.adoteme_app.perfil.presentation.perfilAplicacao_screen.Perfil
 import com.example.adoteme_app.perfil.presentation.perfilDados_screen.PerfilDadosScreen
 import com.example.adoteme_app.perfil.presentation.perfilForm_screen.PerfilFormScreen
 import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
+import com.example.adoteme_app.pets.presentation.pet_info_screen.RequisicaoViewModel
+import org.koin.androidx.compose.koinViewModel
+import androidx.compose.runtime.getValue
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -43,14 +47,12 @@ fun MainApp() {
         }
 
         composable(route = InternalRoutes.PetsInfo.route) { backStackEntry ->
-            val idAnimal = backStackEntry.arguments?.getLong("idAnimal")?.toLong() ?: 0
-
             PetInfoScreen(
-                idAnimal = idAnimal,
                 onBack = { navController.popBackStack() },
                 navController = navController
             )
         }
+
         composable(InternalRoutes.ProfileData.route) { PerfilDadosScreen(onBack = {navController.popBackStack()}) }
         composable(InternalRoutes.ProfileForm.route) { PerfilFormScreen(onBack = {navController.popBackStack()}) }
         composable(InternalRoutes.ProfileAplicacoes.route) { PerfilAplicacoScreen(navController) }

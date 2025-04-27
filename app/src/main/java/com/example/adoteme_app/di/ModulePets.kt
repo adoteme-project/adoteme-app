@@ -1,5 +1,6 @@
 package com.example.adoteme_app.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.example.adoteme_app.interfaces.AnimalApiService
 import com.example.adoteme_app.network.RetrofitInstance
 import com.example.adoteme_app.pets.presentation.favoritos_screen.AnimalFavoritoViewModel
@@ -18,7 +19,10 @@ val ModulePets = module {
         AnimalViewModel(get())
     }
 
-    viewModel {
-        AnimalFavoritoViewModel(get())
+    viewModel { (savedStateHandle: SavedStateHandle) ->
+        AnimalFavoritoViewModel(
+            animalService = get(),
+            savedStateHandle = savedStateHandle
+        )
     }
 }

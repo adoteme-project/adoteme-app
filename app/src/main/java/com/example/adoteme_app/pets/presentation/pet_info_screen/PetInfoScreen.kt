@@ -65,16 +65,10 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalLayoutApi
-fun PetInfoScreen(onBack: () -> Unit, navController: NavController, idAnimal: Long) {
-    val adocaoViewModel: RequisicaoViewModel = koinViewModel()
-    val status by adocaoViewModel.estadoAdocao.collectAsState()
+fun PetInfoScreen(onBack: () -> Unit, navController: NavController, requisicaoViewModel: RequisicaoViewModel = koinViewModel()) {
     val animalViewModel: AnimalViewModel = koinViewModel()
     val animal by animalViewModel.animal.collectAsState()
     val animals: List<AnimalResponse> = koinViewModel()
-
-    LaunchedEffect(idAnimal) {
-        animalViewModel.carregarAnimalPorId(idAnimal.toLong())
-    }
 
     if (animal == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -82,9 +76,6 @@ fun PetInfoScreen(onBack: () -> Unit, navController: NavController, idAnimal: Lo
         }
         return
     }
-
-    val loginViewModel: LoginViewModel = koinViewModel()
-    val idUsuario = loginViewModel.userId.collectAsState()
 
     val petNome = animal!!.nome
     val petEspecie = animal!!.especie
@@ -359,7 +350,7 @@ topBar = {
                                         disabledContentColor = Color.Transparent,
                                         disabledContainerColor = Color.LightGray
                                     ),
-                                    onClick = {  adocaoViewModel.adotarAnimal(idUsuario, idAnimal)
+                                    onClick = {  requisicaoViewModel.adotarAnimal()
                                         showModal.value = true }
                                 ) {
                                     Text(

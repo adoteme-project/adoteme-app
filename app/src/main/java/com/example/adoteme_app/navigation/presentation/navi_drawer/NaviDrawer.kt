@@ -56,8 +56,6 @@ fun NaviDrawerLayout(
     scope: CoroutineScope,
     mainNavController: NavController,  // Rotas externas
     nestedNavController: NavController,  // Rotas internas
-    adotanteId: Long,
-    isLoggedIn: Boolean
 ) {
     val items = listOf(
         NavDrawerItem.Home,
@@ -123,7 +121,7 @@ fun NaviDrawerLayout(
                         }
                     }
                     InternalRoutes.Favoritos.route -> {
-                        nestedNavController.navigate(InternalRoutes.Favoritos.withAdotanteId(adotanteId)) {
+                        nestedNavController.navigate(InternalRoutes.Favoritos.route) {
                             popUpTo(nestedNavController.graph.startDestinationId!!)
                             launchSingleTop = true
                         }

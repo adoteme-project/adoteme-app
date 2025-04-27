@@ -41,7 +41,6 @@ fun HomeSectionWrapper(
 
     val loginViewModel: LoginViewModel = koinViewModel()
     val adotanteId by loginViewModel.userId.collectAsState()
-    val isLoggedIn by loginViewModel.isLoggedIn.collectAsState()
 
 
     ModalNavigationDrawer(
@@ -52,9 +51,7 @@ fun HomeSectionWrapper(
                     drawerState = drawerState,
                     scope = scope,
                     mainNavController = mainNavController,
-                    nestedNavController = nestedNavController,
-                    adotanteId = adotanteId,
-                    isLoggedIn = isLoggedIn
+                    nestedNavController = nestedNavController
                 )
             }
         }
@@ -76,13 +73,7 @@ fun HomeSectionWrapper(
                     composable(InternalRoutes.Home.route) { HomeScreen(mainNavController, nestedNavController) }
                     composable(InternalRoutes.Pets.route) { PetsScreen(mainNavController) }
                     composable(InternalRoutes.Profile.route) { ProfileScreen(mainNavController) }
-                    composable(
-                        route = InternalRoutes.Favoritos.route,
-                        arguments = listOf(navArgument("idUser") { type = NavType.LongType })
-                    ) { backStackEntry ->
-                        val adotanteId = backStackEntry.arguments?.getLong("idUser") ?: return@composable
-                        AnimalFavoritoScreen(mainNavController, adotanteId = adotanteId)
-                    }
+                    composable(InternalRoutes.Favoritos.route) { AnimalFavoritoScreen(mainNavController) }
                     composable(InternalRoutes.Ongs.route) { OngsScreen(mainNavController) }
                 }
             }
