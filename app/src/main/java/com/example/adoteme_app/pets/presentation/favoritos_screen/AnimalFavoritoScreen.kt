@@ -1,5 +1,7 @@
 package com.example.adoteme_app.pets.presentation.favoritos_screen
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,11 +20,24 @@ import androidx.navigation.NavController
 import com.example.adoteme_app.ui.components.AnimalFavoritoDtoCard
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
+import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
 
 
 @Composable
 fun AnimalFavoritoScreen(navController: NavController, viewModel: AnimalFavoritoViewModel = koinViewModel()) {
-   val favoritos by viewModel.favoritos.collectAsState()
+    val context = LocalContext.current
+
+    val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+    val token = sharedPreferences.getString("token", "") ?: ""
+    val userId = sharedPreferences.getLong("userId", 0L)
+
+    val favoritos by viewModel.favoritos.collectAsState()
+
+    LaunchedEffect(token) {
+        Log.i("Status Login", "Estou Logado $userId")
+        viewModel.carregarFavoritos(userId)
+    }
 
     Column(
         modifier = Modifier

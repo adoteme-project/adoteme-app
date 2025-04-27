@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,7 +58,8 @@ fun LoginScreen(
     navController: NavHostController
 ) {
     val viewModel: LoginViewModel = koinViewModel()
-    val token by viewModel.token
+    val token by viewModel.token.collectAsState()
+    val userId by viewModel.userId.collectAsState()
 
     val context = LocalContext.current
 
@@ -66,7 +68,7 @@ fun LoginScreen(
             context.getSharedPreferences("auth", Context.MODE_PRIVATE)
                 .edit()
                 .putString("token", token)
-                .putLong("userId", viewModel.userId.value)
+                .putLong("userId", userId)
                 .apply()
             context.startActivity(Intent(context, MainActivity::class.java))
         }

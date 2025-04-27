@@ -15,26 +15,12 @@ import kotlinx.coroutines.launch
 
 class AnimalFavoritoViewModel(
     private val animalService: AnimalApiService,
-    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
-    private val adotanteId: StateFlow<Long> = savedStateHandle.getStateFlow("idUser", 0L)
 
     private val _favoritos = MutableStateFlow<List<AnimalFavoritoDto>>(emptyList())
     val favoritos: StateFlow<List<AnimalFavoritoDto>> = _favoritos.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            adotanteId
-                .filter { it != 0L }
-                .distinctUntilChanged()
-                .collect { id ->
-                    carregarFavoritos(id)
-                }
-        }
-    }
-
-    private suspend fun carregarFavoritos(idAdotante: Long) {
+    suspend fun carregarFavoritos(idAdotante: Long) {
         try {
             val response = animalService.getFavoritosByAdotanteId(idAdotante)
             _favoritos.value = response.animaisfavoritos
