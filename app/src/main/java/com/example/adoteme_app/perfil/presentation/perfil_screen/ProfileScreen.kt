@@ -7,18 +7,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
+import com.example.adoteme_app.R
+import com.example.adoteme_app.model.PerfilViewModel
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.perfil.presentation.utils.components.ListItemOption
 import com.example.adoteme_app.perfil.presentation.utils.components.ProfilePhotoPicker
 
 @Composable
-fun ProfileScreen(navHostController: NavHostController) {
+fun ProfileScreen(navHostController: NavHostController, userViewModel: PerfilViewModel) {
+
+    val adotante by userViewModel.adotanteDados.collectAsState()
+
     Column(
         modifier = Modifier.padding(horizontal = 12.dp)
     ) {
@@ -27,8 +35,8 @@ fun ProfileScreen(navHostController: NavHostController) {
             horizontalArrangement = Arrangement.spacedBy(21.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProfilePhotoPicker()
-            Text(text = "Adotante", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            ProfilePhotoPicker(adotante?.urlFoto)
+            Text(text = adotante?.nome ?: "Adotante", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         }
         ListItemOption(
             text = "Meus Dados",
