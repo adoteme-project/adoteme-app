@@ -1,5 +1,6 @@
 package com.example.adoteme_app.di
 
+import androidx.compose.ui.platform.LocalContext
 import com.example.adoteme_app.data.repository.PerfilRepository
 import com.example.adoteme_app.interfaces.AdotanteApiService
 import com.example.adoteme_app.interfaces.AnimalApiService
