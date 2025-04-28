@@ -1,5 +1,6 @@
 package com.example.adoteme_app.home.presentation.utils.components
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -16,23 +17,30 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.adoteme_app.WelcomeActivity
+import com.example.adoteme_app.model.PerfilViewModel
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
+import com.example.adoteme_app.ui.theme.GreenColor
+import com.example.adoteme_app.ui.theme.MainColor
 
 @Composable
 fun AdotemeBottomAppBar(
-    mainNavController: NavController,  // Rotas externas
-    nestedNavController: NavController  // Rotas internas
+    nestedNavController: NavController,  // Rotas internas
+    userViewModel: PerfilViewModel
 ) {
+    val token by userViewModel.token.collectAsState()
+    val contexto = LocalContext.current
 
-    val mainColor = Color(red = 255, green = 197, blue = 94)
     val secondaryColor = Color(red = 253, green = 246, blue = 240)
-    val greenColor = Color(red = 198, green = 214, blue = 104)
 
     BottomAppBar(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
@@ -47,7 +55,7 @@ fun AdotemeBottomAppBar(
             ) {
                 Button(
                     colors = ButtonColors(
-                        containerColor = mainColor,
+                        containerColor = MainColor,
                         contentColor = Color.White,
                         disabledContentColor = Color.Transparent,
                         disabledContainerColor = Color.LightGray
@@ -68,10 +76,15 @@ fun AdotemeBottomAppBar(
                 }
                 IconButton(
                     onClick = {
-                        nestedNavController.navigate(InternalRoutes.Favoritos.route) {
-                            popUpTo(InternalRoutes.Home.route) {
-                                saveState = true
+                        if(token != null) {
+                            nestedNavController.navigate(InternalRoutes.Favoritos.route) {
+                                popUpTo(InternalRoutes.Home.route) {
+                                    saveState = true
+                                }
                             }
+                        } else {
+                            val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
+                            contexto.startActivity(welcomeSection)
                         }
                     }
                 ) {
@@ -83,17 +96,22 @@ fun AdotemeBottomAppBar(
                 }
                 IconButton(
                     onClick = {
-                        nestedNavController.navigate(InternalRoutes.Profile.route) {
-                            popUpTo(InternalRoutes.Home.route) {
-                                saveState = true
+                        if(token != null) {
+                            nestedNavController.navigate(InternalRoutes.Profile.route) {
+                                popUpTo(InternalRoutes.Home.route) {
+                                    saveState = true
+                                }
                             }
+                        } else {
+                            val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
+                            contexto.startActivity(welcomeSection)
                         }
                     }
                 ) {
                     Icon(
                         Icons.Outlined.Person,
                         contentDescription = "Usuário",
-                        tint = greenColor
+                        tint = GreenColor
                     )
                 }
             }

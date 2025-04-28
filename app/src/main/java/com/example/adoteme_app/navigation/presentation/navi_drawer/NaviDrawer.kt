@@ -1,6 +1,8 @@
 package com.example.adoteme_app.navigation.presentation.navi_drawer
 
+import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,7 +28,9 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,10 +41,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import coil.compose.rememberAsyncImagePainter
 import com.example.adoteme_app.R
 import com.example.adoteme_app.WelcomeActivity
+import com.example.adoteme_app.model.PerfilViewModel
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.NavDrawerItem
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
@@ -48,24 +55,33 @@ import com.example.adoteme_app.ui.theme.BlueColor
 import com.example.adoteme_app.ui.theme.MainColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun NaviDrawerLayout(
     drawerState: DrawerState,
     scope: CoroutineScope,
-    mainNavController: NavController,  // Rotas externas
-    nestedNavController: NavController,  // Rotas internas
+    mainNavController: NavController,
+    nestedNavController: NavController,
+    userViewModel: PerfilViewModel
 ) {
-    val items = listOf(
-        NavDrawerItem.Home,
-        NavDrawerItem.Pets,
-        NavDrawerItem.Ongs,
-        NavDrawerItem.Favoritos,
-    )
-
     val contexto = LocalContext.current
 
+    val adotante by userViewModel.adotanteDados.collectAsState()
+    val token by userViewModel.token.collectAsState()
+
+    val items = remember(token) {
+        mutableListOf(
+            NavDrawerItem.Home,
+            NavDrawerItem.Pets,
+            NavDrawerItem.Ongs,
+        ).apply {
+            if (!token.isNullOrBlank()) {
+                add(NavDrawerItem.Favoritos)
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -85,21 +101,24 @@ fun NaviDrawerLayout(
                 Image(
                     modifier = Modifier.size(100.dp)
                         .clickable {
-                            nestedNavController.navigate(InternalRoutes.Profile.route) {
-                                popUpTo(InternalRoutes.Home.route) {
-                                    saveState = true
+                            if(token != null) {
+                                nestedNavController.navigate(InternalRoutes.Profile.route) {
+                                    popUpTo(InternalRoutes.Home.route) {
+                                        saveState = true
+                                    }
+                                }
+                                scope.launch {
+                                    drawerState.close()
                                 }
                             }
-                            scope.launch {
-                                drawerState.close()
-                            }
-                        }.clip(CircleShape),
-                    painter = painterResource(id = R.drawable.adotante_feliz),
+                        }
+                        .clip(CircleShape),
+                    painter = rememberAsyncImagePainter(adotante?.urlFoto ?: R.drawable.adotante_feliz),
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
                 )
                 Text(
-                    "Olá, Adotante!",
+                    text = "Olá, ${adotante?.nome ?: "Adotante"}!",
                     color = Color.White,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
@@ -142,43 +161,68 @@ fun NaviDrawerLayout(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Row(
-            modifier = Modifier.padding(start = 12.dp, bottom = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-        ) {
-            Button(
-                colors = ButtonColors(
-                    containerColor = BlueColor,
-                    contentColor = Color.White,
-                    disabledContentColor = Color.Transparent,
-                    disabledContainerColor = Color.LightGray
-                ),
-                onClick = {
-                    val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
-                    contexto.startActivity(welcomeSection)
-                }
+        if (token != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = "Entrar",
-                    fontSize = 18.sp,
-                )
+                Button(
+                    colors = ButtonColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White,
+                        disabledContentColor = Color.Transparent,
+                        disabledContainerColor = Color.LightGray
+                    ),
+                    onClick = {
+                        userViewModel.logout()
+                        val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
+                        contexto.startActivity(welcomeSection)
+                    }
+                ) {
+                    Text(text = "Logout", fontSize = 18.sp)
+                }
             }
-            Button(
-                colors = ButtonColors(
-                    containerColor = MainColor,
-                    contentColor = Color.White,
-                    disabledContentColor = Color.Transparent,
-                    disabledContainerColor = Color.LightGray
-                ),
-                onClick = {
-                    val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
-                    contexto.startActivity(welcomeSection)
-                }
+        } else {
+            Row(
+                modifier = Modifier.padding(start = 12.dp, bottom = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                Text(
-                    text = "Cadastrar",
-                    fontSize = 18.sp,
-                )
+                Button(
+                    colors = ButtonColors(
+                        containerColor = BlueColor,
+                        contentColor = Color.White,
+                        disabledContentColor = Color.Transparent,
+                        disabledContainerColor = Color.LightGray
+                    ),
+                    onClick = {
+                        val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
+                        contexto.startActivity(welcomeSection)
+                    }
+                ) {
+                    Text(
+                        text = "Entrar",
+                        fontSize = 18.sp,
+                    )
+                }
+                Button(
+                    colors = ButtonColors(
+                        containerColor = MainColor,
+                        contentColor = Color.White,
+                        disabledContentColor = Color.Transparent,
+                        disabledContainerColor = Color.LightGray
+                    ),
+                    onClick = {
+                        val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
+                        contexto.startActivity(welcomeSection)
+                    }
+                ) {
+                    Text(
+                        text = "Cadastrar",
+                        fontSize = 18.sp,
+                    )
+                }
             }
         }
     }
