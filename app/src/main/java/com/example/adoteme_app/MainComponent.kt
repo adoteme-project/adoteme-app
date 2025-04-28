@@ -24,6 +24,7 @@ import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
 import com.example.adoteme_app.pets.presentation.pet_info_screen.RequisicaoViewModel
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
+import com.example.adoteme_app.model.PerfilViewModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -53,8 +54,16 @@ fun MainApp() {
             )
         }
 
-        composable(InternalRoutes.ProfileData.route) { PerfilDadosScreen(onBack = {navController.popBackStack()}) }
-        composable(InternalRoutes.ProfileForm.route) { PerfilFormScreen(onBack = {navController.popBackStack()}) }
+        composable(InternalRoutes.ProfileData.route) {
+            val userViewModel: PerfilViewModel = koinViewModel()
+            val adotante by userViewModel.adotanteDados.collectAsState()
+            PerfilDadosScreen(onBack = {navController.popBackStack()}, adotante)
+        }
+        composable(InternalRoutes.ProfileForm.route) {
+            val userViewModel: PerfilViewModel = koinViewModel()
+            val adotante by userViewModel.adotanteDados.collectAsState()
+            PerfilFormScreen(onBack = {navController.popBackStack()}, adotante)
+        }
         composable(InternalRoutes.ProfileAplicacoes.route) { PerfilAplicacoScreen(navController) }
     }
 }

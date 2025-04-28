@@ -41,17 +41,20 @@ fun ProfileScreen(navHostController: NavHostController, userViewModel: PerfilVie
         ListItemOption(
             text = "Meus Dados",
             navController =  navHostController,
-            InternalRoutes.ProfileData.route
+            InternalRoutes.ProfileData.route,
+            adotanteDados = adotante
         )
         ListItemOption(
             text = "Meus Formulário",
             navController = navHostController,
-            InternalRoutes.ProfileForm.route
+            InternalRoutes.ProfileForm.route,
+            adotanteDados = adotante
         )
         ListItemOption(
             text = "Minhas Aplicações",
             navController = navHostController,
-            InternalRoutes.ProfileAplicacoes.route
+            InternalRoutes.ProfileAplicacoes.route,
+            adotanteDados = adotante
         )
     }
 }
