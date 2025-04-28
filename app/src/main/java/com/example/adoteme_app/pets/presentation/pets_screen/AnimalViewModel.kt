@@ -1,6 +1,5 @@
 package com.example.adoteme_app.pets.presentation.pets_screen
 
-import android.net.http.HttpException
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +8,6 @@ import com.example.adoteme_app.model.AnimalResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class AnimalViewModel(
     private val animalApiService: AnimalApiService

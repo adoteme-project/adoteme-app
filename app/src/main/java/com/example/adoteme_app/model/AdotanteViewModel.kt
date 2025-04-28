@@ -21,6 +21,9 @@ class AdotanteViewModel(
     private val _cadastroConcluido = MutableStateFlow(false)
     val cadastroConcluido: StateFlow<Boolean> = _cadastroConcluido
 
+    private val _aplicacaoData = MutableStateFlow<List<AdotanteListaRequisicaoDto>>(emptyList())
+    val aplicacaoData: StateFlow<List<AdotanteListaRequisicaoDto>> = _aplicacaoData
+
     fun cadastrarAdotante(adotante: AdotanteRequest, fotoFile: File?) {
         viewModelScope.launch {
             try {
@@ -45,6 +48,17 @@ class AdotanteViewModel(
             } catch (e: Exception) {
                 Log.i("Cadastro", "Cadastro falhou " + e.message)
                 _cadastroConcluido.value = false
+            }
+        }
+    }
+
+    fun carregarAplicacao(idAdotante: Long) {
+        viewModelScope.launch {
+            try {
+                val response = api.obterRequisicaoAdotante(idAdotante)
+                _aplicacaoData.value = response
+            } catch (e: Exception) {
+                Log.e("PerfilAplicacao", "Erro ao carregar dados", e)
             }
         }
     }
