@@ -30,7 +30,7 @@ fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
         shape = RoundedCornerShape(24.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(3f / 4f),
+            .height(300.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFDF6F0))
     ) {
@@ -43,9 +43,9 @@ fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
                 contentDescription = "Imagem de ${animal.nome}",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .padding(top = 12.dp, bottom = 8.dp)
-                    .clip(RoundedCornerShape(20.dp))
                     .height(170.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .padding(top = 12.dp, bottom = 8.dp)
             )
 
             Card(
@@ -54,6 +54,7 @@ fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
+                    .width(200.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
@@ -61,11 +62,12 @@ fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
                 ) {
                     Text(animal.nome, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     Text("${animal.idade}, ${animal.sexo}", fontSize = 14.sp, color = Color.Gray)
+
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Button(
                         onClick = {
-                            navController.navigate("petInfo/${animal.id}")
+                            navController.navigate(InternalRoutes.PetsInfo.withId(animal.id))
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA726)),
                         modifier = Modifier

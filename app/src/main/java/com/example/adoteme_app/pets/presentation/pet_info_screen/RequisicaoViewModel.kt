@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.adoteme_app.interfaces.RequisicaoApiService
+import com.example.adoteme_app.model.AdotanteListaRequisicaoDto
 import com.example.adoteme_app.model.RequisicaoCreateDto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

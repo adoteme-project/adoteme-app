@@ -2,5 +2,6 @@ package com.example.adoteme_app.di
 
 val appModules = listOf(
     ModuleAuth,
-    ModulePets
+    ModulePets,
+    ModuleOngs
 )

@@ -24,6 +24,8 @@ import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
 import com.example.adoteme_app.pets.presentation.pet_info_screen.RequisicaoViewModel
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -46,9 +48,11 @@ fun MainApp() {
             }
         }
 
-        composable(route = InternalRoutes.PetsInfo.route + "/{animalId}") { backStackEntry ->
-            val animalId = backStackEntry.arguments?.getString("animalId")?.toLongOrNull() ?: 0L
-
+        composable(
+            route = "petInfo/{animalId}",
+            arguments = listOf(navArgument("animalId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val animalId = backStackEntry.arguments?.getLong("animalId") ?: return@composable
             PetInfoScreen(
                 onBack = { navController.popBackStack() },
                 animalId = animalId,

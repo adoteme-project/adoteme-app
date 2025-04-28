@@ -1,5 +1,7 @@
 package com.example.adoteme_app.perfil.presentation.utils.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,17 +36,25 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.adoteme_app.model.AdotanteListaRequisicaoDto
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AplicacoesCard(
-    nome: String,
-    dataAplicacao: String,
-    motivo: String,
-    logo: Int,
-    categoriaColor: Color,
+    aplicacao: AdotanteListaRequisicaoDto,
     navController: NavController
 ) {
+
+    val dataFormatada = try {
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        LocalDateTime.parse(aplicacao.dataAplicacao).format(formatter)
+    } catch (e: Exception) {
+        aplicacao.dataAplicacao
+    }
+
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -57,12 +67,12 @@ fun AplicacoesCard(
             Box(
                 modifier = Modifier
                     .align(Alignment.End)
-                    .background(categoriaColor, shape = RoundedCornerShape(bottomStart = 12.dp))
+                    .background(getRandomColor(), shape = RoundedCornerShape(bottomStart = 12.dp))
                     .padding(horizontal = 16.dp, vertical = 6.dp)
                     .fillMaxWidth(0.5f)
             ) {
                 Text(
-                    text = nome,
+                    text = aplicacao.nomePet,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
@@ -75,14 +85,14 @@ fun AplicacoesCard(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = logo),
-                    contentDescription = "Logo da ONG",
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
+//                Image(
+//                    painter = painterResource(id = logo),
+//                    contentDescription = "Logo da ONG",
+//                    modifier = Modifier
+//                        .size(100.dp)
+//                        .clip(CircleShape),
+//                    contentScale = ContentScale.Crop
+//                )
 
                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -90,7 +100,7 @@ fun AplicacoesCard(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Data da aplicao: $dataAplicacao",
+                        text = "Data da aplicação: $dataFormatada",
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
@@ -98,13 +108,13 @@ fun AplicacoesCard(
                         text = buildAnnotatedString {
                             append("Status:")
                             withStyle(style = SpanStyle(color = Color.Green)) {
-                                append(" Aceito")
+                                append("Aceito")
                             }
                         },
                         lineHeight = 14.sp
                     )
                     Text(
-                        text = "Motivo: $motivo",
+                        text = "Motivo: ${aplicacao.motivo}",
                         fontSize = 12.sp
                     )
                 }
@@ -136,4 +146,13 @@ fun AplicacoesCard(
             }
         }
     }
+}
+
+fun getRandomColor(): Color {
+    val random = (0..255).random()
+    return Color(
+        red = random,
+        green = (0..255).random(),
+        blue = (0..255).random()
+    )
 }

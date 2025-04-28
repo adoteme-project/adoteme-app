@@ -6,7 +6,7 @@ sealed class InternalRoutes(val route: String) {
     data object Ongs: InternalRoutes("ongs")
     data object Favoritos : InternalRoutes("favoritos")
 
-    object PetsInfo : InternalRoutes("petInfo/{idAnimal}") {
+    object PetsInfo : InternalRoutes("petInfo/{animalId}") {
         fun withId(id: Long) = "petInfo/$id"
     }
 
