@@ -1,5 +1,6 @@
 package com.example.adoteme_app.home.presentation.utils.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -29,6 +30,7 @@ import com.example.adoteme_app.pets.presentation.pets_screen.PetsScreen
 import kotlinx.coroutines.flow.StateFlow
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
+import com.example.adoteme_app.model.PerfilViewModel
 
 
 @Composable
@@ -39,8 +41,7 @@ fun HomeSectionWrapper(
     val scope = rememberCoroutineScope()
     val nestedNavController = rememberNavController()
 
-    val loginViewModel: LoginViewModel = koinViewModel()
-    val adotanteId by loginViewModel.userId.collectAsState()
+    val userViewModel: PerfilViewModel = koinViewModel()
 
 
     ModalNavigationDrawer(
@@ -51,7 +52,8 @@ fun HomeSectionWrapper(
                     drawerState = drawerState,
                     scope = scope,
                     mainNavController = mainNavController,
-                    nestedNavController = nestedNavController
+                    nestedNavController = nestedNavController,
+                    userViewModel = userViewModel
                 )
             }
         }
@@ -60,8 +62,8 @@ fun HomeSectionWrapper(
             topBar = { AdotemeTopAppBar(drawerState, scope) },
             bottomBar = {
                 AdotemeBottomAppBar(
-                    mainNavController = mainNavController,
-                    nestedNavController = nestedNavController
+                    nestedNavController = nestedNavController,
+                    userViewModel = userViewModel
                 )
             }
         ) { innerPadding ->

@@ -49,7 +49,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.adoteme_app.MainActivity
 import com.example.adoteme_app.R
+import com.example.adoteme_app.data.repository.PerfilRepository
+import com.example.adoteme_app.interfaces.AdotanteApiService
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
+import com.example.adoteme_app.network.RetrofitInstance
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -70,6 +73,19 @@ fun LoginScreen(
                 .putString("token", token)
                 .putLong("userId", userId)
                 .apply()
+
+            val perfilRepository = PerfilRepository(context)
+            perfilRepository.salvarToken(token)
+
+            val adotanteApiService = RetrofitInstance.retrofit.create(AdotanteApiService::class.java)
+
+            try {
+                val adotante = adotanteApiService.getDadosAdotante(userId)
+                perfilRepository.salvarAdotante(adotante)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             context.startActivity(Intent(context, MainActivity::class.java))
         }
     }
