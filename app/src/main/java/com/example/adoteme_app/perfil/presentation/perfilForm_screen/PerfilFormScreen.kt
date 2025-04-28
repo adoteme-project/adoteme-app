@@ -23,12 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.adoteme_app.model.AdotanteDados
 import com.example.adoteme_app.perfil.presentation.utils.components.RadioButtonGroup
 import com.example.adoteme_app.ui.theme.ActionColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilFormScreen(onBack: () -> Unit) {
+fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
 
     val temCrianca = remember { mutableStateOf("") }
     val moradoresConcordam = remember { mutableStateOf("") }
@@ -133,5 +134,13 @@ fun PerfilFormScreen(onBack: () -> Unit) {
                 }
             }
         }
+    }
+}
+
+fun convertApiValues(valor: String?): String {
+    return if (valor == "true" || valor == "false") {
+        "true"
+    } else {
+        "false"
     }
 }

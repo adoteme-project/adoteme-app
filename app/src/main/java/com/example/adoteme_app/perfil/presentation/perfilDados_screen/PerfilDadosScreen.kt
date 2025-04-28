@@ -1,5 +1,6 @@
 package com.example.adoteme_app.perfil.presentation.perfilDados_screen
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,24 +27,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.adoteme_app.model.AdotanteDados
+import com.example.adoteme_app.model.AdotanteRequest
 import com.example.adoteme_app.perfil.presentation.utils.components.DatePickerFieldToModal
 import com.example.adoteme_app.perfil.presentation.utils.components.InputForm
+import com.google.gson.GsonBuilder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilDadosScreen(onBack: () -> Unit) {
-    var fieldNome by remember { mutableStateOf("") }
-    var fieldEmail by remember { mutableStateOf("") }
-    var fieldCelular by remember { mutableStateOf("") }
+fun PerfilDadosScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
+    var fieldNome by remember { mutableStateOf(adotanteDados?.nome ?: "") }
+    var fieldEmail by remember { mutableStateOf(adotanteDados?.email ?: "") }
+    var fieldCelular by remember { mutableStateOf(adotanteDados?.telefone ?: "") }
     var fieldDataNascimento by remember { mutableStateOf("") }
-    var fieldCep by remember { mutableStateOf("") }
-    var fieldEstado by remember { mutableStateOf("") }
-    var fieldCidade by remember { mutableStateOf("") }
-    var fieldSenha by remember { mutableStateOf("") }
+    var fieldCep by remember { mutableStateOf(adotanteDados?.cep ?: "") }
+    var fieldEstado by remember { mutableStateOf(adotanteDados?.endereco?.estado ?: "") }
+    var fieldCidade by remember { mutableStateOf(adotanteDados?.endereco?.cidade ?: "") }
 
     val actionColor = Color(red = 255, green = 166, blue = 7)
 
@@ -76,9 +80,7 @@ fun PerfilDadosScreen(onBack: () -> Unit) {
                 modifier = Modifier.padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                item {
-                    HorizontalDivider()
-                }
+                item {HorizontalDivider()}
                 item { InputForm(fieldNome, "Nome Completo", KeyboardType.Text, onValueChange = { fieldNome = it }) }
                 item {InputForm(fieldEmail, "E-mail", KeyboardType.Email, onValueChange = { fieldEmail = it})}
                 item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone, onValueChange = { fieldCelular = it})}
@@ -86,7 +88,6 @@ fun PerfilDadosScreen(onBack: () -> Unit) {
                 item {InputForm(fieldCep, "CEP", KeyboardType.Text, onValueChange = { fieldCep = it })}
                 item {InputForm(fieldEstado, "Estado", KeyboardType.Text, onValueChange = { fieldEstado = it })}
                 item {InputForm(fieldCidade, "Cidade", KeyboardType.Text, onValueChange = { fieldEstado = it })}
-                item {InputForm(fieldSenha, "Senha", KeyboardType.Password, onValueChange = { fieldSenha = it })}
                 item {
                     Button(
                         colors = ButtonColors(

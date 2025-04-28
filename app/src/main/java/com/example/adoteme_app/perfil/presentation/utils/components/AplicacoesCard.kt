@@ -36,6 +36,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.adoteme_app.model.AdotanteListaRequisicaoDto
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import java.time.LocalDateTime
@@ -85,14 +86,14 @@ fun AplicacoesCard(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-//                Image(
-//                    painter = painterResource(id = logo),
-//                    contentDescription = "Logo da ONG",
-//                    modifier = Modifier
-//                        .size(100.dp)
-//                        .clip(CircleShape),
-//                    contentScale = ContentScale.Crop
-//                )
+                Image(
+                    painter = rememberAsyncImagePainter(aplicacao.imagem),
+                    contentDescription = "Logo da ONG",
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
 
                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -106,17 +107,17 @@ fun AplicacoesCard(
                     )
                     Text(
                         text = buildAnnotatedString {
-                            append("Status:")
+                            append("Status: ")
                             withStyle(style = SpanStyle(color = Color.Green)) {
                                 append("Aceito")
                             }
                         },
                         lineHeight = 14.sp
                     )
-                    Text(
-                        text = "Motivo: ${aplicacao.motivo}",
-                        fontSize = 12.sp
-                    )
+//                    Text(
+//                        text = "Motivo: ${aplicacao.motivo}",
+//                        fontSize = 12.sp
+//                    )
                 }
             }
 
