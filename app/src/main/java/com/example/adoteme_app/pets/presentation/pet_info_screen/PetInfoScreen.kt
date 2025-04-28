@@ -171,14 +171,14 @@ topBar = {
                 )
             }
 
-            item {
-                Text(
-                    text = "Nhoa é um pet carismático e cheio de energia! " +
-                            "Com um olhar expressivo e uma personalidade cativante, ele " +
-                            "adora brincar, correr e explorar novos ambientes.",
-                    fontSize = 14.sp
-                )
-            }
+//            item {
+//                Text(
+//                    text = "Nhoa é um pet carismático e cheio de energia! " +
+//                            "Com um olhar expressivo e uma personalidade cativante, ele " +
+//                            "adora brincar, correr e explorar novos ambientes.",
+//                    fontSize = 14.sp
+//                )
+//            }
 
             item {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -243,12 +243,12 @@ topBar = {
                         AccordionSection(
                             title = "Personalidades",
                             rows = listOf(
-                                "Energia: ${animalState?.personalidade?.energia}",
-                                "Sociabilidade: ${animalState?.personalidade?.sociabilidade}",
-                                "Tolerância: ${animalState?.personalidade?.tolerante}",
-                                "Obediência: ${animalState?.personalidade?.obediente}",
-                                "Territorialidade: ${animalState?.personalidade?.territorial}",
-                                "Inteligência: ${animalState?.personalidade?.inteligencia}"
+                                "Energia: ",
+                                "Sociabilidade: ",
+                                "Tolerância: ",
+                                "Obediência: ",
+                                "Territorialidade: ",
+                                "Inteligência: "
                             )
                         )
                     )
