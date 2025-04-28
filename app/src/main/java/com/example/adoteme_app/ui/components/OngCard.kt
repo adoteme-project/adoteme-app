@@ -23,7 +23,7 @@ import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 
 
 @Composable
-fun OngCard(ong: OngResponseAllDto, navController: NavController ) {
+fun OngCard(ong: OngResponseAllDto, navController: NavController) {
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -36,12 +36,12 @@ fun OngCard(ong: OngResponseAllDto, navController: NavController ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.End)
-                  //  .background(categoriaColor, shape = RoundedCornerShape(bottomStart = 12.dp))
+                    .background(getRandomColor(), shape = RoundedCornerShape(bottomStart = 12.dp))
                     .padding(horizontal = 16.dp, vertical = 6.dp)
                     .fillMaxWidth(0.5f)
             ) {
                 Text(
-                    text = "ONG",
+                    text = ong.nome,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
@@ -94,10 +94,7 @@ fun OngCard(ong: OngResponseAllDto, navController: NavController ) {
                 horizontalArrangement = Arrangement.End
             ) {
                 Button(
-                    onClick = {  navController.navigate("petInfo/${ong.id}") {
-                        popUpTo(InternalRoutes.Home.route) { saveState = true }
-                        launchSingleTop = true
-                    } },
+                    onClick = { /* TODO */ },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC55E)),
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
@@ -125,3 +122,13 @@ fun OngCard(ong: OngResponseAllDto, navController: NavController ) {
         }
     }
 }
+
+fun getRandomColor(): Color {
+    val random = (0..255).random()
+    return Color(
+        red = random,
+        green = (0..255).random(),
+        blue = (0..255).random()
+    )
+}
+

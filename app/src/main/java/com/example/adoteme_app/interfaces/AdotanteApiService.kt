@@ -1,5 +1,6 @@
 package com.example.adoteme_app.interfaces
 
+import com.example.adoteme_app.model.AdotanteListaRequisicaoDto
 import com.example.adoteme_app.model.AdotanteDados
 import com.example.adoteme_app.model.AdotanteRequest
 import com.example.adoteme_app.model.AdotanteResponse
@@ -24,4 +25,6 @@ interface AdotanteApiService {
     @GET("adotantes/dados-foto-adotante/{id}")
     suspend fun getDadosAdotante(@Path("id") id: Long): AdotanteDados
 
+    @GET("adotantes/lista-requisicao-adotante/{idAdotante}")
+    suspend fun obterRequisicaoAdotante(@Path("idAdotante") idAdotante: Long): List<AdotanteListaRequisicaoDto>
 }
