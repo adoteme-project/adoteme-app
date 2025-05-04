@@ -16,18 +16,27 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.adoteme_app.model.AdotanteDados
 import com.example.adoteme_app.perfil.presentation.utils.components.RadioButtonGroup
+import com.example.adoteme_app.ui.theme.ActionColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilFormScreen(onBack: () -> Unit) {
+fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
 
-    val actionColor = Color(red = 255, green = 166, blue = 7)
+    val temCrianca = remember { mutableStateOf("") }
+    val moradoresConcordam = remember { mutableStateOf("") }
+    val seraResponsavel = remember { mutableStateOf("") }
+    val moraEmCasa = remember { mutableStateOf("") }
+    val isTelado = remember { mutableStateOf("") }
+    val casaPortaoAlto = remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -56,52 +65,58 @@ fun PerfilFormScreen(onBack: () -> Unit) {
                 modifier = Modifier.padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(21.dp)
             ) {
-                item { Text(
-                    "Preencha o formulário de adoção abaixo.",
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(top = 12.dp)
-                )
-                }
                 item {
                     RadioButtonGroup(
                         "Moram crianças na sua casa?",
-                        radioOptions = listOf("Sim", "Não")
+                        radioOptions = listOf("Sim", "Não"),
+                        selectedOption = temCrianca.value,
+                        onOptionSelected = { temCrianca.value = if (it == "Sim") "true" else "false" }
                     )
                 }
                 item {
                     RadioButtonGroup(
                         "Todos que moram com você estão de acordo com a adoção?",
-                        radioOptions = listOf("Sim", "Não")
+                        radioOptions = listOf("Sim", "Não"),
+                        selectedOption = moradoresConcordam.value,
+                        onOptionSelected = { moradoresConcordam.value = if (it == "Sim") "true" else "false" }
                     )
                 }
                 item {
                     RadioButtonGroup(
-                        "O responsável pelo animal será você ou outra pessoa?",
-                        radioOptions = listOf("Sim", "Não")
+                        "O responsável pelo animal será você?",
+                        radioOptions = listOf("Sim", "Não"),
+                        selectedOption = seraResponsavel.value,
+                        onOptionSelected = { seraResponsavel.value = if (it == "Sim") "true" else "false" }
                     )
                 }
                 item {
                     RadioButtonGroup(
-                        "Você mora em casa ou apartamento?",
-                        radioOptions = listOf("Sim", "Não")
+                        "Você mora em casa?",
+                        radioOptions = listOf("Sim", "Não"),
+                        selectedOption = moraEmCasa.value,
+                        onOptionSelected = { moraEmCasa.value = if (it == "Sim") "true" else "false" }
                     )
                 }
                 item {
                     RadioButtonGroup(
                         "Sua residência é telada?",
-                        radioOptions = listOf("Sim", "Não")
+                        radioOptions = listOf("Sim", "Não"),
+                        selectedOption = isTelado.value,
+                        onOptionSelected = { isTelado.value = if (it == "Sim") "true" else "false" }
                     )
                 }
                 item {
                     RadioButtonGroup(
                         "Sua casa tem portão alto?",
-                        radioOptions = listOf("Sim", "Não")
+                        radioOptions = listOf("Sim", "Não"),
+                        selectedOption = casaPortaoAlto.value,
+                        onOptionSelected = { casaPortaoAlto.value = if (it == "Sim") "true" else "false" }
                     )
                 }
                 item {
                     Button(
                         colors = ButtonColors(
-                            containerColor = actionColor,
+                            containerColor = ActionColor,
                             contentColor = Color.White,
                             disabledContentColor = Color.Transparent,
                             disabledContainerColor = Color.LightGray
@@ -119,5 +134,13 @@ fun PerfilFormScreen(onBack: () -> Unit) {
                 }
             }
         }
+    }
+}
+
+fun convertApiValues(valor: String?): String {
+    return if (valor == "true" || valor == "false") {
+        "true"
+    } else {
+        "false"
     }
 }

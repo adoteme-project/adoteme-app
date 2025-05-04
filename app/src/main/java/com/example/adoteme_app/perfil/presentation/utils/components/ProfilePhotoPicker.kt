@@ -29,12 +29,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.adoteme_app.ui.theme.ActionColor
+import com.example.adoteme_app.ui.theme.MainColor
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.*
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ProfilePhotoPicker() {
+fun ProfilePhotoPicker(profileUrl: String?) {
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -48,10 +50,6 @@ fun ProfilePhotoPicker() {
         }
     }
 
-    val mainColor = Color(red = 255, green = 197, blue = 94)
-    val actionColor = Color(red = 255, green = 166, blue = 7)
-
-
     Column (
         modifier = Modifier.padding(vertical = 21.dp),
         verticalArrangement = Arrangement.Center,
@@ -63,7 +61,7 @@ fun ProfilePhotoPicker() {
                 .clip(CircleShape)
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(actionColor, mainColor)
+                        colors = listOf(ActionColor, MainColor)
                     )
                 )
                 .clickable {
@@ -86,11 +84,10 @@ fun ProfilePhotoPicker() {
                         .clip(CircleShape)
                 )
             } else {
-                Icon(
-                    imageVector = Icons.Filled.AccountCircle,
+                Image(
+                    painter = rememberAsyncImagePainter(profileUrl ?: Icons.Filled.AccountCircle) ,
                     contentDescription = "Foto de Perfil",
                     modifier = Modifier.size(100.dp),
-                    tint = Color.White
                 )
             }
         }

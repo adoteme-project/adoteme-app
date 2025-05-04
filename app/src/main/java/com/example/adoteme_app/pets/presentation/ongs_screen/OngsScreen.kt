@@ -12,14 +12,16 @@ import com.example.adoteme_app.model.Ong
 import com.example.adoteme_app.ui.components.OngCard
 import com.example.adoteme_app.ui.components.SearchBar
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import org.koin.androidx.compose.koinViewModel
+import androidx.compose.runtime.getValue
+
 
 @Composable
-fun OngsScreen() {
-    val ongs = listOf(
-        Ong("CÃO SEM DONO", "São Paulo - SP", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "A 5 km de distância", R.drawable.ong1, Color(0xFF1E88E5)),
-        Ong("VICA", "São Paulo - SP", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "A 5 km de distância", R.drawable.ong2, Color(0xFF8BC34A))
-    )
+fun OngsScreen(navController: NavController, viewModel: OngViewModel = koinViewModel()) {
+    val ongs by viewModel.ongs.collectAsState()
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         item {
@@ -36,12 +38,8 @@ fun OngsScreen() {
         items(ongs) { ong ->
             Spacer(modifier = Modifier.height(16.dp))
             OngCard(
-                nome = ong.nome,
-                endereco = ong.endereco,
-                descricao = ong.descricao,
-                distancia = ong.distancia,
-                logo = ong.logo,
-                categoriaColor = ong.categoriaColor
+                ong = ong,
+                navController = navController
             )
         }
     }

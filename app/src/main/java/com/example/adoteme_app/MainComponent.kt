@@ -1,24 +1,32 @@
 package com.example.adoteme_app
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.adoteme_app.home.presentation.utils.components.HomeSectionWrapper
-import com.example.adoteme_app.auth.presentation.login_screen.LoginScreen
-import com.example.adoteme_app.auth.presentation.register_form_screen.RegistrationFormScreen
-import com.example.adoteme_app.auth.presentation.register_screen.RegistrationScreen
 import com.example.adoteme_app.navigation.presentation.utils.InternalRoutes
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.perfil.presentation.perfilAplicacao_screen.PerfilAplicacoScreen
 import com.example.adoteme_app.perfil.presentation.perfilDados_screen.PerfilDadosScreen
 import com.example.adoteme_app.perfil.presentation.perfilForm_screen.PerfilFormScreen
 import com.example.adoteme_app.pets.presentation.pet_info_screen.PetInfoScreen
+import com.example.adoteme_app.pets.presentation.pet_info_screen.RequisicaoViewModel
+import org.koin.androidx.compose.koinViewModel
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.example.adoteme_app.model.PerfilViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MainApp() {
@@ -26,21 +34,8 @@ fun MainApp() {
 
     NavHost(
         navController = navController,
-        startDestination = RootRoutes.Login.route
+        startDestination = RootRoutes.HomeSection.route
     ) {
-        composable(RootRoutes.Login.route) {
-            LoginScreen(
-                navController = navController
-            )
-        }
-
-        composable(RootRoutes.UserRegistration.route) {
-            RegistrationScreen(navController = navController)
-        }
-
-        composable(RootRoutes.UserFormRegistration.route) {
-            RegistrationFormScreen(navController = navController)
-        }
 
         navigation(
             route = RootRoutes.HomeSection.route,
@@ -53,10 +48,31 @@ fun MainApp() {
             }
         }
 
-        composable(InternalRoutes.PetsInfo.route) { PetInfoScreen(onBack = {navController.popBackStack()}, navController)  }
-        composable(InternalRoutes.ProfileData.route) { PerfilDadosScreen(onBack = {navController.popBackStack()}) }
-        composable(InternalRoutes.ProfileForm.route) { PerfilFormScreen(onBack = {navController.popBackStack()}) }
-        composable(InternalRoutes.ProfileAplicacoes.route) { PerfilAplicacoScreen(navController) }
+        composable(
+            route = "petInfo/{animalId}",
+            arguments = listOf(navArgument("animalId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val animalId = backStackEntry.arguments?.getLong("animalId") ?: return@composable
+            PetInfoScreen(
+                onBack = { navController.popBackStack() },
+                animalId = animalId,
+                navController = navController
+            )
+        }
+
+        composable(InternalRoutes.ProfileData.route) {
+            val userViewModel: PerfilViewModel = koinViewModel()
+            val adotante by userViewModel.adotanteDados.collectAsState()
+            PerfilDadosScreen(onBack = {navController.popBackStack()}, adotante)
+        }
+        composable(InternalRoutes.ProfileForm.route) {
+            val userViewModel: PerfilViewModel = koinViewModel()
+            val adotante by userViewModel.adotanteDados.collectAsState()
+            PerfilFormScreen(onBack = {navController.popBackStack()}, adotante)
+        }
+        composable(InternalRoutes.ProfileAplicacoes.route) {
+            PerfilAplicacoScreen(navController)
+        }
     }
 }
 
