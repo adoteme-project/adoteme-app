@@ -61,7 +61,7 @@ fun AnimalFavoritoCard(animal: AnimalResponse, navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(animal.nome, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    Text("${animal.idade}, ${animal.sexo}", fontSize = 14.sp, color = Color.Gray)
+                    Text("${animal.idade} anos, ${animal.sexo}", fontSize = 13.sp, color = Color.Gray)
 
                     Spacer(modifier = Modifier.height(10.dp))
 

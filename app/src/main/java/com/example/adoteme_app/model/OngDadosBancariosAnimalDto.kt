@@ -21,5 +21,5 @@ data class AnimalOngDto(
     val id: Long,
     val nome: String,
     val idade: Int,
-    val imagemUrl: String
+    val imagem: String
 )

@@ -103,7 +103,7 @@ fun AnimalOngDto.toAnimalResponse(): AnimalResponse {
         id = this.id,
         nome = this.nome,
         idade = this.idade,
-        imagem = this.imagemUrl ?: "",
+        imagem = this.imagem,
         imagem2 = null,
         imagem3 = null,
         imagem4 = null,
