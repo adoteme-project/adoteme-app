@@ -27,10 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.adoteme_app.model.PersonalidadeDto
 
 @Composable
 fun AccordionPersonality(
     sections: List<AccordionSection>,
+    personalidade: PersonalidadeDto,
     modifier: Modifier = Modifier
 ) {
     val collapsedState = remember(sections) { sections.map { true }.toMutableStateList() }
@@ -76,7 +78,15 @@ fun AccordionPersonality(
                                 .padding(vertical = 10.dp)
                         )
                         RatingBarPersonality(
-                            currentRating = 3,
+                            currentRating = when (row) {
+                                "Energia: ${personalidade.energia}" -> personalidade.energia
+                                "Sociabilidade: ${personalidade.sociabilidade}" -> personalidade.sociabilidade
+                                "Tolerância: ${personalidade.tolerante}" -> personalidade.tolerante
+                                "Obediência: ${personalidade.obediente}" -> personalidade.obediente
+                                "Territorialidade: ${personalidade.territorial}" -> personalidade.territorial
+                                "Inteligência: ${personalidade.inteligencia}" -> personalidade.inteligencia
+                                else -> 0
+                            },
                         )
                     }
                 }

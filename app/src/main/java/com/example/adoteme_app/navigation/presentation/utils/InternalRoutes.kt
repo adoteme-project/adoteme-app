@@ -11,6 +11,10 @@ sealed class InternalRoutes(val route: String) {
         fun withId(id: Long) = "petInfo/$id"
     }
 
+    object OngsInfo : InternalRoutes("ongInfo/{idOng}") {
+        fun withId(id: Long) = "ongInfo/$id"
+    }
+
     data object Profile: InternalRoutes("profile")
     data object ProfileData: InternalRoutes("profileData")
     data object ProfileForm: InternalRoutes("profileForm")

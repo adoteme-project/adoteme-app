@@ -58,6 +58,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
 import com.example.adoteme_app.model.AnimalResponse
+import com.example.adoteme_app.model.PersonalidadeDto
 import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import com.example.adoteme_app.pets.utils.components.AccordionPersonality
 import com.example.adoteme_app.pets.utils.components.AccordionSection
@@ -78,8 +79,11 @@ fun PetInfoScreen(onBack: () -> Unit,
         animalViewModel.carregarAnimalPorId(animalId)
     }
 
+    val maxItemsToShow = 2
+
     val animalState by animalViewModel.animal.collectAsState()
     val animaisState by animalViewModel.animais.collectAsState()
+    val animaisLimitados = animaisState.take(maxItemsToShow)
 
     val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     val userId = sharedPreferences.getLong("userId", 0L)
@@ -94,7 +98,7 @@ fun PetInfoScreen(onBack: () -> Unit,
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val minHeight = screenHeight * 0.45f
 
-    val showModal = remember { mutableStateOf(false) }
+    var showModal = remember { mutableStateOf(false) }
 
     val actionColor = Color(red = 255, green = 166, blue = 7)
     val rejectColor = Color(red = 236, green = 90, blue = 73)
@@ -243,15 +247,16 @@ topBar = {
                         AccordionSection(
                             title = "Personalidades",
                             rows = listOf(
-                                "Energia: ",
-                                "Sociabilidade: ",
-                                "Tolerância: ",
-                                "Obediência: ",
-                                "Territorialidade: ",
-                                "Inteligência: "
+                                "Energia: ${animalState?.personalidade?.energia ?: 0}",
+                                "Sociabilidade: ${animalState?.personalidade?.sociabilidade ?: 0}",
+                                "Tolerância: ${animalState?.personalidade?.tolerante ?: 0}",
+                                "Obediência: ${animalState?.personalidade?.obediente ?: 0}",
+                                "Territorialidade: ${animalState?.personalidade?.territorial ?: 0}",
+                                "Inteligência: ${animalState?.personalidade?.inteligencia ?: 0}"
                             )
                         )
-                    )
+                    ),
+                    personalidade = animalState?.personalidade ?: PersonalidadeDto(0, 0, 0, 0, 0, 0)
                 )
             }
 
@@ -265,7 +270,7 @@ topBar = {
 
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                val rows = animaisState.chunked(2)
+                val rows = animaisLimitados.chunked(2)
                 rows.forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -375,7 +380,7 @@ topBar = {
 
             item {
                 if (showModal.value) {
-                    ModalAdocao(onBack, setShowModal = { showModal.value = it })
+                    ModalAdocao(onBack = onBack, setShowModal = { showModal.value = it })
                 }
             }
         }
@@ -386,7 +391,7 @@ topBar = {
 @Composable
 fun ModalAdocao(
     onBack: () -> Unit,
-    setShowModal: (Boolean) -> Unit = {}
+    setShowModal: (Boolean) -> Unit
 ) {
     Dialog(onDismissRequest = {
         onBack()

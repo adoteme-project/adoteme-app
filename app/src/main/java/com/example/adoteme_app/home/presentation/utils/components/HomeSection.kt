@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
 import com.example.adoteme_app.model.PerfilViewModel
+import com.example.adoteme_app.pets.presentation.ong_info_screen.OngInfoScreen
 
 
 @Composable
