@@ -1,6 +1,7 @@
 package com.example.adoteme_app.auth.presentation.register_screen
 
 import android.util.Log
+import android.util.Patterns
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,9 +60,27 @@ fun RegistrationScreen(navController: NavController) {
     var fieldCep by remember { mutableStateOf("") }
     var fieldEstado by remember { mutableStateOf("") }
     var fieldCidade by remember { mutableStateOf("") }
+    var fieldNumero by remember { mutableStateOf("") }
     var fieldSenha by remember { mutableStateOf("") }
     var fieldConfirmarSenha by remember { mutableStateOf("") }
 
+    var nomeError by remember { mutableStateOf<String?>(null) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var senhaError by remember { mutableStateOf<String?>(null) }
+    var confirmarSenhaError by remember { mutableStateOf<String?>(null) }
+    var celularError by remember { mutableStateOf<String?>(null) }
+    var cepError by remember { mutableStateOf<String?>(null) }
+
+    fun validateNome(nome: String) = if (nome.isBlank() && nome.length <= 2) "Nome é obrigatório" else null
+    fun validateEmail(email: String) = if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) "Email inválido" else null
+    fun validateCEP(cep: String) = if (cep.length == 8) "CEP deve ter no mínimo 8 digitos" else null
+    fun validateSenha(senha: String) = if (senha.length < 6) "Senha deve ter no mínimo 6 caracteres" else null
+    fun validateConfirmarSenha(senha: String, confirmar: String) = if (senha != confirmar) "As senhas não coincidem" else null
+
+    fun validateCelular(celular: String): String? {
+        val regex = Regex("^\\+?[1-9]\\d{1,14}$")
+        return if (!regex.matches(celular)) "Número de celular inválido (ex: +5511999999999)" else null
+    }
 
     Scaffold (
         topBar = {
@@ -90,16 +109,34 @@ fun RegistrationScreen(navController: NavController) {
                 item {
                     HorizontalDivider()
                 }
-                item { InputForm(fieldNome, "Nome Completo", KeyboardType.Text, onValueChange = { fieldNome = it }) }
-                item {InputForm(fieldEmail, "E-mail", KeyboardType.Email, onValueChange = { fieldEmail = it})}
-                item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone, onValueChange = { fieldCelular = it})}
+                item {
+                    InputForm(fieldNome, "Nome Completo", KeyboardType.Text,
+                    onValueChange = { fieldNome = it }, errorMessage = nomeError) }
+                item {
+                    InputForm(fieldEmail, "E-mail", KeyboardType.Email,
+                        onValueChange = { fieldEmail = it}, errorMessage = emailError)
+                }
+                item {
+                    InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone,
+                    onValueChange = { fieldCelular = it}, errorMessage = celularError)
+                }
                 item {DatePickerFieldToModal(label = "Data de Nascimento", selectedDate = fieldDataNascimento, onDateSelected = { fieldDataNascimento = it}) }
-                item {InputForm(fieldCep, "CEP", KeyboardType.Text, onValueChange = { fieldCep = it })}
+                item {
+                    InputForm(fieldCep, "CEP", KeyboardType.Text,
+                    onValueChange = { fieldCep = it }, errorMessage = cepError)
+                }
                 item {InputForm(fieldEstado, "Estado", KeyboardType.Text, onValueChange = { fieldEstado = it })}
                 item {InputForm(fieldCidade, "Cidade", KeyboardType.Text, onValueChange = { fieldEstado = it })}
-                item {PasswordInputForm(fieldSenha, "Senha", onValueChange = { fieldSenha = it })}
+                item {InputForm(fieldNumero, "Numero", KeyboardType.Text, onValueChange = { fieldNumero = it })}
+                item {
+                    PasswordInputForm(fieldSenha, "Senha",
+                    onValueChange = { fieldSenha = it }, errorMessage = senhaError )
+                }
                 item {BulletList()}
-                item {PasswordInputForm(fieldSenha, "Confirmar senha", onValueChange = { fieldConfirmarSenha = it })}
+                item {
+                    PasswordInputForm(fieldConfirmarSenha, "Confirmar senha",
+                    onValueChange = { fieldConfirmarSenha = it }, errorMessage = confirmarSenhaError)
+                }
                 item {
                     Button(
                         colors = ButtonColors(
@@ -110,34 +147,45 @@ fun RegistrationScreen(navController: NavController) {
                         ),
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            val adotanteInfo = AdotanteRequest(
-                                nome = fieldNome,
-                                cep = fieldCep,
-                                email = fieldEmail,
-                                senha = fieldSenha,
-                                dtNasc = fieldDataNascimento,
-                                numero = "123",
-                                celular = fieldCelular,
-                                formulario = Formulario(
-                                    temPet = "",
-                                    casaPortaoAlto = "",
-                                    moradoresConcordam = "",
-                                    isTelado = "",
-                                    seraResponsavel = "",
-                                    moraEmCasa = "",
-                                    temCrianca = ""
+                            nomeError = validateNome(fieldNome)
+                            emailError = validateEmail(fieldEmail)
+                            senhaError = validateSenha(fieldSenha)
+                            confirmarSenhaError = validateConfirmarSenha(fieldSenha, fieldConfirmarSenha)
+                            celularError = validateCelular(fieldCelular)
+                            cepError = validateCEP(fieldCep)
+
+                            val hasError = listOf(nomeError, emailError, senhaError, confirmarSenhaError).any { it != null }
+
+                            if(hasError) {
+                                val adotanteInfo = AdotanteRequest(
+                                    nome = fieldNome,
+                                    cep = fieldCep,
+                                    email = fieldEmail,
+                                    senha = fieldSenha,
+                                    dtNasc = fieldDataNascimento,
+                                    numero = fieldNumero,
+                                    celular = fieldCelular,
+                                    formulario = Formulario(
+                                        temPet = "",
+                                        casaPortaoAlto = "",
+                                        moradoresConcordam = "",
+                                        isTelado = "",
+                                        seraResponsavel = "",
+                                        moraEmCasa = "",
+                                        temCrianca = ""
+                                    )
                                 )
-                            )
 
-                            val gson: Gson = GsonBuilder().create()
-                            val adotanteInfoJson = gson.toJson(adotanteInfo)
+                                val gson: Gson = GsonBuilder().create()
+                                val adotanteInfoJson = gson.toJson(adotanteInfo)
 
-                            Log.i("Forms", "Adotante Info Json: $adotanteInfoJson")
+                                Log.i("Forms", "Adotante Info Json: $adotanteInfoJson")
 
-                            navController.currentBackStackEntry?.savedStateHandle?.set("adotanteInfo", adotanteInfoJson)
+                                navController.currentBackStackEntry?.savedStateHandle?.set("adotanteInfo", adotanteInfoJson)
 
-                            navController.navigate(RootRoutes.UserFormRegistration.route) {
-                                popUpTo(RootRoutes.UserRegistration.route) { saveState = true }
+                                navController.navigate(RootRoutes.UserFormRegistration.route) {
+                                    popUpTo(RootRoutes.UserRegistration.route) { saveState = true }
+                                }
                             }
                         }
                     ) {

@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.adoteme_app.ui.theme.ActionColor
@@ -36,8 +37,7 @@ import com.google.accompanist.permissions.*
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ProfilePhotoPicker(profileUrl: String?) {
-    val context = LocalContext.current
+fun ProfilePhotoPicker(profileUrl: String?, sizeValue: Dp = 100.dp) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     val permissionState = rememberPermissionState(android.Manifest.permission.READ_MEDIA_IMAGES)
@@ -57,7 +57,7 @@ fun ProfilePhotoPicker(profileUrl: String?) {
     ) {
         Box(
             modifier = Modifier
-                .size(100.dp)
+                .size(sizeValue)
                 .clip(CircleShape)
                 .background(
                     brush = Brush.linearGradient(
@@ -80,14 +80,14 @@ fun ProfilePhotoPicker(profileUrl: String?) {
                     contentDescription = "Selected Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(sizeValue)
                         .clip(CircleShape)
                 )
             } else {
                 Image(
-                    painter = rememberAsyncImagePainter(profileUrl ?: Icons.Filled.AccountCircle) ,
+                    painter = rememberAsyncImagePainter(profileUrl ?: ""),
                     contentDescription = "Foto de Perfil",
-                    modifier = Modifier.size(100.dp),
+                    modifier = Modifier.size(sizeValue),
                 )
             }
         }

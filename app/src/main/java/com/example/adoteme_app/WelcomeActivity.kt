@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.adoteme_app.auth.presentation.login_screen.LoginScreen
 import com.example.adoteme_app.auth.presentation.register_form_screen.RegistrationFormScreen
+import com.example.adoteme_app.auth.presentation.register_photo_screen.RegistrationPhoneScreen
 import com.example.adoteme_app.auth.presentation.register_screen.RegistrationScreen
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.ui.theme.AdotemeappTheme
@@ -42,7 +43,10 @@ fun WelcomeNavGraph() {
             RegistrationScreen(navController = navController)
         }
         composable(RootRoutes.UserFormRegistration.route) {
-            RegistrationFormScreen(navController)
+            RegistrationFormScreen(navController = navController)
+        }
+        composable(RootRoutes.UserPhotoRegistration.route) {
+            RegistrationPhoneScreen(navController = navController)
         }
     }
 }
