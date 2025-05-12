@@ -31,10 +31,11 @@ import com.example.adoteme_app.pets.presentation.ongs_screen.OngViewModel
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
 import com.example.adoteme_app.ui.components.DoacaoDialog
 import com.example.adoteme_app.ui.components.FilterButton
+import com.example.adoteme_app.ui.components.loading.AnimalGrid
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun OngInfoScreen(onBack: () -> Unit, ongId: Long, navController: NavController, ongViewModel: OngViewModel = koinViewModel()) {
+fun OngInfoScreen(ongId: Long, navController: NavController, ongViewModel: OngViewModel = koinViewModel()) {
     val ongSelecionada by ongViewModel.ongSelecionada.collectAsState()
 
     var showDialog by remember { mutableStateOf(false) }
@@ -44,7 +45,6 @@ fun OngInfoScreen(onBack: () -> Unit, ongId: Long, navController: NavController,
     }
 
     val animais = ongSelecionada?.animais ?: emptyList()
-    val chunkedAnimais = animais.chunked(2)
 
     LazyColumn(
         modifier = Modifier
@@ -63,26 +63,12 @@ fun OngInfoScreen(onBack: () -> Unit, ongId: Long, navController: NavController,
             }
             Spacer(modifier = Modifier.height(12.dp))
         }
-
-        items(chunkedAnimais.size) { index ->
-            val rowItems = chunkedAnimais[index]
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(21.dp)
-            ) {
-                rowItems.forEach { animal ->
-                    Box(modifier = Modifier.weight(1f)) {
-                        AnimalFavoritoCard(
-                            animal = animal.toAnimalResponse(),
-                            navController = navController
-                        )
-                    }
-                }
-                if (rowItems.size < 2) {
-                    Box(modifier = Modifier.weight(1f))
-                }
-            }
-            Spacer(modifier = Modifier.height(32.dp))
+        item {
+            AnimalGrid(
+                isLoading = animais.isEmpty(),
+                animais = animais.map { it.toAnimalResponse() },
+                navController = navController
+            )
         }
     }
 

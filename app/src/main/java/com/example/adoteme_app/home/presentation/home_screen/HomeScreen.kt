@@ -26,6 +26,7 @@ import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
 import com.example.adoteme_app.ui.components.BannerCarrossel
 import com.example.adoteme_app.ui.components.CategoriaCarrossel
+import com.example.adoteme_app.ui.components.loading.AnimalGrid
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -71,24 +72,12 @@ fun HomeScreen(navController: NavController, nestedNavController: NavController,
             Text(text = "Próximos a você", fontSize = 28.sp, fontWeight = FontWeight.Bold)
         }
         item {
-            Spacer(modifier = Modifier.height(12.dp))
-            val rows = animais.value.chunked(2)
-            rows.forEach { rowItems ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(21.dp)
-                ) {
-                    rowItems.forEach { animal ->
-                        Box(modifier = Modifier.weight(1f)) {
-                            AnimalFavoritoCard(animal, navController)
-                        }
-                    }
-                    if (rowItems.size < 2) {
-                        Box(modifier = Modifier.weight(1f))
-                    }
-                }
-                Spacer(modifier = Modifier.height(32.dp))
-            }
+            AnimalGrid(
+                isLoading = animais.value.isEmpty(),
+                animais = animais.value,
+                navController = navController
+            )
         }
+
     }
 }

@@ -22,12 +22,15 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
+import com.example.adoteme_app.ui.components.loading.AnimalFavoritoDtoGrid
 
 
 @Composable
-fun AnimalFavoritoScreen(navController: NavController, viewModel: AnimalFavoritoViewModel = koinViewModel()) {
+fun AnimalFavoritoScreen(
+    navController: NavController,
+    viewModel: AnimalFavoritoViewModel = koinViewModel()
+) {
     val context = LocalContext.current
-
     val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     val token = sharedPreferences.getString("token", "") ?: ""
     val userId = sharedPreferences.getLong("userId", 0L)
@@ -35,7 +38,6 @@ fun AnimalFavoritoScreen(navController: NavController, viewModel: AnimalFavorito
     val favoritos by viewModel.favoritos.collectAsState()
 
     LaunchedEffect(token) {
-        Log.i("Status Login", "Estou Logado $userId")
         viewModel.carregarFavoritos(userId)
     }
 
@@ -52,14 +54,10 @@ fun AnimalFavoritoScreen(navController: NavController, viewModel: AnimalFavorito
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(favoritos) { animal ->
-                AnimalFavoritoDtoCard(animal, navController)
-            }
-        }
+        AnimalFavoritoDtoGrid(
+            isLoading = favoritos.isEmpty(),
+            animais = favoritos,
+            navController = navController
+        )
     }
 }

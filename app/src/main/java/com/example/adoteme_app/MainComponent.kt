@@ -67,7 +67,6 @@ fun MainApp() {
         ) { backStackEntry ->
             val ongId = backStackEntry.arguments?.getLong("ongId") ?: return@composable
             OngInfoScreen(
-                onBack = { navController.popBackStack() },
                 ongId = ongId,
                 navController = navController
             )

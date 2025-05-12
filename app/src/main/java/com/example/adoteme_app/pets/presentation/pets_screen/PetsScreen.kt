@@ -30,6 +30,7 @@ import com.example.adoteme_app.model.Categoria
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
 import com.example.adoteme_app.ui.components.CategoriaCarrossel
 import com.example.adoteme_app.ui.components.FilterButton
+import com.example.adoteme_app.ui.components.loading.AnimalGrid
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -83,28 +84,12 @@ fun PetsScreen(navController: NavController, viewModel: AnimalViewModel = koinVi
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        val chunkedAnimais = animais.value.chunked(2)
-
-        items(count = chunkedAnimais.size) { index ->
-            val rowItems = chunkedAnimais[index]
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(21.dp)
-            ) {
-                rowItems.forEach { animal ->
-                    Box(modifier = Modifier.weight(1f)) {
-                        AnimalFavoritoCard(
-                            animal = animal,
-                            navController = navController
-                        )
-                    }
-                }
-                if (rowItems.size < 2) {
-                    Box(modifier = Modifier.weight(1f))
-                }
-            }
-            Spacer(modifier = Modifier.height(32.dp))
+        item {
+            AnimalGrid(
+                isLoading = animais.value.isEmpty(),
+                animais = animais.value,
+                navController = navController
+            )
         }
     }
 }
