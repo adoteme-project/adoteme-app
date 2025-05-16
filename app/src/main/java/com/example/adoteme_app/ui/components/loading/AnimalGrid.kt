@@ -14,16 +14,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.adoteme_app.model.AnimalResponse
+import com.example.adoteme_app.model.AnimalUiModel
 import com.example.adoteme_app.ui.components.AnimalFavoritoCard
 
 @Composable
 fun AnimalGrid(
     isLoading: Boolean,
-    animais: List<AnimalResponse>,
-    navController: NavController
+    animais: List<AnimalUiModel>,
+    navController: NavController,
+    idAdotante: Long
 ) {
-    val rows = if (isLoading) List(2) { listOf<AnimalResponse?>(null, null) }
-    else animais.chunked(2).map { it.map { animal -> animal as AnimalResponse? } }
+    val rows = if (isLoading) List(2) { listOf<AnimalUiModel?>(null, null) }
+    else animais.chunked(2).map { it.map { animal -> animal as AnimalUiModel? } }
     Column {
         rows.forEach { rowItems ->
             Row(
@@ -33,7 +35,7 @@ fun AnimalGrid(
                 rowItems.forEach { animal ->
                     Box(modifier = Modifier.weight(1f)) {
                         if (animal != null) {
-                            AnimalFavoritoCard(animal, navController)
+                            AnimalFavoritoCard(animal, navController, idAdotante = idAdotante)
                         } else {
                             AnimalCardShimmer()
                         }

@@ -58,7 +58,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
 import com.example.adoteme_app.model.AnimalResponse
+import com.example.adoteme_app.model.AnimalUiModel
 import com.example.adoteme_app.model.PersonalidadeDto
+import com.example.adoteme_app.pets.presentation.favoritos_screen.AnimalFavoritoViewModel
 import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import com.example.adoteme_app.pets.utils.components.AccordionPersonality
 import com.example.adoteme_app.pets.utils.components.AccordionSection
@@ -72,7 +74,8 @@ fun PetInfoScreen(onBack: () -> Unit,
                   animalId: Long,
                   navController: NavController,
                   requisicaoViewModel: RequisicaoViewModel = koinViewModel(),
-                  animalViewModel: AnimalViewModel = koinViewModel()) {
+                  animalViewModel: AnimalViewModel = koinViewModel(),
+                  animalViewModelFavoritos: AnimalFavoritoViewModel = koinViewModel()) {
     val context = LocalContext.current
 
     LaunchedEffect(animalId) {
@@ -83,7 +86,6 @@ fun PetInfoScreen(onBack: () -> Unit,
 
     val animalState by animalViewModel.animal.collectAsState()
     val animaisState by animalViewModel.animais.collectAsState()
-    val animaisLimitados = animaisState.take(maxItemsToShow)
 
     val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     val userId = sharedPreferences.getLong("userId", 0L)
@@ -110,6 +112,25 @@ fun PetInfoScreen(onBack: () -> Unit,
             showModal.value = true
         }
     }
+
+    val favoritosIds by animalViewModelFavoritos.favoritosIds.collectAsState()
+
+    val animaisUi = remember(animaisState, favoritosIds) {
+        animaisState.map { animal ->
+            AnimalUiModel(
+                id = animal.id,
+                nome = animal.nome,
+                idade = animal.idade,
+                imagem = animal.imagem,
+                especie = animal.especie ?: "",
+                sexo = animal.sexo ?: "",
+                porte = animal.porte ?: "",
+                isFavoritado = favoritosIds.contains(animal.id)
+            )
+        }
+    }
+
+    val animaisLimitados = animaisUi.take(maxItemsToShow)
 
 
     Scaffold(
@@ -278,7 +299,7 @@ topBar = {
                     ) {
                         rowItems.forEach { animal ->
                             Box(modifier = Modifier.weight(1f)) {
-                                AnimalFavoritoCard(animal, navController)
+                                AnimalFavoritoCard(animal, navController, idAdotante = userId)
                             }
                         }
                         if (rowItems.size < 2) {

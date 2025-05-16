@@ -2,7 +2,7 @@ package com.example.adoteme_app.model
 
 data class AnimalFavoritoUsuarioDto(
     val usuarioId: Long,
-    val animaisfavoritos: List<AnimalFavoritoDto>
+    val animaisfavoritos: List<AnimalUiFavoritoDto>
 )
 
 data class AnimalFavoritoDto(

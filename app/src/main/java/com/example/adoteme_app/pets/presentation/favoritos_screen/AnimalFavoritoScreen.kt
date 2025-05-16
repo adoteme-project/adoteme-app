@@ -22,6 +22,7 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
+import com.example.adoteme_app.ui.components.TelaComFiltro
 import com.example.adoteme_app.ui.components.loading.AnimalFavoritoDtoGrid
 
 
@@ -35,7 +36,7 @@ fun AnimalFavoritoScreen(
     val token = sharedPreferences.getString("token", "") ?: ""
     val userId = sharedPreferences.getLong("userId", 0L)
 
-    val favoritos by viewModel.favoritos.collectAsState()
+    val favoritos by viewModel.favoritosCompletos.collectAsState()
 
     LaunchedEffect(token) {
         viewModel.carregarFavoritos(userId)
@@ -53,11 +54,12 @@ fun AnimalFavoritoScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-
         AnimalFavoritoDtoGrid(
             isLoading = favoritos.isEmpty(),
             animais = favoritos,
-            navController = navController
+            navController = navController,
+            idAdotante = userId
         )
     }
 }
+

@@ -10,13 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.adoteme_app.model.AnimalFavoritoDto
+import com.example.adoteme_app.model.AnimalUiFavoritoDto
+import com.example.adoteme_app.model.AnimalUiModel
 import com.example.adoteme_app.ui.components.AnimalFavoritoDtoCard
 
 @Composable
 fun AnimalFavoritoDtoGrid(
     isLoading: Boolean,
-    animais: List<AnimalFavoritoDto>,
-    navController: NavController
+    animais: List<AnimalUiFavoritoDto>,
+    navController: NavController,
+    idAdotante: Long
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -30,7 +33,7 @@ fun AnimalFavoritoDtoGrid(
             }
         } else {
             itemsIndexed(animais) { _, animal ->
-                AnimalFavoritoDtoCard(animal, navController)
+                AnimalFavoritoDtoCard(animal, navController, idAdotante = idAdotante)
             }
         }
     }
