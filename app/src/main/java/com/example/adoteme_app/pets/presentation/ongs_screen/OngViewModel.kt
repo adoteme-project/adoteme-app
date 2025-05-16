@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.adoteme_app.api.OngApi
 import com.example.adoteme_app.interfaces.OngApiService
+import com.example.adoteme_app.model.OngDadosBancariosAnimalDto
 import com.example.adoteme_app.model.OngResponseAllDto
 import com.example.adoteme_app.network.RetrofitInstance
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,11 +18,14 @@ class OngViewModel(
     private val _ongs = MutableStateFlow<List<OngResponseAllDto>>(emptyList())
     val ongs: StateFlow<List<OngResponseAllDto>> = _ongs
 
+    private val _ongSelecionada = MutableStateFlow<OngDadosBancariosAnimalDto?>(null)
+    val ongSelecionada: StateFlow<OngDadosBancariosAnimalDto?> = _ongSelecionada
+
     init {
         carregarOngs()
     }
 
-    private fun carregarOngs() {
+     fun carregarOngs() {
         viewModelScope.launch {
             try {
                 val response = ongApiService.getOngs()
@@ -30,6 +34,21 @@ class OngViewModel(
                 }
             } catch (e: Exception) {
                 Log.e("ViewModel", "Erro ao carregar animais", e)
+            }
+        }
+    }
+
+    fun carregarOngPorId(ongId: Long) {
+        viewModelScope.launch {
+            try {
+                val response = ongApiService.getOngsComAnimais()
+                if (response.isSuccessful) {
+                    val lista = response.body()
+                    val ongFiltrada = lista?.find { it.id == ongId }
+                    _ongSelecionada.value = ongFiltrada
+                }
+            } catch (e: Exception) {
+                Log.e("OngViewModel", "Erro ao carregar ONG por ID", e)
             }
         }
     }

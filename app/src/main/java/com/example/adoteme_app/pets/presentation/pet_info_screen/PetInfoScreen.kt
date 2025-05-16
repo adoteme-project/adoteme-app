@@ -58,6 +58,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
 import com.example.adoteme_app.model.AnimalResponse
+import com.example.adoteme_app.model.AnimalUiModel
+import com.example.adoteme_app.model.PersonalidadeDto
+import com.example.adoteme_app.pets.presentation.favoritos_screen.AnimalFavoritoViewModel
 import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import com.example.adoteme_app.pets.utils.components.AccordionPersonality
 import com.example.adoteme_app.pets.utils.components.AccordionSection
@@ -71,12 +74,15 @@ fun PetInfoScreen(onBack: () -> Unit,
                   animalId: Long,
                   navController: NavController,
                   requisicaoViewModel: RequisicaoViewModel = koinViewModel(),
-                  animalViewModel: AnimalViewModel = koinViewModel()) {
+                  animalViewModel: AnimalViewModel = koinViewModel(),
+                  animalViewModelFavoritos: AnimalFavoritoViewModel = koinViewModel()) {
     val context = LocalContext.current
 
     LaunchedEffect(animalId) {
         animalViewModel.carregarAnimalPorId(animalId)
     }
+
+    val maxItemsToShow = 2
 
     val animalState by animalViewModel.animal.collectAsState()
     val animaisState by animalViewModel.animais.collectAsState()
@@ -94,7 +100,7 @@ fun PetInfoScreen(onBack: () -> Unit,
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val minHeight = screenHeight * 0.45f
 
-    val showModal = remember { mutableStateOf(false) }
+    var showModal = remember { mutableStateOf(false) }
 
     val actionColor = Color(red = 255, green = 166, blue = 7)
     val rejectColor = Color(red = 236, green = 90, blue = 73)
@@ -106,6 +112,25 @@ fun PetInfoScreen(onBack: () -> Unit,
             showModal.value = true
         }
     }
+
+    val favoritosIds by animalViewModelFavoritos.favoritosIds.collectAsState()
+
+    val animaisUi = remember(animaisState, favoritosIds) {
+        animaisState.map { animal ->
+            AnimalUiModel(
+                id = animal.id,
+                nome = animal.nome,
+                idade = animal.idade,
+                imagem = animal.imagem,
+                especie = animal.especie ?: "",
+                sexo = animal.sexo ?: "",
+                porte = animal.porte ?: "",
+                isFavoritado = favoritosIds.contains(animal.id)
+            )
+        }
+    }
+
+    val animaisLimitados = animaisUi.take(maxItemsToShow)
 
 
     Scaffold(
@@ -243,15 +268,16 @@ topBar = {
                         AccordionSection(
                             title = "Personalidades",
                             rows = listOf(
-                                "Energia: ",
-                                "Sociabilidade: ",
-                                "Tolerância: ",
-                                "Obediência: ",
-                                "Territorialidade: ",
-                                "Inteligência: "
+                                "Energia: ${animalState?.personalidade?.energia ?: 0}",
+                                "Sociabilidade: ${animalState?.personalidade?.sociabilidade ?: 0}",
+                                "Tolerância: ${animalState?.personalidade?.tolerante ?: 0}",
+                                "Obediência: ${animalState?.personalidade?.obediente ?: 0}",
+                                "Territorialidade: ${animalState?.personalidade?.territorial ?: 0}",
+                                "Inteligência: ${animalState?.personalidade?.inteligencia ?: 0}"
                             )
                         )
-                    )
+                    ),
+                    personalidade = animalState?.personalidade ?: PersonalidadeDto(0, 0, 0, 0, 0, 0)
                 )
             }
 
@@ -265,7 +291,7 @@ topBar = {
 
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                val rows = animaisState.chunked(2)
+                val rows = animaisLimitados.chunked(2)
                 rows.forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -273,7 +299,7 @@ topBar = {
                     ) {
                         rowItems.forEach { animal ->
                             Box(modifier = Modifier.weight(1f)) {
-                                AnimalFavoritoCard(animal, navController)
+                                AnimalFavoritoCard(animal, navController, idAdotante = userId)
                             }
                         }
                         if (rowItems.size < 2) {
@@ -375,7 +401,7 @@ topBar = {
 
             item {
                 if (showModal.value) {
-                    ModalAdocao(onBack, setShowModal = { showModal.value = it })
+                    ModalAdocao(onBack = onBack, setShowModal = { showModal.value = it })
                 }
             }
         }
@@ -386,7 +412,7 @@ topBar = {
 @Composable
 fun ModalAdocao(
     onBack: () -> Unit,
-    setShowModal: (Boolean) -> Unit = {}
+    setShowModal: (Boolean) -> Unit
 ) {
     Dialog(onDismissRequest = {
         onBack()
