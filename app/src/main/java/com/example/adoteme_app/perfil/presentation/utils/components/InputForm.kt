@@ -27,7 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun InputForm(value: String, label: String, inputType: KeyboardType, onValueChange: (String) -> Unit) {
+fun InputForm(
+    value: String,
+    label: String,
+    inputType: KeyboardType,
+    onValueChange: (String) -> Unit,
+    errorMessage: String? = null
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -45,6 +51,9 @@ fun InputForm(value: String, label: String, inputType: KeyboardType, onValueChan
             ),
             keyboardOptions = KeyboardOptions(keyboardType = inputType)
         )
+        if (errorMessage != null) {
+            Text(text = errorMessage, color = Color.Red, fontSize = 12.sp)
+        }
     }
 }
 
@@ -52,7 +61,8 @@ fun InputForm(value: String, label: String, inputType: KeyboardType, onValueChan
 fun PasswordInputForm(
     value: String,
     label: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    errorMessage: String? = null
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -82,5 +92,8 @@ fun PasswordInputForm(
                 }
             }
         )
+        if (errorMessage != null) {
+            Text(text = errorMessage, color = Color.Red, fontSize = 12.sp)
+        }
     }
 }

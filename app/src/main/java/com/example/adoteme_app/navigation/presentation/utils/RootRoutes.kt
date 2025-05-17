@@ -5,4 +5,5 @@ sealed class RootRoutes(val route: String) {
     data object HomeSection: RootRoutes("main_section")
     data object UserRegistration: RootRoutes("user_registration")
     data object UserFormRegistration: RootRoutes("user_form_registration")
+    data object UserPhotoRegistration: RootRoutes("user_photo_registration")
 }

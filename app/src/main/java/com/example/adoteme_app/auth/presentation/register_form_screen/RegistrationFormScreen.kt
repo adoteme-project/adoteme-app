@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.adoteme_app.model.AdotanteRequest
 import com.example.adoteme_app.model.AdotanteViewModel
@@ -177,14 +176,18 @@ fun RegistrationFormScreen(navController: NavController) {
                                 )
                             )
 
-                            viewModel.cadastrarAdotante(adotanteWithFormulario, null)
+                            // viewModel.cadastrarAdotante(adotanteWithFormulario, null)
+
+                            navController.navigate(RootRoutes.UserPhotoRegistration.route) {
+                                popUpTo(RootRoutes.UserFormRegistration.route) { saveState = true }
+                            }
 
                             Log.i("Form Final", adotanteWithFormulario.toString())
 
                         },
                     ) {
                         Text(
-                            text = "Cadastrar",
+                            text = "Próximo",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.White

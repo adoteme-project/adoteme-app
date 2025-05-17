@@ -86,11 +86,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
     implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("androidx.compose.material:material:1.5.4")
-
-
-
-
-
-
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 }
