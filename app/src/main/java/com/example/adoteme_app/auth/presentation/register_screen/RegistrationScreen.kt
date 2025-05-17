@@ -200,7 +200,7 @@ fun RegistrationScreen(navController: NavController) {
                                         temCrianca = ""
                                     )
                                 )
-                                
+
                                 val gson: Gson = GsonBuilder().create()
                                 val adotanteInfoJson = gson.toJson(adotanteInfo)
 

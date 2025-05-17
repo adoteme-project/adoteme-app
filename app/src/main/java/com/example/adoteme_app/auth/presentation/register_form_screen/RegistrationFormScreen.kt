@@ -34,6 +34,7 @@ import com.example.adoteme_app.model.Formulario
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.perfil.presentation.utils.components.RadioButtonGroup
 import com.example.adoteme_app.ui.theme.ActionColor
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.koin.androidx.compose.koinViewModel
 
@@ -163,6 +164,14 @@ fun RegistrationFormScreen(navController: NavController) {
                                     temPet = convertValues(temPet)
                                 )
                             )
+
+                            val gsonAdotanteWithForm: Gson = GsonBuilder().create()
+                            val adotanteWithFormJson = gsonAdotanteWithForm.toJson(adotanteWithFormulario)
+
+                            Log.i("Forms", "Adotante Info Json: $adotanteInfoJson")
+
+                            navController.currentBackStackEntry?.
+                                savedStateHandle?.set("adotanteWithForm", adotanteWithFormJson)
 
                             navController.navigate(RootRoutes.UserPhotoRegistration.route) {
                                 popUpTo(RootRoutes.UserFormRegistration.route) { saveState = true }
