@@ -6,6 +6,8 @@ import com.example.adoteme_app.model.AdotanteRequest
 import com.example.adoteme_app.model.AdotanteResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST

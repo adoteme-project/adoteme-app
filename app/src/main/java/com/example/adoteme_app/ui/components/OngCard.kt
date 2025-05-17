@@ -94,7 +94,9 @@ fun OngCard(ong: OngResponseAllDto, navController: NavController) {
                 horizontalArrangement = Arrangement.End
             ) {
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = {
+                        navController.navigate(InternalRoutes.OngsInfo.withId(ong.id))
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC55E)),
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))

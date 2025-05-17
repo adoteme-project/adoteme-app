@@ -20,7 +20,6 @@ class AnimalViewModel(
     val animal: StateFlow<AnimalResponse?> = _animal
 
     init {
-        Log.d("AnimalViewModel", "ViewModel criado")
         carregarAnimais()
     }
 
