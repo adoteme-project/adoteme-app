@@ -19,6 +19,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,12 +29,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.adoteme_app.model.AdotanteViewModel
+import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.perfil.presentation.utils.components.ProfilePhotoPicker
 import com.example.adoteme_app.ui.theme.MainColor
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationPhoneScreen(navController: NavController) {
+    val viewModel: AdotanteViewModel = koinViewModel()
+
+    val cadastroConcluido by viewModel.cadastroConcluido.collectAsState()
+
+    LaunchedEffect (cadastroConcluido) {
+        if (cadastroConcluido) {
+            navController.navigate(RootRoutes.Login.route) {
+                popUpTo(RootRoutes.UserFormRegistration.route) { inclusive = true }
+            }
+        }
+    }
+
     Scaffold (
         topBar = {
             TopAppBar (
@@ -76,7 +94,10 @@ fun RegistrationPhoneScreen(navController: NavController) {
                             disabledContainerColor = Color.LightGray
                         ),
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = {}
+                        onClick = {
+
+                            // viewModel.cadastrarAdotante(adotanteCadastro, null)
+                        }
                     ) {
                         Text(
                             text = "Finalizar Cadastro",

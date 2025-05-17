@@ -40,8 +40,6 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationFormScreen(navController: NavController) {
-    val viewModel: AdotanteViewModel = koinViewModel()
-
     val adotanteInfoJson = navController.previousBackStackEntry
         ?.savedStateHandle
         ?.get<String>("adotanteInfo")
@@ -50,16 +48,6 @@ fun RegistrationFormScreen(navController: NavController) {
 
     val adotanteInfo = remember(adotanteInfoJson) {
         adotanteInfoJson.let { gson.fromJson(it, AdotanteRequest::class.java) }
-    }
-
-    val cadastroConcluido by viewModel.cadastroConcluido.collectAsState()
-
-    LaunchedEffect (cadastroConcluido) {
-        if (cadastroConcluido) {
-            navController.navigate(RootRoutes.Login.route) {
-                popUpTo(RootRoutes.UserFormRegistration.route) { inclusive = true }
-            }
-        }
     }
 
     val (temCrianca, setTemCrianca) = remember { mutableStateOf("") }
@@ -175,8 +163,6 @@ fun RegistrationFormScreen(navController: NavController) {
                                     temPet = convertValues(temPet)
                                 )
                             )
-
-                            // viewModel.cadastrarAdotante(adotanteWithFormulario, null)
 
                             navController.navigate(RootRoutes.UserPhotoRegistration.route) {
                                 popUpTo(RootRoutes.UserFormRegistration.route) { saveState = true }
