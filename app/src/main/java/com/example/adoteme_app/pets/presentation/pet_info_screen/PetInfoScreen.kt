@@ -113,6 +113,10 @@ fun PetInfoScreen(onBack: () -> Unit,
         }
     }
 
+    LaunchedEffect(userId) {
+        animalViewModelFavoritos.carregarFavoritos(userId)
+    }
+
     val favoritosIds by animalViewModelFavoritos.favoritosIds.collectAsState()
 
     val animaisUi = remember(animaisState, favoritosIds) {
