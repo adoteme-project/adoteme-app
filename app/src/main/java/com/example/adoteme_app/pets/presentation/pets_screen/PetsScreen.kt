@@ -66,6 +66,11 @@ fun PetsScreen(
     val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     val userId = sharedPreferences.getLong("userId", 0L)
 
+    LaunchedEffect(userId) {
+        animalFavoritoViewModel.carregarFavoritos(userId)
+    }
+
+
     val animaisUi = remember(animaisResponse.value, favoritosIds) {
         animaisResponse.value.map { animal ->
             AnimalUiModel(

@@ -54,6 +54,10 @@ fun OngInfoScreen(ongId: Long, navController: NavController, ongViewModel: OngVi
         ongViewModel.carregarOngPorId(ongId)
     }
 
+    LaunchedEffect(userId) {
+        favoritoViewModel.carregarFavoritos(userId)
+    }
+
     val animais = ongSelecionada?.animais ?: emptyList()
 
     val animaisComFavorito = remember(animais, favoritosIds) {
