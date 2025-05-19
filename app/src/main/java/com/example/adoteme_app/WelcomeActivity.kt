@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +34,8 @@ class WelcomeActivity : ComponentActivity() {
 @Composable
 fun WelcomeNavGraph() {
     val navController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     NavHost(
         navController = navController,
@@ -43,10 +48,10 @@ fun WelcomeNavGraph() {
             RegistrationScreen(navController = navController)
         }
         composable(RootRoutes.UserFormRegistration.route) {
-            RegistrationFormScreen(navController = navController)
+            RegistrationFormScreen(navController, snackbarHostState, coroutineScope)
         }
         composable(RootRoutes.UserPhotoRegistration.route) {
-            RegistrationPhoneScreen(navController = navController)
+            RegistrationPhoneScreen(navController, snackbarHostState, coroutineScope)
         }
     }
 }

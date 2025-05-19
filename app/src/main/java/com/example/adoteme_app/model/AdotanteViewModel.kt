@@ -21,11 +21,18 @@ class AdotanteViewModel(
     private val _cadastroConcluido = MutableStateFlow(false)
     val cadastroConcluido: StateFlow<Boolean> = _cadastroConcluido
 
+    private val _cadastroErro = MutableStateFlow<String?>(null)
+    val cadastroErro: StateFlow<String?> = _cadastroErro
+
     private val _aplicacaoData = MutableStateFlow<List<AdotanteListaRequisicaoDto>>(emptyList())
     val aplicacaoData: StateFlow<List<AdotanteListaRequisicaoDto>> = _aplicacaoData
 
+    private val _loading = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> = _loading
+
     fun cadastrarAdotante(adotante: AdotanteRequest, fotoFile: File?) {
         viewModelScope.launch {
+            _loading.value = true
             try {
                 val gson = Gson()
                 val adotanteJson = gson.toJson(adotante)
@@ -45,9 +52,13 @@ class AdotanteViewModel(
                 Log.i("Cadastro", "Cadastrado adotante com sucesso " + response.nome)
 
                 _cadastroConcluido.value = true
+                _cadastroErro.value = null
             } catch (e: Exception) {
                 Log.i("Cadastro", "Cadastro falhou " + e.message)
                 _cadastroConcluido.value = false
+                _cadastroErro.value = e.message ?: "Erro desconhecido"
+            } finally {
+                _loading.value = false
             }
         }
     }
