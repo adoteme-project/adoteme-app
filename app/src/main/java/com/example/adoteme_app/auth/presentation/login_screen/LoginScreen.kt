@@ -22,6 +22,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -57,7 +58,6 @@ import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.network.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.net.URLEncoder
 
@@ -76,7 +76,15 @@ fun LoginScreen(
 
     LaunchedEffect(token, loginState) {
         when (loginState) {
+            is LoginState.Loading -> {
+                snackbarHostState.showSnackbar(
+                    message = "Entrando...",
+                    withDismissAction = false,
+                    duration = SnackbarDuration.Indefinite
+                )
+            }
             is LoginState.Success -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
                 if (token.isNotBlank()) {
                     context.getSharedPreferences("auth", Context.MODE_PRIVATE)
                         .edit()
@@ -100,12 +108,16 @@ fun LoginScreen(
                 }
             }
             is LoginState.Require2FA -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
                 navController.navigate("twoFactorVerification/${URLEncoder.encode(viewModel.email, "UTF-8")}")
             }
             is LoginState.Error -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
                 snackbarHostState.showSnackbar("Erro ao fazer login, email ou senha inválidos")
             }
-            else -> {}
+            else -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
+            }
         }
     }
 
