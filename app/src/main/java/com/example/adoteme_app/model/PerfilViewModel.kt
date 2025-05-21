@@ -1,7 +1,9 @@
 package com.example.adoteme_app.model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.adoteme_app.auth.data.ProfileFormState
 import com.example.adoteme_app.perfil.data.use_case.PerfilUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +37,27 @@ class PerfilViewModel(
             perfilUseCase.limparDadosUsuario()
             _adotanteDados.value = null
             _token.value = null
+        }
+    }
+
+    fun atualizarAdotante(id: Long, form: ProfileFormState) {
+        viewModelScope.launch {
+            try {
+                val request = AdotantePutRequest(
+                    nome = form.nome,
+                    email = form.email,
+                    celular = form.celular,
+                    dtNasc = form.dataNascimento,
+                    numero = form.numero
+                )
+
+                val response = perfilUseCase.atualizarAdotante(id, request)
+
+                perfilUseCase.salvarAdotante(response)
+                _adotanteDados.value = response
+            } catch (e: Exception) {
+                Log.e("PerfilViewModel", "Erro ao atualizar dados", e)
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ fun InputForm(
     value: String,
     label: String,
     inputType: KeyboardType,
+    enabled: Boolean = true,
     onValueChange: (String) -> Unit,
     errorMessage: String? = null
 ) {
@@ -41,6 +42,7 @@ fun InputForm(
         TextField(
             value = value,
             onValueChange = onValueChange,
+            enabled = enabled,
             placeholder = {Text(label)},
             modifier = Modifier
                 .fillMaxWidth(),
@@ -61,6 +63,7 @@ fun InputForm(
 fun PasswordInputForm(
     value: String,
     label: String,
+    enabled: Boolean = false,
     onValueChange: (String) -> Unit,
     errorMessage: String? = null
 ) {
@@ -74,6 +77,7 @@ fun PasswordInputForm(
             value = value,
             onValueChange = onValueChange,
             placeholder = { Text(label) },
+            enabled = enabled,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(32.dp),
             colors = TextFieldDefaults.colors(

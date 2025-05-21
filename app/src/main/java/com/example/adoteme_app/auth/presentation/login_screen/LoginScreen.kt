@@ -92,7 +92,7 @@ fun LoginScreen(
                         .putLong("userId", userId)
                         .apply()
 
-                    val perfilRepository = PerfilRepository(context)
+                    val perfilRepository = PerfilRepository(context, null)
                     perfilRepository.salvarToken(token)
 
                     val adotanteApiService = RetrofitInstance.retrofit.create(AdotanteApiService::class.java)

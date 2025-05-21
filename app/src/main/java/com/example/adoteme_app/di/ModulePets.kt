@@ -1,6 +1,5 @@
 package com.example.adoteme_app.di
 
-import androidx.compose.ui.platform.LocalContext
 import com.example.adoteme_app.data.repository.PerfilRepository
 import com.example.adoteme_app.interfaces.AdotanteApiService
 import com.example.adoteme_app.interfaces.AnimalApiService
@@ -10,7 +9,6 @@ import com.example.adoteme_app.model.AdotanteViewModel
 import com.example.adoteme_app.network.RetrofitInstance
 import com.example.adoteme_app.perfil.data.use_case.PerfilUseCase
 import com.example.adoteme_app.pets.presentation.favoritos_screen.AnimalFavoritoViewModel
-import com.example.adoteme_app.pets.presentation.ongs_screen.OngViewModel
 import com.example.adoteme_app.pets.presentation.pet_info_screen.RequisicaoViewModel
 import com.example.adoteme_app.pets.presentation.pets_screen.AnimalViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -30,7 +28,7 @@ val ModulePets = module {
         RetrofitInstance.retrofit.create(RequisicaoApiService::class.java)
     }
 
-    single { PerfilRepository(get()) }
+    single { PerfilRepository(get(), get()) }
     single { PerfilUseCase(get()) }
 
     viewModel {

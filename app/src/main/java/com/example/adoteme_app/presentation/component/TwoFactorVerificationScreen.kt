@@ -13,10 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -34,7 +32,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.adoteme_app.MainActivity
 import com.example.adoteme_app.R
 import com.example.adoteme_app.auth.presentation.login_screen.LoginState
@@ -66,7 +63,7 @@ fun TwoFactorVerificationScreen(
                     .putLong("userId", userId)
                     .apply()
 
-                val perfilRepository = PerfilRepository(context)
+                val perfilRepository = PerfilRepository(context, null)
                 perfilRepository.salvarToken(token)
 
                 val adotanteApiService = RetrofitInstance.retrofit.create(AdotanteApiService::class.java)

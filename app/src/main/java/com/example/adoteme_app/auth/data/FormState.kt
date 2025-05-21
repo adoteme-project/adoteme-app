@@ -15,6 +15,18 @@ data class UserFormState (
     var confirmarSenha: String = ""
 )
 
+data class ProfileFormState (
+    var nome: String = "",
+    var email: String = "",
+    var celular: String = "",
+    var dataNascimento: String = "",
+    var cep: String = "",
+    var estado: String = "",
+    var cidade: String = "",
+    var numero: String = "",
+    var senha: String = "",
+)
+
 
 data class UserFormErros(
     var nome: String? = null,

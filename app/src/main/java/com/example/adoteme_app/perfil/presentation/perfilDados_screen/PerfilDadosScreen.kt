@@ -32,41 +32,53 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.adoteme_app.auth.data.ProfileFormState
 import com.example.adoteme_app.model.AdotanteDados
 import com.example.adoteme_app.model.AdotanteRequest
+import com.example.adoteme_app.model.PerfilViewModel
 import com.example.adoteme_app.perfil.presentation.utils.components.DatePickerFieldToModal
 import com.example.adoteme_app.perfil.presentation.utils.components.InputForm
+import com.example.adoteme_app.perfil.presentation.utils.components.PasswordInputForm
 import com.google.gson.GsonBuilder
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilDadosScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
-    var fieldNome by remember { mutableStateOf(adotanteDados?.nome ?: "") }
-    var fieldEmail by remember { mutableStateOf(adotanteDados?.email ?: "") }
-    var fieldCelular by remember { mutableStateOf(adotanteDados?.telefone ?: "") }
-    var fieldDataNascimento by remember { mutableStateOf("") }
-    var fieldCep by remember { mutableStateOf(adotanteDados?.cep ?: "") }
-    var fieldEstado by remember { mutableStateOf(adotanteDados?.endereco?.estado ?: "") }
-    var fieldCidade by remember { mutableStateOf(adotanteDados?.endereco?.cidade ?: "") }
+fun PerfilDadosScreen(
+    onBack: () -> Unit,
+    adotanteDados: AdotanteDados?,
+    perfilViewModel: PerfilViewModel = koinViewModel()
+) {
+    val profileState = remember {
+        mutableStateOf(
+            ProfileFormState(
+                nome = adotanteDados?.nome ?: "",
+                email = adotanteDados?.email ?: "",
+                celular = adotanteDados?.telefone ?: "",
+                dataNascimento = adotanteDados?.dataNascimeto ?: "",
+                cep = adotanteDados?.endereco?.cep ?: "",
+                estado = adotanteDados?.endereco?.estado ?: "",
+                cidade = adotanteDados?.endereco?.cidade ?: "",
+                numero = adotanteDados?.endereco?.numero ?: "",
+            )
+        )
+    }
+
+    val form = profileState.value
+    val isEditing = remember { mutableStateOf(false) }
 
     val actionColor = Color(red = 255, green = 166, blue = 7)
 
     Scaffold(
         topBar = {
-            TopAppBar (
+            TopAppBar(
                 title = { Text("MEUS DADOS", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(
-                        onClick = onBack
-                    ) {
+                    IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBackIosNew,
                             contentDescription = "Voltar",
-                            tint = Color(
-                                red = 198,
-                                green = 214,
-                                blue = 104
-                            )
+                            tint = Color(red = 198, green = 214, blue = 104)
                         )
                     }
                 },
@@ -76,18 +88,98 @@ fun PerfilDadosScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
         Box(
             modifier = Modifier.padding(horizontal = 21.dp)
         ) {
-            LazyColumn (
+            LazyColumn(
                 modifier = Modifier.padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                item {HorizontalDivider()}
-                item { InputForm(fieldNome, "Nome Completo", KeyboardType.Text, onValueChange = { fieldNome = it }) }
-                item {InputForm(fieldEmail, "E-mail", KeyboardType.Email, onValueChange = { fieldEmail = it})}
-                item {InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone, onValueChange = { fieldCelular = it})}
-                item {DatePickerFieldToModal(label = "Data de Nascimento", selectedDate = fieldDataNascimento, onDateSelected = { fieldDataNascimento = it}) }
-                item {InputForm(fieldCep, "CEP", KeyboardType.Text, onValueChange = { fieldCep = it })}
-                item {InputForm(fieldEstado, "Estado", KeyboardType.Text, onValueChange = { fieldEstado = it })}
-                item {InputForm(fieldCidade, "Cidade", KeyboardType.Text, onValueChange = { fieldEstado = it })}
+                item { HorizontalDivider() }
+
+                item {
+                    InputForm(
+                        value = form.nome,
+                        label = "Nome Completo",
+                        inputType = KeyboardType.Text,
+                        enabled = isEditing.value,
+                        onValueChange = { newValue ->
+                            profileState.value = form.copy(nome = newValue)
+                        }
+                    )
+                }
+                item {
+                    InputForm(
+                        value = form.email,
+                        label = "E-mail",
+                        inputType = KeyboardType.Email,
+                        enabled = isEditing.value,
+                        onValueChange = { newValue ->
+                            profileState.value = form.copy(email = newValue)
+                        }
+                    )
+                }
+                item {
+                    InputForm(
+                        value = form.celular,
+                        label = "DDD + Celular",
+                        inputType = KeyboardType.Phone,
+                        enabled = isEditing.value,
+                        onValueChange = { newValue ->
+                            profileState.value = form.copy(celular = newValue)
+                        }
+                    )
+                }
+                item {
+                    DatePickerFieldToModal(
+                        label = "Data de Nascimento",
+                        selectedDate = form.dataNascimento,
+                        onDateSelected = { newValue ->
+                            profileState.value = form.copy(dataNascimento = newValue)
+                        }
+                    )
+                }
+                item {
+                    InputForm(
+                        value = form.cep,
+                        label = "CEP",
+                        inputType = KeyboardType.Text,
+                        enabled = false,
+                        onValueChange = { newValue ->
+                            profileState.value = form.copy(cep = newValue)
+                        }
+                    )
+                }
+                item {
+                    InputForm(
+                        value = form.estado,
+                        label = "Estado",
+                        inputType = KeyboardType.Text,
+                        enabled = false,
+                        onValueChange = { newValue ->
+                            profileState.value = form.copy(estado = newValue)
+                        }
+                    )
+                }
+                item {
+                    InputForm(
+                        value = form.cidade,
+                        label = "Cidade",
+                        inputType = KeyboardType.Text,
+                        enabled = false,
+                        onValueChange = { newValue ->
+                            profileState.value = form.copy(cidade = newValue)
+                        }
+                    )
+                }
+                item {
+                    InputForm(
+                        value = form.numero,
+                        label = "Numero",
+                        inputType = KeyboardType.Number,
+                        enabled = false,
+                        onValueChange = { newValue ->
+                            profileState.value = form.copy(numero = newValue)
+                        }
+                    )
+                }
                 item {
                     Button(
                         colors = ButtonColors(
@@ -96,11 +188,21 @@ fun PerfilDadosScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
                             disabledContentColor = Color.Transparent,
                             disabledContainerColor = Color.LightGray
                         ),
-                        modifier = Modifier.fillMaxWidth( ),
-                        onClick = { }
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            if (isEditing.value) {
+                                adotanteDados?.id?.let { id ->
+                                    perfilViewModel.atualizarAdotante(
+                                        id = id,
+                                        form = profileState.value
+                                    )
+                                }
+                            }
+                            isEditing.value = !isEditing.value
+                        }
                     ) {
                         Text(
-                            text = "Alterar Dados",
+                            text = if (isEditing.value) "Salvar Alterações" else "Alterar Dados",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.White
