@@ -176,7 +176,7 @@ fun NaviDrawerLayout(
                         disabledContainerColor = Color.LightGray
                     ),
                     onClick = {
-                        userViewModel.logout()
+                        userViewModel.logout(contexto)
                         val welcomeSection = Intent(contexto, WelcomeActivity::class.java)
                         contexto.startActivity(welcomeSection)
                     }
