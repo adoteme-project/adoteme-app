@@ -3,6 +3,8 @@ package com.example.adoteme_app.perfil.data.use_case
 import com.example.adoteme_app.data.repository.PerfilRepository
 import com.example.adoteme_app.model.AdotanteDados
 import com.example.adoteme_app.model.AdotantePutRequest
+import com.example.adoteme_app.model.Formulario
+import com.example.adoteme_app.model.FormularioResponse
 
 class PerfilUseCase(
     private val perfilRepository: PerfilRepository
@@ -25,5 +27,13 @@ class PerfilUseCase(
 
     fun salvarAdotante(adotante: AdotanteDados) {
         perfilRepository.salvarAdotante(adotante)
+    }
+
+    suspend fun atualizarAdotanteFormulario(id: Long, request: Formulario): AdotanteDados {
+        return perfilRepository.atualizarAdotanteFormulario(id, request)
+    }
+
+    suspend fun buscarFormularioAdotanteCase(id: Long): FormularioResponse {
+        return perfilRepository.buscarFormularioAdotante(id)
     }
 }

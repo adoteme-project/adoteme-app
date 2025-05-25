@@ -6,6 +6,7 @@ import com.example.adoteme_app.model.AdotantePutRequest
 import com.example.adoteme_app.model.AdotanteRequest
 import com.example.adoteme_app.model.AdotanteResponse
 import com.example.adoteme_app.model.Formulario
+import com.example.adoteme_app.model.FormularioResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -44,5 +45,8 @@ interface AdotanteApiService {
     suspend fun atualizarFormularioAdotante(
         @Path("id") id: Long,
         @Body adotanteForm: Formulario
-        ): AdotanteDados
+    ): AdotanteDados
+
+    @GET("adotantes/formulario-adotante/{id}")
+    suspend fun getFormularioAdotante(@Path("id") id: Long): FormularioResponse
 }

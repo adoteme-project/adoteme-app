@@ -16,6 +16,9 @@ class PerfilViewModel(
     private val _adotanteDados = MutableStateFlow<AdotanteDados?>(null)
     val adotanteDados: StateFlow<AdotanteDados?> = _adotanteDados
 
+    private val _adotanteFormulario = MutableStateFlow<FormularioResponse?>(null)
+    val adotanteFormulario: StateFlow<FormularioResponse?> = _adotanteFormulario
+
     private val _token = MutableStateFlow<String?>(null)
     val token: StateFlow<String?> = _token
 
@@ -29,6 +32,18 @@ class PerfilViewModel(
             val tokenSalvo = perfilUseCase.buscarTokenSalvo()
             _adotanteDados.value = adotanteSalvo
             _token.value = tokenSalvo
+        }
+    }
+
+    fun buscarFormularioUsuario(id: Long) {
+        viewModelScope.launch {
+            try {
+                val response = perfilUseCase.buscarFormularioAdotanteCase(id)
+
+                _adotanteFormulario.value = response
+            } catch (e: Exception) {
+                Log.e("PerfilViewModel", "Erro ao buscar o formulário")
+            }
         }
     }
 
@@ -52,6 +67,19 @@ class PerfilViewModel(
                 )
 
                 val response = perfilUseCase.atualizarAdotante(id, request)
+
+                perfilUseCase.salvarAdotante(response)
+                _adotanteDados.value = response
+            } catch (e: Exception) {
+                Log.e("PerfilViewModel", "Erro ao atualizar dados", e)
+            }
+        }
+    }
+
+    fun atualizarAdotanteFormulario(id: Long, form: Formulario) {
+        viewModelScope.launch {
+            try {
+                val response = perfilUseCase.atualizarAdotanteFormulario(id, form)
 
                 perfilUseCase.salvarAdotante(response)
                 _adotanteDados.value = response

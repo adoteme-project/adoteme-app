@@ -47,7 +47,7 @@ import org.koin.androidx.compose.koinViewModel
 fun PerfilDadosScreen(
     onBack: () -> Unit,
     adotanteDados: AdotanteDados?,
-    perfilViewModel: PerfilViewModel = koinViewModel()
+    perfilViewModel: PerfilViewModel
 ) {
     val profileState = remember {
         mutableStateOf(
@@ -66,6 +66,10 @@ fun PerfilDadosScreen(
 
     val form = profileState.value
     val isEditing = remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+    val userId = sharedPreferences.getLong("userId", 0L)
 
     val actionColor = Color(red = 255, green = 166, blue = 7)
 
@@ -191,12 +195,11 @@ fun PerfilDadosScreen(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             if (isEditing.value) {
-                                adotanteDados?.id?.let { id ->
-                                    perfilViewModel.atualizarAdotante(
-                                        id = id,
-                                        form = profileState.value
-                                    )
-                                }
+                                perfilViewModel.atualizarAdotante(
+                                    id = userId,
+                                    form = profileState.value
+                                )
+
                             }
                             isEditing.value = !isEditing.value
                         }

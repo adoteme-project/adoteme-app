@@ -63,10 +63,10 @@ fun TwoFactorVerificationScreen(
                     .putLong("userId", userId)
                     .apply()
 
-                val perfilRepository = PerfilRepository(context, null)
-                perfilRepository.salvarToken(token)
-
                 val adotanteApiService = RetrofitInstance.retrofit.create(AdotanteApiService::class.java)
+
+                val perfilRepository = PerfilRepository(context, adotanteApiService)
+                perfilRepository.salvarToken(token)
 
                 try {
                     val adotante = adotanteApiService.getDadosAdotante(userId)

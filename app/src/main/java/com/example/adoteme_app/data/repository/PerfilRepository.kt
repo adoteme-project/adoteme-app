@@ -5,11 +5,13 @@ import com.example.adoteme_app.interfaces.AdotanteApiService
 import com.example.adoteme_app.model.AdotanteDados
 import com.example.adoteme_app.model.AdotantePutRequest
 import com.example.adoteme_app.model.Endereco
+import com.example.adoteme_app.model.Formulario
+import com.example.adoteme_app.model.FormularioResponse
 import com.google.gson.Gson
 
 class PerfilRepository(
     private val context: Context,
-    private val adotanteApi: AdotanteApiService?
+    private val adotanteApi: AdotanteApiService
 ) {
     private val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
 
@@ -46,22 +48,14 @@ class PerfilRepository(
     }
 
     suspend fun atualizarAdotante(id: Long, request: AdotantePutRequest): AdotanteDados {
-        return adotanteApi?.atualizarDadosAdotante(id = id, adotantePutRequest = request) ?: AdotanteDados(
-            id = id,
-            nome = request.nome,
-            dataNascimeto = request.dtNasc,
-            email = request.email,
-            cep = "",
-            telefone = request.celular,
-            urlFoto = "",
-            endereco = Endereco(
-                cep = "",
-                estado = "",
-                cidade = "",
-                bairro = "",
-                rua = "",
-                numero = request.numero
-            )
-        )
+        return adotanteApi.atualizarDadosAdotante(id = id, adotantePutRequest = request)
+    }
+
+    suspend fun atualizarAdotanteFormulario(id: Long, request: Formulario): AdotanteDados {
+        return adotanteApi.atualizarFormularioAdotante(id, request)
+    }
+
+    suspend fun buscarFormularioAdotante(id: Long): FormularioResponse {
+        return adotanteApi.getFormularioAdotante(id)
     }
 }
