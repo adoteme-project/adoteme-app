@@ -51,7 +51,7 @@ class PerfilRepository(
         return adotanteApi.atualizarDadosAdotante(id = id, adotantePutRequest = request)
     }
 
-    suspend fun atualizarAdotanteFormulario(id: Long, request: Formulario): AdotanteDados {
+    suspend fun atualizarAdotanteFormulario(id: Long, request: FormularioResponse): FormularioResponse {
         return adotanteApi.atualizarFormularioAdotante(id, request)
     }
 

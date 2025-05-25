@@ -29,7 +29,7 @@ class PerfilUseCase(
         perfilRepository.salvarAdotante(adotante)
     }
 
-    suspend fun atualizarAdotanteFormulario(id: Long, request: Formulario): AdotanteDados {
+    suspend fun atualizarAdotanteFormulario(id: Long, request: FormularioResponse): FormularioResponse {
         return perfilRepository.atualizarAdotanteFormulario(id, request)
     }
 

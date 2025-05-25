@@ -79,8 +79,7 @@ fun MainApp() {
         }
         composable(InternalRoutes.ProfileForm.route) {
             val userViewModel: PerfilViewModel = koinViewModel()
-            val adotante by userViewModel.adotanteDados.collectAsState()
-            PerfilFormScreen(onBack = {navController.popBackStack()}, adotante, userViewModel)
+            PerfilFormScreen(onBack = {navController.popBackStack()}, userViewModel)
         }
         composable(InternalRoutes.ProfileAplicacoes.route) {
             PerfilAplicacoScreen(navController)

@@ -22,7 +22,8 @@ fun RadioButtonGroup(
     question: String,
     radioOptions: List<String>,
     selectedOption: String,
-    onOptionSelected: (String) -> Unit
+    onOptionSelected: (String) -> Unit,
+    enabled: Boolean = true
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -35,7 +36,8 @@ fun RadioButtonGroup(
                 ) {
                     RadioButton(
                         selected = (text == selectedOption),
-                        onClick = {onOptionSelected(text)}
+                        onClick = {onOptionSelected(text)},
+                        enabled = enabled
                     )
                     Text(text = text, modifier = Modifier.padding(start = 4.dp))
                 }

@@ -76,13 +76,12 @@ class PerfilViewModel(
         }
     }
 
-    fun atualizarAdotanteFormulario(id: Long, form: Formulario) {
+    fun atualizarAdotanteFormulario(id: Long, formularioResponse: FormularioResponse) {
         viewModelScope.launch {
             try {
-                val response = perfilUseCase.atualizarAdotanteFormulario(id, form)
+                val response = perfilUseCase.atualizarAdotanteFormulario(id, formularioResponse)
 
-                perfilUseCase.salvarAdotante(response)
-                _adotanteDados.value = response
+                _adotanteFormulario.value = response
             } catch (e: Exception) {
                 Log.e("PerfilViewModel", "Erro ao atualizar dados", e)
             }

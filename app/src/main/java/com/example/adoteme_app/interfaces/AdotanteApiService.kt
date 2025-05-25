@@ -41,11 +41,11 @@ interface AdotanteApiService {
         @Body adotantePutRequest: AdotantePutRequest
     ): AdotanteDados
 
-    @PUT("adotantes/atualizacao-formulario/{id}")
+    @PUT("adotantes/atualizacao-formulario/{id}/")
     suspend fun atualizarFormularioAdotante(
         @Path("id") id: Long,
-        @Body adotanteForm: Formulario
-    ): AdotanteDados
+        @Body adotanteForm: FormularioResponse
+    ): FormularioResponse
 
     @GET("adotantes/formulario-adotante/{id}")
     suspend fun getFormularioAdotante(@Path("id") id: Long): FormularioResponse
