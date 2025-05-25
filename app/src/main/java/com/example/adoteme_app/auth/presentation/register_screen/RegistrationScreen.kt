@@ -24,6 +24,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +40,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.adoteme_app.auth.data.FormValidator
+import com.example.adoteme_app.auth.data.UserFormErros
+import com.example.adoteme_app.auth.data.UserFormState
 import com.example.adoteme_app.model.AdotanteRequest
 import com.example.adoteme_app.model.AdotanteViewModel
 import com.example.adoteme_app.model.Formulario
@@ -53,34 +57,8 @@ import com.google.gson.GsonBuilder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(navController: NavController) {
-    var fieldNome by remember { mutableStateOf("") }
-    var fieldEmail by remember { mutableStateOf("") }
-    var fieldCelular by remember { mutableStateOf("") }
-    var fieldDataNascimento by remember { mutableStateOf("") }
-    var fieldCep by remember { mutableStateOf("") }
-    var fieldEstado by remember { mutableStateOf("") }
-    var fieldCidade by remember { mutableStateOf("") }
-    var fieldNumero by remember { mutableStateOf("") }
-    var fieldSenha by remember { mutableStateOf("") }
-    var fieldConfirmarSenha by remember { mutableStateOf("") }
-
-    var nomeError by remember { mutableStateOf<String?>(null) }
-    var emailError by remember { mutableStateOf<String?>(null) }
-    var senhaError by remember { mutableStateOf<String?>(null) }
-    var confirmarSenhaError by remember { mutableStateOf<String?>(null) }
-    var celularError by remember { mutableStateOf<String?>(null) }
-    var cepError by remember { mutableStateOf<String?>(null) }
-
-    fun validateNome(nome: String) = if (nome.isBlank() && nome.length <= 2) "Nome é obrigatório" else null
-    fun validateEmail(email: String) = if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) "Email inválido" else null
-    fun validateCEP(cep: String) = if (cep.length == 8) "CEP deve ter no mínimo 8 digitos" else null
-    fun validateSenha(senha: String) = if (senha.length < 6) "Senha deve ter no mínimo 6 caracteres" else null
-    fun validateConfirmarSenha(senha: String, confirmar: String) = if (senha != confirmar) "As senhas não coincidem" else null
-
-    fun validateCelular(celular: String): String? {
-        val regex = Regex("^\\+?[1-9]\\d{1,14}$")
-        return if (!regex.matches(celular)) "Número de celular inválido (ex: +5511999999999)" else null
-    }
+    val formState = remember { mutableStateOf(UserFormState()) }
+    val formErros = remember { mutableStateOf(UserFormErros()) }
 
     Scaffold (
         topBar = {
@@ -110,32 +88,88 @@ fun RegistrationScreen(navController: NavController) {
                     HorizontalDivider()
                 }
                 item {
-                    InputForm(fieldNome, "Nome Completo", KeyboardType.Text,
-                    onValueChange = { fieldNome = it }, errorMessage = nomeError) }
-                item {
-                    InputForm(fieldEmail, "E-mail", KeyboardType.Email,
-                        onValueChange = { fieldEmail = it}, errorMessage = emailError)
+                    InputForm(
+                        formState.value.nome,
+                        "Nome Completo",
+                        KeyboardType.Text,
+                        onValueChange = { formState.value = formState.value.copy(nome = it) },
+                        errorMessage = formErros.value.nome
+                    )
                 }
                 item {
-                    InputForm(fieldCelular, "DDD + Celular", KeyboardType.Phone,
-                    onValueChange = { fieldCelular = it}, errorMessage = celularError)
+                    InputForm(
+                        formState.value.email,
+                    "E-mail",
+                        KeyboardType.Email,
+                        onValueChange = { formState.value = formState.value.copy(email = it)},
+                        errorMessage = formErros.value.email
+                    )
                 }
-                item {DatePickerFieldToModal(label = "Data de Nascimento", selectedDate = fieldDataNascimento, onDateSelected = { fieldDataNascimento = it}) }
                 item {
-                    InputForm(fieldCep, "CEP", KeyboardType.Text,
-                    onValueChange = { fieldCep = it }, errorMessage = cepError)
+                    InputForm(
+                        formState.value.celular,
+                        "DDD + Celular",
+                        KeyboardType.Phone,
+                        onValueChange = { formState.value = formState.value.copy(celular = it)},
+                        errorMessage = formErros.value.celular
+                    )
                 }
-                item {InputForm(fieldEstado, "Estado", KeyboardType.Text, onValueChange = { fieldEstado = it })}
-                item {InputForm(fieldCidade, "Cidade", KeyboardType.Text, onValueChange = { fieldEstado = it })}
-                item {InputForm(fieldNumero, "Numero", KeyboardType.Text, onValueChange = { fieldNumero = it })}
                 item {
-                    PasswordInputForm(fieldSenha, "Senha",
-                    onValueChange = { fieldSenha = it }, errorMessage = senhaError )
+                    DatePickerFieldToModal(
+                        label = "Data de Nascimento",
+                        selectedDate = formState.value.dataNascimento,
+                        onDateSelected = { formState.value = formState.value.copy(dataNascimento = it)}
+                    )
+                }
+                item {
+                    InputForm(
+                        formState.value.cep,
+                        "CEP",
+                        KeyboardType.Text,
+                        onValueChange = { formState.value = formState.value.copy(cep = it) },
+                        errorMessage = formErros.value.cep
+                    )
+                }
+                item {
+                    InputForm(
+                        formState.value.estado,
+                    "Estado",
+                        KeyboardType.Text,
+                        onValueChange = { formState.value = formState.value.copy(estado = it) }
+                    )
+                }
+                item {
+                    InputForm(
+                        formState.value.cidade,
+                        "Cidade",
+                        KeyboardType.Text,
+                        onValueChange = { formState.value = formState.value.copy(cidade = it) }
+                    )
+                }
+                item {
+                    InputForm(
+                        formState.value.numero,
+                        "Numero",
+                        KeyboardType.Text,
+                        onValueChange = { formState.value = formState.value.copy(numero = it) }
+                    )
+                }
+                item {
+                    PasswordInputForm(
+                        formState.value.senha,
+                        "Senha",
+                        onValueChange = { formState.value = formState.value.copy(senha = it) },
+                        errorMessage = formErros.value.senha
+                    )
                 }
                 item {BulletList()}
                 item {
-                    PasswordInputForm(fieldConfirmarSenha, "Confirmar senha",
-                    onValueChange = { fieldConfirmarSenha = it }, errorMessage = confirmarSenhaError)
+                    PasswordInputForm(
+                        formState.value.confirmarSenha,
+                        "Confirmar senha",
+                        onValueChange = { formState.value = formState.value.copy(confirmarSenha = it) },
+                        errorMessage = formErros.value.confirmarSenha
+                    )
                 }
                 item {
                     Button(
@@ -147,24 +181,15 @@ fun RegistrationScreen(navController: NavController) {
                         ),
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            nomeError = validateNome(fieldNome)
-                            emailError = validateEmail(fieldEmail)
-                            senhaError = validateSenha(fieldSenha)
-                            confirmarSenhaError = validateConfirmarSenha(fieldSenha, fieldConfirmarSenha)
-                            celularError = validateCelular(fieldCelular)
-                            cepError = validateCEP(fieldCep)
-
-                            val hasError = listOf(nomeError, emailError, senhaError, confirmarSenhaError).any { it != null }
-
-                            if(hasError) {
+                            if(validateUserForm(formState, formErros)) {
                                 val adotanteInfo = AdotanteRequest(
-                                    nome = fieldNome,
-                                    cep = fieldCep,
-                                    email = fieldEmail,
-                                    senha = fieldSenha,
-                                    dtNasc = fieldDataNascimento,
-                                    numero = fieldNumero,
-                                    celular = fieldCelular,
+                                    nome = formState.value.nome,
+                                    cep = formState.value.cep,
+                                    email = formState.value.email,
+                                    senha = formState.value.senha,
+                                    dtNasc = formState.value.dataNascimento,
+                                    numero = formState.value.numero,
+                                    celular = formState.value.celular,
                                     formulario = Formulario(
                                         temPet = "",
                                         casaPortaoAlto = "",
@@ -200,6 +225,28 @@ fun RegistrationScreen(navController: NavController) {
             }
         }
     }
+}
+
+fun validateUserForm(formState: MutableState<UserFormState>, formErros: MutableState<UserFormErros>): Boolean {
+    val errors  = with(formState.value) {
+        UserFormErros(
+            nome = FormValidator.validateNome(nome),
+            email = FormValidator.validateEmail(email),
+            senha = FormValidator.validateSenha(senha),
+            confirmarSenha = FormValidator.validateConfirmarSenha(senha, confirmarSenha),
+            celular = FormValidator.validateCelular(celular),
+            cep = FormValidator.validateCEP(cep)
+        )
+    }
+    formErros.value = errors
+    return listOf(
+        errors.nome,
+        errors.email,
+        errors.senha,
+        errors.confirmarSenha,
+        errors.celular,
+        errors.cep
+    ).all { it == null }
 }
 
 @Composable

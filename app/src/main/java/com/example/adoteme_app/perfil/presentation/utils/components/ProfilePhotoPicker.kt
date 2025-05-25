@@ -37,17 +37,19 @@ import com.google.accompanist.permissions.*
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ProfilePhotoPicker(profileUrl: String?, sizeValue: Dp = 100.dp) {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+fun ProfilePhotoPicker(
+    profileUrl: String?,
+    sizeValue: Dp = 100.dp,
+    imageUri: Uri? = null,
+    onImageSelected: (Uri) -> Unit
+) {
 
     val permissionState = rememberPermissionState(android.Manifest.permission.READ_MEDIA_IMAGES)
 
     val imagePickerLauncher = rememberLauncherForActivityResult (
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        uri?.let {
-            imageUri = it
-        }
+        uri?.let { onImageSelected(it) }
     }
 
     Column (

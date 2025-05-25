@@ -22,6 +22,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -53,44 +56,76 @@ import com.example.adoteme_app.data.repository.PerfilRepository
 import com.example.adoteme_app.interfaces.AdotanteApiService
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.network.RetrofitInstance
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
+import java.net.URLEncoder
 
 @Composable
 fun LoginScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: LoginViewModel = koinViewModel(),
+    snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope
 ) {
-    val viewModel: LoginViewModel = koinViewModel()
     val token by viewModel.token.collectAsState()
     val userId by viewModel.userId.collectAsState()
+    val loginState by viewModel.loginState.collectAsState()
 
     val context = LocalContext.current
 
-    LaunchedEffect(token) {
-        if (token.isNotBlank()) {
-            context.getSharedPreferences("auth", Context.MODE_PRIVATE)
-                .edit()
-                .putString("token", token)
-                .putLong("userId", userId)
-                .apply()
-
-            val perfilRepository = PerfilRepository(context)
-            perfilRepository.salvarToken(token)
-
-            val adotanteApiService = RetrofitInstance.retrofit.create(AdotanteApiService::class.java)
-
-            try {
-                val adotante = adotanteApiService.getDadosAdotante(userId)
-                perfilRepository.salvarAdotante(adotante)
-            } catch (e: Exception) {
-                e.printStackTrace()
+    LaunchedEffect(token, loginState) {
+        when (loginState) {
+            is LoginState.Loading -> {
+                snackbarHostState.showSnackbar(
+                    message = "Entrando...",
+                    withDismissAction = false,
+                    duration = SnackbarDuration.Indefinite
+                )
             }
+            is LoginState.Success -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
+                if (token.isNotBlank()) {
+                    context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("token", token)
+                        .putLong("userId", userId)
+                        .apply()
 
-            context.startActivity(Intent(context, MainActivity::class.java))
+                    val adotanteApiService = RetrofitInstance.retrofit.create(AdotanteApiService::class.java)
+
+                    val perfilRepository = PerfilRepository(context, adotanteApiService)
+                    perfilRepository.salvarToken(token)
+
+                    try {
+                        val adotante = adotanteApiService.getDadosAdotante(userId)
+                        perfilRepository.salvarAdotante(adotante)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                }
+            }
+            is LoginState.Require2FA -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
+                navController.navigate("twoFactorVerification/${URLEncoder.encode(viewModel.email, "UTF-8")}")
+            }
+            is LoginState.Error -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
+                snackbarHostState.showSnackbar("Erro ao fazer login, email ou senha inválidos")
+            }
+            else -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
+            }
         }
     }
 
-    Scaffold { innerPadding ->
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        }
+    ) { innerPadding ->
         var showForm by remember { mutableStateOf(false) }
 
 
@@ -128,6 +163,7 @@ fun LoginScreen(
                             .align(Alignment.BottomCenter)
                             .offset(y = formOffSet),
                         navController = navController,
+                        loginViewModel = viewModel
                     )
                 }
             }
@@ -136,11 +172,13 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
+fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, loginViewModel: LoginViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val viewModel: LoginViewModel = koinViewModel()
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -160,17 +198,18 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
                     fontFamily = FontFamily.SansSerif
                 )
             )
+
+            Spacer(modifier = Modifier.height(2.dp))
+
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
-                label = { Text("Digite seu e-mail") },
+                onValueChange = {
+                    email = it
+                    emailError = false
+                },
+                isError = emailError,
                 supportingText = {
-                    if (email.isEmpty()) {
-                        Text(
-                            text = "Precisa de um email",
-                            color = Color.Red
-                        )
-                    }
+                    if (emailError) Text("Campo obrigatório", color = Color.Red)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -179,10 +218,9 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
                     unfocusedBorderColor = Color(0xFFFFA607)
                 )
             )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
 
-        Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp, top = 8.dp)) {
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = "Senha",
                 modifier = Modifier.fillMaxWidth(),
@@ -192,10 +230,19 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
                     fontFamily = FontFamily.SansSerif
                 )
             )
+
+            Spacer(modifier = Modifier.height(2.dp))
+
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
-                label = { Text("Digite sua senha") },
+                onValueChange = {
+                    password = it
+                    passwordError = false
+                },
+                isError = passwordError,
+                supportingText = {
+                    if (passwordError) Text("A senha deve ter no mínimo 8 caracteres", color = Color.Red)
+                },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation(),
@@ -209,7 +256,15 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { viewModel.login(email,password) },
+            onClick = {
+                emailError = email.isBlank()
+                passwordError = password.isBlank() || password.length < 8
+
+                if (!emailError && !passwordError) {
+                    loginViewModel.email = email
+                    loginViewModel.login(email, password)
+                }
+            },
             modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 32.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFFA607),
@@ -228,7 +283,11 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController) {
         Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(
-            onClick = { /* Handle forgot password */ }
+            onClick = {
+                navController.navigate(RootRoutes.RedefinicaoSenha.route) {
+                    popUpTo(RootRoutes.Login.route) { inclusive = true }
+                }
+            }
         ) {
             Text(
                 text = "Esqueci minha senha",

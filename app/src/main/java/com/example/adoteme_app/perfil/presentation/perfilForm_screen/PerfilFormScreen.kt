@@ -1,8 +1,11 @@
 package com.example.adoteme_app.perfil.presentation.perfilForm_screen
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
@@ -16,32 +19,72 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import com.example.adoteme_app.model.AdotanteDados
+import com.example.adoteme_app.model.Formulario
+import com.example.adoteme_app.model.FormularioResponse
+import com.example.adoteme_app.model.PerfilViewModel
 import com.example.adoteme_app.perfil.presentation.utils.components.RadioButtonGroup
 import com.example.adoteme_app.ui.theme.ActionColor
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
+fun PerfilFormScreen(
+    onBack: () -> Unit,
+    perfilViewModel: PerfilViewModel
+) {
 
-    val temCrianca = remember { mutableStateOf("") }
-    val moradoresConcordam = remember { mutableStateOf("") }
-    val seraResponsavel = remember { mutableStateOf("") }
-    val moraEmCasa = remember { mutableStateOf("") }
-    val isTelado = remember { mutableStateOf("") }
-    val casaPortaoAlto = remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+    val userId = sharedPreferences.getLong("userId", 0L)
+
+    val formularioResponse by perfilViewModel.adotanteFormulario.collectAsState()
+    val formAdotante = formularioResponse?.let { formatValuesFromUi(it) }
+
+    LaunchedEffect(userId) {
+        if (userId != 0L) {
+            perfilViewModel.buscarFormularioUsuario(userId)
+        }
+    }
+
+    val temCrianca = remember { mutableStateOf(formAdotante?.temCrianca ?: "") }
+    val moradoresConcordam = remember { mutableStateOf(formAdotante?.moradoresConcordam ?: "") }
+    val seraResponsavel = remember { mutableStateOf(formAdotante?.seraResponsavel ?: "") }
+    val moraEmCasa = remember { mutableStateOf(formAdotante?.moraEmCasa ?: "") }
+    val isTelado = remember { mutableStateOf(formAdotante?.isTelado ?: "") }
+    val casaPortaoAlto = remember { mutableStateOf(formAdotante?.casaPortaoAlto ?: "") }
+    val temPet = remember { mutableStateOf(formAdotante?.temPet ?: "") }
+
+    LaunchedEffect(formAdotante) {
+        formAdotante?.let {
+            temCrianca.value = it.temCrianca
+            moradoresConcordam.value = it.moradoresConcordam
+            seraResponsavel.value = it.seraResponsavel
+            moraEmCasa.value = it.moraEmCasa
+            isTelado.value = it.isTelado
+            casaPortaoAlto.value = it.casaPortaoAlto
+            temPet.value = it.temPet
+        }
+    }
+
+    val isEditing = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar (
-                title = { Text("MEUS FORMULÁRIO", fontWeight = FontWeight.Bold) },
+                title = { Text("MEU FORMULÁRIO", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(
                         onClick = onBack
@@ -66,11 +109,13 @@ fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
                 verticalArrangement = Arrangement.spacedBy(21.dp)
             ) {
                 item {
+                    Spacer(modifier = Modifier.height(12.dp))
                     RadioButtonGroup(
                         "Moram crianças na sua casa?",
                         radioOptions = listOf("Sim", "Não"),
-                        selectedOption = temCrianca.value,
-                        onOptionSelected = { temCrianca.value = if (it == "Sim") "true" else "false" }
+                        selectedOption = formAdotante?.temCrianca ?: "",
+                        onOptionSelected = { temCrianca.value = it },
+                        enabled = isEditing.value
                     )
                 }
                 item {
@@ -78,23 +123,26 @@ fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
                         "Todos que moram com você estão de acordo com a adoção?",
                         radioOptions = listOf("Sim", "Não"),
                         selectedOption = moradoresConcordam.value,
-                        onOptionSelected = { moradoresConcordam.value = if (it == "Sim") "true" else "false" }
+                        onOptionSelected = { moradoresConcordam.value = it },
+                        enabled = isEditing.value
                     )
                 }
                 item {
                     RadioButtonGroup(
                         "O responsável pelo animal será você?",
-                        radioOptions = listOf("Sim", "Não"),
+                        radioOptions = listOf("Eu", "Outra Pessoa"),
                         selectedOption = seraResponsavel.value,
-                        onOptionSelected = { seraResponsavel.value = if (it == "Sim") "true" else "false" }
+                        onOptionSelected = { seraResponsavel.value = it },
+                        enabled = isEditing.value
                     )
                 }
                 item {
                     RadioButtonGroup(
                         "Você mora em casa?",
-                        radioOptions = listOf("Sim", "Não"),
+                        radioOptions = listOf("Casa", "Apartamento"),
                         selectedOption = moraEmCasa.value,
-                        onOptionSelected = { moraEmCasa.value = if (it == "Sim") "true" else "false" }
+                        onOptionSelected = { moraEmCasa.value = it },
+                        enabled = isEditing.value
                     )
                 }
                 item {
@@ -102,7 +150,8 @@ fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
                         "Sua residência é telada?",
                         radioOptions = listOf("Sim", "Não"),
                         selectedOption = isTelado.value,
-                        onOptionSelected = { isTelado.value = if (it == "Sim") "true" else "false" }
+                        onOptionSelected = { isTelado.value = it },
+                        enabled = isEditing.value
                     )
                 }
                 item {
@@ -110,7 +159,17 @@ fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
                         "Sua casa tem portão alto?",
                         radioOptions = listOf("Sim", "Não"),
                         selectedOption = casaPortaoAlto.value,
-                        onOptionSelected = { casaPortaoAlto.value = if (it == "Sim") "true" else "false" }
+                        onOptionSelected = { casaPortaoAlto.value = it },
+                        enabled = isEditing.value
+                    )
+                }
+                item {
+                    RadioButtonGroup(
+                        "Tem outros pets na sua casa?",
+                        radioOptions = listOf("Sim", "Não"),
+                        selectedOption = temPet.value,
+                        onOptionSelected = { temPet.value = it},
+                        enabled = isEditing.value
                     )
                 }
                 item {
@@ -121,8 +180,24 @@ fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
                             disabledContentColor = Color.Transparent,
                             disabledContainerColor = Color.LightGray
                         ),
-                        modifier = Modifier.fillMaxWidth( ),
-                        onClick = { }
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            if (isEditing.value) {
+                                val novoFormulario = convertToFormularioResponse(
+                                    temCrianca.value,
+                                    moradoresConcordam.value,
+                                    seraResponsavel.value,
+                                    moraEmCasa.value,
+                                    isTelado.value,
+                                    casaPortaoAlto.value,
+                                    temPet.value
+                                )
+                                perfilViewModel.atualizarAdotanteFormulario(userId, novoFormulario)
+                                isEditing.value = false
+                            } else {
+                                isEditing.value = true
+                            }
+                        }
                     ) {
                         Text(
                             text = "Alterar Formulário",
@@ -137,10 +212,34 @@ fun PerfilFormScreen(onBack: () -> Unit, adotanteDados: AdotanteDados?) {
     }
 }
 
-fun convertApiValues(valor: String?): String {
-    return if (valor == "true" || valor == "false") {
-        "true"
-    } else {
-        "false"
-    }
+fun formatValuesFromUi(formulario: FormularioResponse): Formulario {
+    return Formulario(
+        temCrianca = if (formulario.temCrianca) "Sim" else "Não",
+        moradoresConcordam = if (formulario.moradoresConcordam) "Sim" else "Não",
+        temPet = if (formulario.temPet) "Sim" else "Não",
+        seraResponsavel = if (formulario.seraResponsavel) "Eu" else "Outra Pessoa",
+        moraEmCasa = if (formulario.moraEmCasa) "Casa" else "Apartamento",
+        isTelado = if (formulario.isTelado) "Sim" else "Não",
+        casaPortaoAlto = if (formulario.casaPortaoAlto) "Sim" else "Não"
+    )
+}
+
+fun convertToFormularioResponse(
+    temCrianca: String,
+    moradoresConcordam: String,
+    seraResponsavel: String,
+    moraEmCasa: String,
+    isTelado: String,
+    casaPortaoAlto: String,
+    temPet: String,
+): FormularioResponse {
+    return FormularioResponse(
+        temCrianca = temCrianca == "Sim",
+        moradoresConcordam = moradoresConcordam == "Sim",
+        temPet = temPet == "Sim",
+        seraResponsavel = seraResponsavel == "Eu",
+        moraEmCasa = moraEmCasa == "Casa",
+        isTelado = isTelado == "Sim",
+        casaPortaoAlto = casaPortaoAlto == "Sim"
+    )
 }

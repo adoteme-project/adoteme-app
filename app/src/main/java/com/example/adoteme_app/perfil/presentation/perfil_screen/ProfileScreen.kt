@@ -35,7 +35,7 @@ fun ProfileScreen(navHostController: NavHostController, userViewModel: PerfilVie
             horizontalArrangement = Arrangement.spacedBy(21.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProfilePhotoPicker(adotante?.urlFoto)
+            ProfilePhotoPicker(adotante?.urlFoto, onImageSelected = {})
             Text(text = adotante?.nome ?: "Adotante", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         }
         ListItemOption(

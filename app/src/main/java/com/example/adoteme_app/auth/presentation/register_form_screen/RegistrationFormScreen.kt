@@ -1,6 +1,7 @@
 package com.example.adoteme_app.auth.presentation.register_form_screen
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -24,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,13 +38,19 @@ import com.example.adoteme_app.model.Formulario
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
 import com.example.adoteme_app.perfil.presentation.utils.components.RadioButtonGroup
 import com.example.adoteme_app.ui.theme.ActionColor
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import kotlinx.coroutines.CoroutineScope
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegistrationFormScreen(navController: NavController) {
-    val viewModel: AdotanteViewModel = koinViewModel()
+fun RegistrationFormScreen(
+    navController: NavController,
+    snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope
+) {
+    val context = LocalContext.current
 
     val adotanteInfoJson = navController.previousBackStackEntry
         ?.savedStateHandle
@@ -50,16 +60,6 @@ fun RegistrationFormScreen(navController: NavController) {
 
     val adotanteInfo = remember(adotanteInfoJson) {
         adotanteInfoJson.let { gson.fromJson(it, AdotanteRequest::class.java) }
-    }
-
-    val cadastroConcluido by viewModel.cadastroConcluido.collectAsState()
-
-    LaunchedEffect (cadastroConcluido) {
-        if (cadastroConcluido) {
-            navController.navigate(RootRoutes.Login.route) {
-                popUpTo(RootRoutes.UserFormRegistration.route) { inclusive = true }
-            }
-        }
     }
 
     val (temCrianca, setTemCrianca) = remember { mutableStateOf("") }
@@ -91,6 +91,9 @@ fun RegistrationFormScreen(navController: NavController) {
                 },
             )
         },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(horizontal = 21.dp)) {
             LazyColumn(
@@ -164,6 +167,25 @@ fun RegistrationFormScreen(navController: NavController) {
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
 
+                            val camposPreenchidos = listOf(
+                                temCrianca,
+                                moradoresConcordam,
+                                seraResponsavel,
+                                moraEmCasa,
+                                isTelado,
+                                casaPortaoAlto,
+                                temPet
+                            ).all { it.isNotBlank() }
+
+                            if (!camposPreenchidos) {
+                                Toast.makeText(
+                                    context,
+                                    "Por favor, preencha todas as perguntas antes de continuar.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return@Button
+                            }
+
                             val adotanteWithFormulario = adotanteInfo.copy(
                                 formulario = Formulario(
                                     temCrianca = convertValues(temCrianca),
@@ -176,7 +198,13 @@ fun RegistrationFormScreen(navController: NavController) {
                                 )
                             )
 
-                            // viewModel.cadastrarAdotante(adotanteWithFormulario, null)
+                            val gsonAdotanteWithForm: Gson = GsonBuilder().create()
+                            val adotanteWithFormJson = gsonAdotanteWithForm.toJson(adotanteWithFormulario)
+
+                            Log.i("Forms", "Adotante Info Json: $adotanteInfoJson")
+
+                            navController.currentBackStackEntry?.
+                                savedStateHandle?.set("adotanteWithForm", adotanteWithFormJson)
 
                             navController.navigate(RootRoutes.UserPhotoRegistration.route) {
                                 popUpTo(RootRoutes.UserFormRegistration.route) { saveState = true }
