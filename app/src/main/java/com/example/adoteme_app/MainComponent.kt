@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.adoteme_app.model.PerfilViewModel
+import com.example.adoteme_app.pets.presentation.AnimaisFiltradosScreen
 import com.example.adoteme_app.pets.presentation.ong_info_screen.OngInfoScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -68,6 +69,17 @@ fun MainApp() {
             val ongId = backStackEntry.arguments?.getLong("ongId") ?: return@composable
             OngInfoScreen(
                 ongId = ongId,
+                navController = navController
+            )
+        }
+
+        composable(
+            "animaisFiltrados/{categoriaNome}",
+            arguments = listOf(navArgument("categoriaNome") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val categoriaNome = backStackEntry.arguments?.getString("categoriaNome") ?: ""
+            AnimaisFiltradosScreen(
+                categoriaNome = categoriaNome,
                 navController = navController
             )
         }

@@ -84,7 +84,12 @@ fun HomeScreen(navController: NavController, nestedNavController: NavController,
             Text(text = "Categorias", fontSize = 28.sp, fontWeight = FontWeight.Bold)
         }
         item {
-            CategoriaCarrossel(listaCategoria)
+            CategoriaCarrossel(
+                categorias = listaCategoria,
+                onCategoriaSelecionada = { categoria ->
+                    navController.navigate("animaisFiltrados/${categoria}")
+                }
+            )
         }
         item {
             Spacer(modifier = Modifier.height(12.dp))
