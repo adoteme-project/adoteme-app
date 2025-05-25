@@ -283,7 +283,11 @@ fun LoginForm(modifier: Modifier = Modifier, navController: NavHostController, l
         Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(
-            onClick = { /* Handle forgot password */ }
+            onClick = {
+                navController.navigate(RootRoutes.RedefinicaoSenha.route) {
+                    popUpTo(RootRoutes.Login.route) { inclusive = true }
+                }
+            }
         ) {
             Text(
                 text = "Esqueci minha senha",

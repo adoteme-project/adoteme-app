@@ -1,4 +1,4 @@
-package com.example.adoteme_app.presentation.component
+package com.example.adoteme_app.presentation.component.pages
 
 import android.content.Context
 import android.content.Intent

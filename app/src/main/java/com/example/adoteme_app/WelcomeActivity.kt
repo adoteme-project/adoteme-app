@@ -18,7 +18,10 @@ import com.example.adoteme_app.auth.presentation.register_form_screen.Registrati
 import com.example.adoteme_app.auth.presentation.register_photo_screen.RegistrationPhoneScreen
 import com.example.adoteme_app.auth.presentation.register_screen.RegistrationScreen
 import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
-import com.example.adoteme_app.presentation.component.TwoFactorVerificationScreen
+import com.example.adoteme_app.presentation.component.pages.RedefinicaoNovaSenhaScreen
+import com.example.adoteme_app.presentation.component.pages.RedefinicaoSenhaCodigoScreen
+import com.example.adoteme_app.presentation.component.pages.RedefinicaoSenhaScreen
+import com.example.adoteme_app.presentation.component.pages.TwoFactorVerificationScreen
 import com.example.adoteme_app.ui.theme.AdotemeappTheme
 
 class WelcomeActivity : ComponentActivity() {
@@ -59,6 +62,17 @@ fun WelcomeNavGraph() {
         }
         composable(RootRoutes.UserPhotoRegistration.route) {
             RegistrationPhoneScreen(navController, snackbarHostState, coroutineScope)
+        }
+        composable(RootRoutes.RedefinicaoSenha.route) {
+            RedefinicaoSenhaScreen(navController)
+        }
+        composable(RootRoutes.RedefinicaoSenhaCodigo.route) { backStack ->
+            val email = backStack.arguments?.getString("email") ?: ""
+            RedefinicaoSenhaCodigoScreen(email, navController)
+        }
+        composable(RootRoutes.RedefinicaoNovaSenha.route) { backStack ->
+            val email = backStack.arguments?.getString("email") ?: ""
+            RedefinicaoNovaSenhaScreen(email, navController)
         }
         composable(
             route = "twoFactorVerification/{email}",
