@@ -3,6 +3,7 @@ package com.example.adoteme_app.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -20,7 +21,10 @@ import androidx.compose.foundation.shape.CircleShape
 import com.example.adoteme_app.model.Categoria
 
 @Composable
-fun CategoriaCarrossel(categorias: List<Categoria>) {
+fun CategoriaCarrossel(
+    categorias: List<Categoria>,
+    onCategoriaSelecionada: (String) -> Unit
+) {
     val listState = rememberLazyListState()
     var currentPage by remember { mutableStateOf(0) }
 
@@ -36,7 +40,8 @@ fun CategoriaCarrossel(categorias: List<Categoria>) {
                 Column(
                     modifier = Modifier
                         .padding(8.dp)
-                        .width(100.dp),
+                        .width(100.dp)
+                        .clickable { onCategoriaSelecionada(categoria.nome) },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(
@@ -60,3 +65,4 @@ fun CategoriaCarrossel(categorias: List<Categoria>) {
         }
     }
 }
+

@@ -1,6 +1,7 @@
 package com.example.adoteme_app.home.presentation.home_screen
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,8 @@ fun HomeScreen(navController: NavController, nestedNavController: NavController,
     val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     val userId = sharedPreferences.getLong("userId", 0L)
 
+    Log.d("Verificacao", "userId nas prefs = $userId")
+
     val favoritosIds = viewModelFavoritos.favoritosIds.collectAsState()
 
     val animaisComFavorito = remember(animais.value, favoritosIds.value) {
@@ -81,7 +84,12 @@ fun HomeScreen(navController: NavController, nestedNavController: NavController,
             Text(text = "Categorias", fontSize = 28.sp, fontWeight = FontWeight.Bold)
         }
         item {
-            CategoriaCarrossel(listaCategoria)
+            CategoriaCarrossel(
+                categorias = listaCategoria,
+                onCategoriaSelecionada = { categoria ->
+                    navController.navigate("animaisFiltrados/${categoria}")
+                }
+            )
         }
         item {
             Spacer(modifier = Modifier.height(12.dp))
@@ -95,6 +103,8 @@ fun HomeScreen(navController: NavController, nestedNavController: NavController,
                 idAdotante = userId
             )
         }
+
+        Log.d("Verificacao", "idAdotante = $userId")
 
     }
 }
