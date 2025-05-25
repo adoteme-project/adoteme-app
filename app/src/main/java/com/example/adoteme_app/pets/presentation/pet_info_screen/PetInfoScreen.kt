@@ -1,6 +1,7 @@
 package com.example.adoteme_app.pets.presentation.pet_info_screen
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -89,6 +90,7 @@ fun PetInfoScreen(onBack: () -> Unit,
 
     val sharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     val userId = sharedPreferences.getLong("userId", 0L)
+    val isUsuarioLogado = userId != 0L
 
     val statusRequisicao by requisicaoViewModel.statusRequisicao.collectAsState()
 
@@ -303,7 +305,7 @@ topBar = {
                     ) {
                         rowItems.forEach { animal ->
                             Box(modifier = Modifier.weight(1f)) {
-                                AnimalFavoritoCard(animal, navController, idAdotante = userId)
+                                AnimalFavoritoCard(animal, navController, idAdotante = userId, isUsuarioLogado = isUsuarioLogado)
                             }
                         }
                         if (rowItems.size < 2) {
@@ -388,7 +390,14 @@ topBar = {
                                         disabledContentColor = Color.Transparent,
                                         disabledContainerColor = Color.LightGray
                                     ),
-                                    onClick = { requisicaoViewModel.criarRequisicao(userId, animalId) }
+                                    onClick = {
+                                        if (userId != 0L) {
+                                            requisicaoViewModel.criarRequisicao(userId, animalId)
+                                        } else {
+                                            Toast.makeText(context, "Você precisa estar logado para adotar.", Toast.LENGTH_SHORT).show()
+                                            showBottomSheet = false
+                                        }
+                                    }
                                 ) {
                                     Text(
                                         "Aceitar",

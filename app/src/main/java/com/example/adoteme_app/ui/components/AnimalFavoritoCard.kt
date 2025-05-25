@@ -1,5 +1,6 @@
 package com.example.adoteme_app.ui.components
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun AnimalFavoritoCard(animal: AnimalUiModel, navController: NavController, idAdotante: Long,  viewModel: AnimalFavoritoViewModel = koinViewModel()) {
+fun AnimalFavoritoCard(animal: AnimalUiModel, navController: NavController, idAdotante: Long,   isUsuarioLogado: Boolean,  viewModel: AnimalFavoritoViewModel = koinViewModel()) {
     val favoritos by viewModel.favoritosIds.collectAsState()
 
     val isFavorito = favoritos.contains(animal.id)
@@ -65,22 +67,24 @@ fun AnimalFavoritoCard(animal: AnimalUiModel, navController: NavController, idAd
                         .height(170.dp)
                         .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                 )
+                if (isUsuarioLogado) {
+                    IconButton(
+                        onClick = {
+                            viewModel.favoritarOuDesfavoritar(idAdotante, animal.id)
+                        },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                            .size(28.dp)
+                            .background(Color.White.copy(alpha = 0.7f), shape = CircleShape)
 
-                IconButton(
-                    onClick = {
-                        viewModel.favoritarOuDesfavoritar(idAdotante, animal.id)
-                    },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .size(28.dp)
-                        .background(Color.White.copy(alpha = 0.7f), shape = CircleShape)
-                ) {
-                    Icon(
-                        imageVector = if (isFavorito) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (isFavorito) "Desfavoritar" else "Favoritar",
-                        tint = Color.Red
-                    )
+                    ) {
+                        Icon(
+                            imageVector = if (isFavorito) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = if (isFavorito) "Desfavoritar" else "Favoritar",
+                            tint = Color.Red
+                        )
+                    }
                 }
             }
 

@@ -24,8 +24,10 @@ fun AnimalGrid(
     navController: NavController,
     idAdotante: Long
 ) {
+    val isUsuarioLogado = idAdotante != 0L
     val rows = if (isLoading) List(2) { listOf<AnimalUiModel?>(null, null) }
     else animais.chunked(2).map { it.map { animal -> animal as AnimalUiModel? } }
+
     Column {
         rows.forEach { rowItems ->
             Row(
@@ -35,7 +37,12 @@ fun AnimalGrid(
                 rowItems.forEach { animal ->
                     Box(modifier = Modifier.weight(1f)) {
                         if (animal != null) {
-                            AnimalFavoritoCard(animal, navController, idAdotante = idAdotante)
+                            AnimalFavoritoCard(
+                                animal = animal,
+                                navController = navController,
+                                idAdotante = idAdotante,
+                                isUsuarioLogado = isUsuarioLogado
+                            )
                         } else {
                             AnimalCardShimmer()
                         }

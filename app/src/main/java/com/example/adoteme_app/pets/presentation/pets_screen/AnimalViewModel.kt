@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.adoteme_app.interfaces.AnimalApiService
 import com.example.adoteme_app.model.AnimalResponse
+import com.example.adoteme_app.ui.components.categoriaParaPersonalidade
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -47,4 +48,14 @@ class AnimalViewModel(
             }
         }
     }
+
+    fun filtrarPorCategoria(categoriaNome: String) {
+        val seletor = categoriaParaPersonalidade[categoriaNome]
+        seletor?.let { seletorFunc ->
+            val listaFiltrada = _animais.value
+                .sortedByDescending { seletorFunc(it.personalidade) }
+            _animais.value = listaFiltrada
+        }
+    }
+
 }

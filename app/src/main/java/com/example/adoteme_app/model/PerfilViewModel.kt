@@ -1,5 +1,6 @@
 package com.example.adoteme_app.model
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.adoteme_app.perfil.data.use_case.PerfilUseCase
@@ -30,11 +31,16 @@ class PerfilViewModel(
         }
     }
 
-    fun logout() {
+    fun logout(context: Context) {
         viewModelScope.launch {
             perfilUseCase.limparDadosUsuario()
             _adotanteDados.value = null
             _token.value = null
+
+            context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                .edit()
+                .clear()
+                .apply()
         }
     }
 }

@@ -109,7 +109,7 @@ fun AplicacoesCard(
                         text = buildAnnotatedString {
                             append("Status: ")
                             withStyle(style = SpanStyle(color = Color.Green)) {
-                                append("Aceito")
+                                append(aplicacao.status)
                             }
                         },
                         lineHeight = 14.sp
@@ -129,10 +129,9 @@ fun AplicacoesCard(
             ) {
                 Button(
                     onClick = {
-                        navController.navigate(InternalRoutes.PetsInfo.route) {
-                            popUpTo(InternalRoutes.Home.route) {
-                                saveState = true
-                            }
+                        navController.navigate("petInfo/${aplicacao.idAnimal}") {
+                            popUpTo(InternalRoutes.Home.route) { saveState = true }
+                            launchSingleTop = true
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC55E)),
@@ -142,7 +141,7 @@ fun AplicacoesCard(
                         .height(30.dp),
                     contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text(text = "Saiba Mias", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    Text(text = "Saiba Mais", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
             }
         }
