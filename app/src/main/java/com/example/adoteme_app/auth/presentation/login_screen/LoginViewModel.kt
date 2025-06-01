@@ -38,6 +38,9 @@ class LoginViewModel(
     private var _email = ""
     var email: String = _email
 
+    private var _message = ""
+    var message: String = _message
+
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -95,6 +98,18 @@ class LoginViewModel(
                 }
             } catch (e: Exception) {
                 _loginState.value = LoginState.Error
+            }
+        }
+    }
+
+    fun ativarTwoFactorAuth(email: String, success: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = api.ativarTwoFactorAuth(email = email)
+                _message =  "2FA ativado com sucesso."
+                success()
+            } catch (e: Exception) {
+                Log.e("2FA", "Erro ao abilitar 2fa: ${e.message}")
             }
         }
     }

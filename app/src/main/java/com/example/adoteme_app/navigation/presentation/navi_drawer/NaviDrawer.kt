@@ -79,6 +79,7 @@ fun NaviDrawerLayout(
         ).apply {
             if (!token.isNullOrBlank()) {
                 add(NavDrawerItem.Favoritos)
+                add(NavDrawerItem.Configuracoes)
             }
         }
     }
@@ -133,15 +134,16 @@ fun NaviDrawerLayout(
                 when (item.route) {
                     InternalRoutes.Home.route,
                     InternalRoutes.Pets.route,
+                    InternalRoutes.Configuracoes.route,
                     InternalRoutes.Ongs.route -> {
                         nestedNavController.navigate(item.route) {
-                            popUpTo(nestedNavController.graph.startDestinationId!!)
+                            popUpTo(nestedNavController.graph.startDestinationId)
                             launchSingleTop = true
                         }
                     }
                     InternalRoutes.Favoritos.route -> {
                         nestedNavController.navigate(InternalRoutes.Favoritos.route) {
-                            popUpTo(nestedNavController.graph.startDestinationId!!)
+                            popUpTo(nestedNavController.graph.startDestinationId)
                             launchSingleTop = true
                         }
                     }
