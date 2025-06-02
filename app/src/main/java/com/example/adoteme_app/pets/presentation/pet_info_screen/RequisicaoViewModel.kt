@@ -28,9 +28,14 @@ class RequisicaoViewModel(
                     idAnimal = animalId
                 )
 
-                requisicaoApiService.criarRequisicao(requisicaoDto)
+                val response = requisicaoApiService.criarRequisicao(requisicaoDto)
 
-                _statusRequisicao.value = StatusRequisicao.Sucesso
+                _statusRequisicao.value = when {
+                    response.isSuccessful -> StatusRequisicao.Sucesso
+                    response.code() == 500 -> StatusRequisicao.RequisicaoDuplicada
+                    else -> StatusRequisicao.Erro("Erro ao processar a requisição")
+                }
+
             } catch (e: Exception) {
                 _statusRequisicao.value = StatusRequisicao.Erro(e.message ?: "Erro desconhecido")
             }

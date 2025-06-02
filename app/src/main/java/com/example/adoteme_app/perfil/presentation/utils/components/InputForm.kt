@@ -63,7 +63,7 @@ fun InputForm(
 fun PasswordInputForm(
     value: String,
     label: String,
-    enabled: Boolean = false,
+    enabled: Boolean = true,
     onValueChange: (String) -> Unit,
     errorMessage: String? = null
 ) {

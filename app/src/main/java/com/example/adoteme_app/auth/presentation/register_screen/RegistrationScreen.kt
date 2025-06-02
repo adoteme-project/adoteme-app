@@ -130,34 +130,36 @@ fun RegistrationScreen(navController: NavController) {
                         errorMessage = formErros.value.cep
                     )
                 }
-                item {
-                    InputForm(
-                        formState.value.estado,
-                    "Estado",
-                        KeyboardType.Text,
-                        onValueChange = { formState.value = formState.value.copy(estado = it) }
-                    )
-                }
-                item {
-                    InputForm(
-                        formState.value.cidade,
-                        "Cidade",
-                        KeyboardType.Text,
-                        onValueChange = { formState.value = formState.value.copy(cidade = it) }
-                    )
-                }
+//                item {
+//                    InputForm(
+//                        formState.value.estado,
+//                    "Estado",
+//                        KeyboardType.Text,
+//                        onValueChange = { formState.value = formState.value.copy(estado = it) }
+//                    )
+//                }
+//                item {
+//                    InputForm(
+//                        formState.value.cidade,
+//                        "Cidade",
+//                        KeyboardType.Text,
+//                        onValueChange = { formState.value = formState.value.copy(cidade = it) }
+//                    )
+//                }
                 item {
                     InputForm(
                         formState.value.numero,
-                        "Numero",
-                        KeyboardType.Text,
+                        enabled = true,
+                        label = "Numero",
+                        inputType =  KeyboardType.Text,
                         onValueChange = { formState.value = formState.value.copy(numero = it) }
                     )
                 }
                 item {
                     PasswordInputForm(
                         formState.value.senha,
-                        "Senha",
+                        label = "Senha",
+                        enabled = true,
                         onValueChange = { formState.value = formState.value.copy(senha = it) },
                         errorMessage = formErros.value.senha
                     )
@@ -166,7 +168,8 @@ fun RegistrationScreen(navController: NavController) {
                 item {
                     PasswordInputForm(
                         formState.value.confirmarSenha,
-                        "Confirmar senha",
+                        label = "Confirmar senha",
+                        enabled = true,
                         onValueChange = { formState.value = formState.value.copy(confirmarSenha = it) },
                         errorMessage = formErros.value.confirmarSenha
                     )

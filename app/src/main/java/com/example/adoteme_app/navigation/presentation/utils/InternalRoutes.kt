@@ -23,4 +23,6 @@ sealed class InternalRoutes(val route: String) {
     data object ProfileData: InternalRoutes("profileData")
     data object ProfileForm: InternalRoutes("profileForm")
     data object ProfileAplicacoes: InternalRoutes("profileAplicacoes")
+    data object Configuracoes: InternalRoutes("configuracoes")
+    data object HabilitarTwoFactor: InternalRoutes("habilitar2fa")
 }
