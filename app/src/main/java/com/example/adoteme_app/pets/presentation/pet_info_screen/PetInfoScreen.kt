@@ -109,10 +109,26 @@ fun PetInfoScreen(onBack: () -> Unit,
     val approvalColor = Color(red = 169, green = 185, blue = 73)
 
     LaunchedEffect(statusRequisicao) {
-        if (statusRequisicao is StatusRequisicao.Sucesso) {
-            showBottomSheet = false
-            showModal.value = true
+        when(statusRequisicao) {
+            is StatusRequisicao.Sucesso -> {
+                showBottomSheet = false
+                showModal.value = true
+            }
+            is StatusRequisicao.RequisicaoDuplicada -> {
+                showBottomSheet = false
+                Toast.makeText(
+                    context,
+                    "Você já realizou uma solicitação de adoção para este pet.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            is StatusRequisicao.Erro -> {
+                showBottomSheet = false
+                Toast.makeText(context, "Erro durante a solicitação", Toast.LENGTH_LONG).show()
+            }
+            else -> {}
         }
+
     }
 
     LaunchedEffect(userId) {
@@ -256,15 +272,15 @@ topBar = {
                         },
                         lineHeight = 32.sp
                     )
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("Taxa de adoção: ")
-                            }
-                            //append(petTaxa)
-                        },
-                        lineHeight = 32.sp
-                    )
+//                    Text(
+//                        text = buildAnnotatedString {
+//                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+//                                append("Taxa de adoção: ")
+//                            }
+//                            //append(petTaxa)
+//                        },
+//                        lineHeight = 32.sp
+//                    )
                 }
             }
 

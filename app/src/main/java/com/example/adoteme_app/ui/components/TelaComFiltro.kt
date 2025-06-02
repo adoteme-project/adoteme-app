@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,23 +44,30 @@ fun <T> TelaComFiltro(
     val filtrados = listaOriginal.filter { aplicarFiltro(it, filtrosSelecionados) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(titulo, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                FilterButton { filtrosAbertos = true }
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(titulo, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    FilterButton { filtrosAbertos = true }
+                }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
-            exibirGrid(filtrados)
+            item {
+                exibirGrid(filtrados)
+            }
+
         }
 
         if (filtrosAbertos) {

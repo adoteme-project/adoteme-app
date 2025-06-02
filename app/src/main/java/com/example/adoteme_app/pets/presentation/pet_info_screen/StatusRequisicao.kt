@@ -5,4 +5,5 @@ sealed class StatusRequisicao {
     object Carregando : StatusRequisicao()
     data class Erro(val mensagem: String) : StatusRequisicao()
     object Nada : StatusRequisicao()
+    object RequisicaoDuplicada: StatusRequisicao()
 }
