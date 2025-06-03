@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.adoteme_app.perfil.presentation.utils.components.InputForm
+import com.example.adoteme_app.presentation.component.InputForm
 import com.example.adoteme_app.presentation.viewmodel.RedefinicaoSenhaViewModel
 import com.example.adoteme_app.ui.theme.ActionColor
 import org.koin.androidx.compose.koinViewModel

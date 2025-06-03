@@ -5,9 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.adoteme_app.data.repository.AuthRepository
-import com.example.adoteme_app.interfaces.RedefinirSenhaApiService
-import com.example.adoteme_app.model.ValidacaoCodigoRequest
+import com.example.adoteme_app.data.network.api.RedefinirSenhaApiService
+import com.example.adoteme_app.domain.model.ValidacaoCodigoRequest
 import kotlinx.coroutines.launch
 
 class RedefinicaoOptViewModel(

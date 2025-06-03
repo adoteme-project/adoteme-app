@@ -19,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -27,9 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.adoteme_app.auth.presentation.register_screen.BulletList
-import com.example.adoteme_app.navigation.presentation.utils.RootRoutes
-import com.example.adoteme_app.perfil.presentation.utils.components.PasswordInputForm
+import com.example.adoteme_app.domain.model.RootRoutes
+import com.example.adoteme_app.presentation.component.PasswordInputForm
 import com.example.adoteme_app.presentation.viewmodel.NovaSenhaViewModel
 import com.example.adoteme_app.ui.theme.ActionColor
 import org.koin.androidx.compose.koinViewModel
