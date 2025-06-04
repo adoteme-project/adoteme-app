@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -27,8 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
-import com.example.adoteme_app.perfil.presentation.utils.components.InputForm
+import com.example.adoteme_app.presentation.viewmodel.LoginViewModel
+import com.example.adoteme_app.presentation.component.InputForm
 import com.example.adoteme_app.ui.theme.ActionColor
 import org.koin.androidx.compose.koinViewModel
 

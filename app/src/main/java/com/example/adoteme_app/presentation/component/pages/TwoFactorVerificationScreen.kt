@@ -32,19 +32,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.adoteme_app.MainActivity
+import com.example.adoteme_app.presentation.activity.MainActivity
 import com.example.adoteme_app.R
-import com.example.adoteme_app.auth.presentation.login_screen.LoginState
-import com.example.adoteme_app.auth.presentation.login_screen.LoginViewModel
+import com.example.adoteme_app.presentation.viewmodel.LoginState
+import com.example.adoteme_app.presentation.viewmodel.LoginViewModel
 import com.example.adoteme_app.data.repository.PerfilRepository
-import com.example.adoteme_app.interfaces.AdotanteApiService
-import com.example.adoteme_app.network.RetrofitInstance
+import com.example.adoteme_app.data.network.api.AdotanteApiService
+import com.example.adoteme_app.presentation.viewmodel.AdotanteViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TwoFactorVerificationScreen(
     email: String,
     viewModel: LoginViewModel = koinViewModel(),
+    viewModelAdotante: AdotanteViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
 
@@ -63,13 +64,11 @@ fun TwoFactorVerificationScreen(
                     .putLong("userId", userId)
                     .apply()
 
-                val adotanteApiService = RetrofitInstance.retrofit.create(AdotanteApiService::class.java)
-
-                val perfilRepository = PerfilRepository(context, adotanteApiService)
+                val perfilRepository = PerfilRepository(context)
                 perfilRepository.salvarToken(token)
 
                 try {
-                    val adotante = adotanteApiService.getDadosAdotante(userId)
+                    val adotante = viewModelAdotante.getDadosAdotante(userId)
                     perfilRepository.salvarAdotante(adotante)
                 } catch (e: Exception) {
                     e.printStackTrace()

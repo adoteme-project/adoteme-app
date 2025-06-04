@@ -19,14 +19,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.adoteme_app.perfil.presentation.utils.components.InputForm
 import com.example.adoteme_app.presentation.component.OtpInput
 import com.example.adoteme_app.presentation.viewmodel.RedefinicaoOptViewModel
 import com.example.adoteme_app.ui.theme.ActionColor
