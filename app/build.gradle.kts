@@ -84,8 +84,8 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
     implementation("io.insert-koin:koin-android:3.5.6")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
-
-
-
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("androidx.compose.material:material:1.5.4")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 }

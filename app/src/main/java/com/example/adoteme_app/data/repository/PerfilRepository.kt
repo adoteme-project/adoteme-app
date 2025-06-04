@@ -1,11 +1,14 @@
 package com.example.adoteme_app.data.repository
 
 import android.content.Context
-import com.example.adoteme_app.model.AdotanteDados
+import com.example.adoteme_app.data.network.api.AdotanteApiService
+import com.example.adoteme_app.domain.model.AdotanteDados
+import com.example.adoteme_app.domain.model.AdotantePutRequest
+import com.example.adoteme_app.domain.model.FormularioResponse
 import com.google.gson.Gson
 
 class PerfilRepository(
-    private val context: Context
+    private val context: Context,
 ) {
     private val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
 
@@ -40,4 +43,5 @@ class PerfilRepository(
         editor.clear()
         editor.apply()
     }
+
 }
