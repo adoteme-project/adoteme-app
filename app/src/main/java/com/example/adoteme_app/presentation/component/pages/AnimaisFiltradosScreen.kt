@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.example.adoteme_app.presentation.viewmodel.AnimalViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.adoteme_app.presentation.viewmodel.AnimalFavoritoViewModel
 import com.example.adoteme_app.presentation.component.categoriaParaPersonalidade
@@ -51,23 +54,36 @@ fun AnimaisFiltradosScreen(
         }
     }
 
-    Column(
+    LazyColumn (
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "Animais da categoria: $categoriaNome",
-            style = MaterialTheme.typography.h4,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
 
-        AnimalGrid(
-            isLoading = animais.isEmpty(),
-            animais = animaisFiltrados,
-            navController = navController,
-            idAdotante = idAdotante
-        )
+        item {
+            Text(
+                text = "Animais da categoria: ",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Text(
+                text =  "$categoriaNome",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
+
+        item {
+            AnimalGrid(
+                isLoading = animais.isEmpty(),
+                animais = animaisFiltrados,
+                navController = navController,
+                idAdotante = idAdotante
+            )
+        }
+
     }
 }
 

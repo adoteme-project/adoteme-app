@@ -82,7 +82,7 @@ fun HomeScreen(navController: NavController, nestedNavController: NavController,
             CategoriaCarrossel(
                 categorias = listaCategoria,
                 onCategoriaSelecionada = { categoria ->
-                    navController.navigate("animaisFiltrados/${categoria}")
+                    nestedNavController.navigate("animaisFiltrados/${categoria}")
                 }
             )
         }

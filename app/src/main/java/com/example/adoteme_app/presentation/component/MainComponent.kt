@@ -58,28 +58,6 @@ fun MainApp() {
             )
         }
 
-        composable(
-            route = "ongInfo/{ongId}",
-            arguments = listOf(navArgument("ongId") { type = NavType.LongType })
-        ) { backStackEntry ->
-            val ongId = backStackEntry.arguments?.getLong("ongId") ?: return@composable
-            OngInfoScreen(
-                ongId = ongId,
-                navController = navController
-            )
-        }
-
-        composable(
-            "animaisFiltrados/{categoriaNome}",
-            arguments = listOf(navArgument("categoriaNome") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val categoriaNome = backStackEntry.arguments?.getString("categoriaNome") ?: ""
-            AnimaisFiltradosScreen(
-                categoriaNome = categoriaNome,
-                navController = navController
-            )
-        }
-
         composable(InternalRoutes.ProfileData.route) {
             val userViewModel: PerfilViewModel = koinViewModel()
             val adotante by userViewModel.adotanteDados.collectAsState()

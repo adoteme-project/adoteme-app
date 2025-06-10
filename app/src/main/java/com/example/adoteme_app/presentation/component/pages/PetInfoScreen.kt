@@ -339,7 +339,7 @@ topBar = {
                         disabledContentColor = Color.Transparent,
                         disabledContainerColor = Color.LightGray
                     ),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
                     onClick = { showBottomSheet = true }
                 ) {
                     Text(
