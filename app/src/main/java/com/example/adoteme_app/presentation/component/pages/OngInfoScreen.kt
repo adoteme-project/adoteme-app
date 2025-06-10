@@ -78,6 +78,9 @@ fun OngInfoScreen(ongId: Long, navController: NavController, ongViewModel: OngVi
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = ongSelecionada?.nome ?: "", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                Button(onClick = { showDialog = true }) {
+                    Text("Doar")
+                }
             }
             Spacer(modifier = Modifier.height(12.dp))
         }
@@ -89,10 +92,6 @@ fun OngInfoScreen(ongId: Long, navController: NavController, ongViewModel: OngVi
                 idAdotante = userId
             )
         }
-    }
-
-    Button(onClick = { showDialog = true }) {
-        Text("Doar")
     }
 
     if (showDialog && ongSelecionada != null) {

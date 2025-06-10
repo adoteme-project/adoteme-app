@@ -1,5 +1,5 @@
 package com.example.adoteme_app.application.config
 
 object Configuracoes {
-    val BASE_URL = "http://192.168.166.77:8080/api/"
+    val BASE_URL = "http://54.145.147.197/api/"
 }
